@@ -4,24 +4,24 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <meta name="verify-paysera" content="97bd17a9030d033b9ecae8c2853994b4">
-       	
+
 		<title>@yield('title')Apklausos internetu</title>
 
 		@include('frontend.layouts.meta')
 
         <link href="{{ asset('packages/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('style.css') }}" rel="stylesheet">
+        <link href="{{ asset('styles.css') }}" rel="stylesheet">
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script type="text/javascript" src="{{ asset('js/holder.js') }}"></script>
-    
+
         @yield('styles')
         @yield('scripts')
     </head>
 
     <body>
         @yield('navigation')
-        
+
         <div class="container">
             <div class="row">
                 <div class="col-sm-10">
@@ -48,9 +48,9 @@
                             Sėkmingai atsijungėte nuo sistemos.
                         </div>
                     @endif
-                    
+
                     @yield('content')
-                    
+
                     <p style="margin-top: 100px;"></p>
 
                     <div class="well text-center">

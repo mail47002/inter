@@ -94,3 +94,9 @@ Route::namespace('frontend')->group(function() {
     Route::get('', ['as' => 'home', 'uses' => 'HomeController@index']);
     Route::get('{page}', 'PagesController@index');
 });
+
+Route::namespace('backend')->group(function() {
+
+    Route::get('admin/pages', ['as' => 'index', 'uses' => 'BackPageController@index']);
+
+});
