@@ -25,25 +25,25 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-10">
-                    @if (Session::get('registered'))
+                    @if (session('registered'))
                         <div class="alert alert-success">
                             Jūs sėkmingai užsiregistravote. Dabar galite prisijungti.
                         </div>
                     @endif
 
-                    @if (Session::get('logned'))
+                    @if (session('logned'))
                         <div class="alert alert-success">
                             Sėkmingai prisijungėte.
                         </div>
                     @endif
 
-                    @if (Session::get('logned_social'))
+                    @if (session('logned_social'))
                         <div class="alert alert-success">
                             Sėkmingai prisijungėte naudojantis {{ Session::get('logned_social') == 1 ? 'Facebook' : 'Google' }}
                         </div>
                     @endif
 
-                    @if (Session::get('logout'))
+                    @if (session('logout'))
                         <div class="alert alert-success">
                             Sėkmingai atsijungėte nuo sistemos.
                         </div>

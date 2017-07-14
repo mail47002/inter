@@ -4,6 +4,7 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Hash;
 
 class RemindersController extends Controller
@@ -19,11 +20,6 @@ class RemindersController extends Controller
 		return view('frontend.password.remind');
 	}
 
-	public function success()
-	{
-		return view('frontend.password.success');
-	}
-
 	/**
 	 * Handle a POST request to remind a user of their password.
 	 *
@@ -31,19 +27,35 @@ class RemindersController extends Controller
 	 */
 	public function postRemind(Request $request)
 	{
-		$response = Password::remind(['email' => $request->only('email')], function($message) {
-		    $message->subject('Slaptažodžio priminimas');
-		});
+	    $this->validate($request, [
+	        'email' => 'required|email|exists:users'
+        ]);
 
-		switch ($response)
-		{
-			case Password::INVALID_USER:
-				return Redirect::back()->with('error', Lang::get($response));
+        $response = $this->broker()->sendResetLink(
+            $request->only('email')
+        );
 
-			case Password::REMINDER_SENT:
-				return Redirect::back()->with('status', Lang::get($response));
-		}
+        return $response == Password::RESET_LINK_SENT
+            ? $this->sendResetLinkResponse($response)
+            : $this->sendResetLinkFailedResponse($request, $response);
 	}
+
+    public function broker()
+    {
+        return Password::broker();
+    }
+
+    protected function sendResetLinkResponse($response)
+    {
+        return back()->with('status', trans($response));
+    }
+
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        return back()->withErrors(
+            ['email' => trans($response)]
+        );
+    }
 
 	/**
 	 * Display the password reset view for the given token.
@@ -88,4 +100,8 @@ class RemindersController extends Controller
 		}
 	}
 
+    public function success()
+    {
+        return view('frontend.password.success');
+    }
 }

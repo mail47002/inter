@@ -74,7 +74,7 @@ Route::namespace('frontend')->group(function() {
     Route::get('paskyros-nustatymai', ['as' => 'account.index', 'uses' => 'AccountController@index']);
     Route::post('paskyros-nustatymai', ['as' => 'account.update', 'uses' => 'AccountController@update']);
 
-    // Slaptažodžio atkūrimas
+    // Password forgot
     Route::get('priminti-slaptazodi', ['as' => 'password.remind', 'uses' => 'RemindersController@getRemind']);
     Route::post('priminti-slaptazodi', ['as' => 'password.remind.post', 'uses' => 'RemindersController@postRemind']);
     Route::get('atkurti-slaptazodi/{token}', ['as' => 'password.reset', 'uses' => 'RemindersController@getReset']);

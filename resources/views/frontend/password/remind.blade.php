@@ -21,14 +21,14 @@
 		</div>
 	@endif
 
-	<form action="{{ route('password.remind.post') }}" method="POST" class="form-horizontal">
+	{{ Form::open( ['route' => 'password.remind.post', 'method' => 'post', 'class' => 'form-horizontal'] ) }}
 		<div class="form-group {{ ( $errors->first('email') ? 'has-error' : NULL) }}">
 			{{ Form::label('email', 'El. paštas', [ 'class' => 'col-sm-3 control-label']) }}
 
 			<div class="col-sm-9">
 				{{ Form::email('email', null, [ 'class' => 'form-control', 'placeholder' => 'El. pašto adresas']) }}
 
-				{{ $errors->first('email', '<label class="control-label">:message</label>') }}
+				{!! $errors->first('email', '<label class="control-label">:message</label>') !!}
 			</div>
 		</div>
 
@@ -37,5 +37,5 @@
 				<button class="btn btn-primary">Patvirtinti</button>
 			</div>
 		</div>
-	</form>
+	{{ Form::close() }}
 @stop
