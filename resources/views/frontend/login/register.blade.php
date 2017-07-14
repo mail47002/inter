@@ -18,7 +18,7 @@
 						{{ Form::email('r_email', '', ['class' => 'form-control', 'placeholder' => 'El. pašto adresas']) }}
 						<span class="label label-info">Nebus rodomas. Bus naudojamas prisijungimui.</span>
 						
-						{{ $errors->first('r_email', '<br><label class="control-label">:message</label>') }}
+						{!! $errors->first('r_email', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
@@ -29,7 +29,7 @@
 						{{ Form::text('r_username', '', ['class' => 'form-control', 'placeholder' => 'Vartotojo vardas']) }}
 						<span class="label label-info">Bus rodomas kartu su jūsų anketomis</span>
 
-						{{ $errors->first('r_username', '<br><label class="control-label">:message</label>') }}
+						{!! $errors->first('r_username', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
@@ -41,13 +41,13 @@
 							<div class="col-sm-6">
 								{{ Form::password('r_password', ['class' => 'form-control', 'placeholder' => 'Sugalvokite slaptažodį']) }}
 
-								{{ $errors->first('r_password', '<label class="control-label">:message</label>') }}
+								{!! $errors->first('r_password', '<label class="control-label">:message</label>') !!}
 							</div>
 
 							<div class="col-sm-6">
 								{{ Form::password('r_password_confirmation', ['class' => 'form-control', 'placeholder' => 'Pakartokite slaptažodį']) }}
 
-								{{ $errors->first('r_password_confirmation', '<label class="control-label">:message</label>') }}
+								{!! $errors->first('r_password_confirmation', '<label class="control-label">:message</label>') !!}
 							</div>
 						</div>
 					</div>
