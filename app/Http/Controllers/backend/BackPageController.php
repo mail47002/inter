@@ -15,7 +15,7 @@ class BackPageController extends Controller
      */
     public function index()
     {
-        return view('backend.pages');
+        return view('backend.pages', ['title' => 'Pages']);
     }
 
     /**
