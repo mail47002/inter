@@ -12,7 +12,6 @@ use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
-    protected $view = 'users';
 
     protected $messages = [
         'required'		=> 'Būtina užpildyti',
@@ -26,7 +25,7 @@ class UsersController extends Controller
 
 	public function __construct()
 	{
-	    $this->middleware('auth');
+	    $this->middleware('admin');
 	}
 
 	public function index()
@@ -35,13 +34,13 @@ class UsersController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-		return view('backend.' . $this->view . '.index')
+		return view('backend.users.index')
 			->withEntries($entries);
 	}
 
 	public function create()
 	{
-		return view('backend.' . $this->view . '.create');
+		return view('backend.users.create');
 	}
 
 	public function store(Request $request)
