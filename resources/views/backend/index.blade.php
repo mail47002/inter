@@ -9,11 +9,11 @@
 			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
 				<thead>
 					<tr>
-						<th>Rendering engine</th>
-						<th>Browser</th>
-						<th>Platform(s)</th>
-						<th>Engine version</th>
-						<th>CSS grade</th>
+						<th>Id</th>
+						<th>Title</th>
+						<th>Slug</th>
+						<th>Date</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>

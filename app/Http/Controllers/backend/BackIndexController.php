@@ -4,15 +4,9 @@ namespace App\Http\Controllers\backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Page;
 
-class PagesController extends Controller
+class BackIndexController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -20,13 +14,7 @@ class PagesController extends Controller
      */
     public function index()
     {
-<<<<<<< Updated upstream:app/Http/Controllers/backend/PagesController.php
-        return view('backend.pages.index');
-=======
-        $pages = Page::all();
-        // dd($pages);
-        return view('backend.pages', ['pages' => $pages, 'title' => 'Pages']);
->>>>>>> Stashed changes:app/Http/Controllers/backend/BackPageController.php
+        //
     }
 
     /**
