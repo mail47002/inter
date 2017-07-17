@@ -12,14 +12,6 @@ use Auth;
 
 class LoginController extends Controller
 {
-    // Validation messages
-    protected $messages = [
-        'required'		=> 'Laukelis yra privalomas',
-        'email'			=> 'Klaidingas el. pašto adresas',
-        'unique'		=> 'Jau egzistruoja',
-        'confirmed'		=> 'Nesutampa',
-        'min'			=> 'Per trumpas (min. :min simboliai)',
-    ];
 
 	public function index()
 	{
@@ -38,7 +30,7 @@ class LoginController extends Controller
 			'r_username' 			    => 'required|unique:users,username',
 			'r_password' 			    => 'required|confirmed|min:5',
 			'r_password_confirmation'   => 'required',
-		], $this->messages);
+		]);
 
 		if ($validation->fails()) {
 			return redirect()
@@ -76,7 +68,7 @@ class LoginController extends Controller
         $validation = Validator::make($request->all(), [
             'email'     => 'required|email',
             'password'  => 'required|string',
-        ], $this->messages);
+        ]);
 
         if ($validation->fails()) {
             return redirect()

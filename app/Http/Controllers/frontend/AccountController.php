@@ -11,15 +11,6 @@ use Image;
 
 class AccountController extends Controller
 {
-    // Validation messages
-    protected $messages = [
-        'required'		=> 'Būtina užpildyti',
-        'enough'		=> 'Neužtenka kreditų',
-        'min'			=> 'Reikškmė turi susidaryti bent iš :min simbolių',
-        'mimes'			=> 'Netinkamas formatas. Galimi formatai: <em>jpeg, gif, bmp, png</em>.',
-        'confirmed'		=> 'Slaptažodžiai nesutampa',
-        'unique'		=> 'Jau egizstuoja',
-    ];
 
 	function __construct()
 	{
@@ -33,11 +24,11 @@ class AccountController extends Controller
 
 	public function update(Request $request)
 	{
-		$validation = Validator::make($request->all(), array(
+		$validation = Validator::make($request->all(), [
 			'username' 				=> 'required|unique:users,username,' . Auth::user()->id,
 			'password' 				=> 'confirmed|min:6',
 			'photo' 				=> 'mimes:jpeg,gif,bmp,png',
-		), $this->messages);
+		]);
 
 		if ($validation->fails()) {
 			return redirect()

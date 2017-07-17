@@ -128,7 +128,7 @@ class CampaignsController extends Controller
 					$fields[$question->id] = 'required';
 			}
 			
-			$validation = Validator::make($request->all(), $fields, $this->messages);
+			$validation = Validator::make($request->all(), $fields);
 
 			if ($validation->fails()) {
 				return redirect()
@@ -284,11 +284,11 @@ class CampaignsController extends Controller
 
 	public function store(Request $request)
 	{
-		$validation = Validator::make($request->all(), array(
+		$validation = Validator::make($request->all(), [
 			'title' 		=> 'required|min:15',
 			'description' 	=> 'required|min:30',
 			'photo' 		=> 'mimes:jpeg,gif,bmp,png',
-		), $this->messages);
+		]);
 
 		if ($validation->fails()) {
 			return redirect()
@@ -932,9 +932,9 @@ class CampaignsController extends Controller
 		$entry = Campaign::find($id);
 
 		if ($entry && $entry->user_id == Auth::user()->id && in_array($type, $this->types) && $entry->active == 0) {
-			$validation = Validator::make($request->all(), array(
+			$validation = Validator::make($request->all(), [
 				'title' 		=> 'required',
-			), $this->messages);
+			]);
 
 			if ($validation->fails()) {
 				return redirect()
@@ -1035,9 +1035,9 @@ class CampaignsController extends Controller
 		$cq 	= CampaignQuestion::find($question_id);
 
 		if ($entry && $entry->user_id == Auth::user()->id && $cq && $cq->campaign_id == $entry->id) {
-			$validation = Validator::make($request->all(), array(
+			$validation = Validator::make($request->all(), [
 				'title' 		=> 'required',
-			), $this->messages);
+			]);
 
 			if ($validation->fails()) {
 				return redirect()
@@ -1197,7 +1197,7 @@ class CampaignsController extends Controller
 				return ($price > $available_credits || $request->advertise_results < 0) ? false : true;
 			});
 
-			$validation = Validator::make($request->all(), $rules, $this->messages);
+			$validation = Validator::make($request->all(), $rules);
 
 			if ($validation->fails()) {
 				return redirect()
