@@ -90,14 +90,16 @@ Route::namespace('frontend')->group(function() {
     Route::post('prisijungti', ['as' => 'login.session', 'uses' => 'LoginController@login']);
     Route::get('atsijungti', ['as' => 'login.logout', 'uses' => 'LoginController@logout']);
 
-    // Page
+    // Pages
     Route::get('', ['as' => 'home', 'uses' => 'HomeController@index']);
     Route::get('{page}', 'PagesController@index');
 });
 
 Route::namespace('backend')->group(function() {
+    // Users
     Route::resource('admin/users', 'UsersController');
 
-    Route::resource('admin/pages', 'PageController');
+    // Pages
+    Route::resource('admin/pages', 'PagesController');
 
 });

@@ -1,7 +1,6 @@
-@include('backend.header')
-<div class="page-content">
-    <div class="row">
-        @include('backend.menu')
+@extends('backend.layouts.default')
+@section('content')
+
         <div class="col-md-10">
             <div class="content-box-large">
                 <div class="panel-heading">
@@ -427,6 +426,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-@include('backend.footer')
+
+@stop
