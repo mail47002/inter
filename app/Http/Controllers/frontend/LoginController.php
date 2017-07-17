@@ -12,9 +12,6 @@ use Auth;
 
 class LoginController extends Controller
 {
-    // View folder
-    protected $view = 'login';
-
     // Validation messages
     protected $messages = [
         'required'		=> 'Laukelis yra privalomas',
@@ -26,12 +23,12 @@ class LoginController extends Controller
 
 	public function index()
 	{
-		return view('frontend.' . $this->view . '.index');
+		return view('frontend.login.index');
 	}
 
 	public function registration()
 	{
-		return view('frontend.' . $this->view . '.register');
+		return view('frontend.login.register');
 	}
 
 	public function register(Request $request)
@@ -66,157 +63,12 @@ class LoginController extends Controller
 
 	public function registerFacebook(Request $request)
 	{
-		$code = Input::get( 'code' );
 
-	    $fb = OAuth::consumer( 'Facebook' );
-
-	    if ( ! empty( $code ) )
-	    {
-			$token = $fb->requestAccessToken( $code );
-
-			$result = json_decode( $fb->request( '/me' ), true );
-
-			$id 		= $result['id'];
-		    $email 		= $result['email'];
-		    $username 	= $result['name'];
-
-		    // check if users exists
-		    $user_network = UserNetwork::where('social_id', '=', $id)->where('type', '=', Config::get('social_types.facebook'))->first();
-
-		    if ($user_network)
-		    {
-		    	Auth::loginUsingId( $user_network->user_id );
-
-		    	return Redirect::route('campaigns.my')->withLogned_social(Config::get('social_types.facebook'));
-		    }
-		    else
-		    {
-		    	$user = User::where('email', '=', $email)->first();
-
-		    	if ( ! $user)
-		    	{
-			    	$password = time() + rand(1, 100);
-
-			    	// creating user
-			    	$user = new User;
-
-			    	$user->email = $email;
-			    	$user->username = $username;
-			    	$user->type = Config::get('user_types.user');
-			    	$user->password = Hash::make((string)$password);
-
-			    	$user->save();
-
-			    	// sending new password
-			    	$data['password'] 	= $password;
-			    	$data['email'] 		= $email;
-
-			    	Mail::send('emails.login.new_password', $data, function($message) use ($data)
-					{
-					    $message->from('info@apklausos.lt', 'Apklausos');
-					    $message->subject('Prisijungimo duomenys');
-
-					    $message->to($data['email']);
-					});
-		    	}
-
-		    	// adding user network
-		    	$network = new UserNetwork;
-
-		    	$network->user_id = $user->id;
-		    	$network->type = Config::get('social_types.facebook');
-		    	$network->social_id = $id;
-
-		    	$network->save();
-
-		    	Auth::loginUsingId( $user->id );
-
-		    	return Redirect::route('campaigns.my')->withLogned_social(Config::get('social_types.facebook'));
-		    }
-	    }
-	    else
-		{
-			$url = $fb->getAuthorizationUri();
-
-			return Redirect::to( (string)$url );
-		}
 	}
 
 	public function registerGoogle(Request $request)
 	{
-	    $code = $request->code;
 
-	    $googleService = OAuth::consumer('Google');
-
-	    if (!empty($code)) {
-	        $token = $googleService->requestAccessToken($code);
-
-	        $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true );
-
-	        $id 		= $result['id'];
-		    $email 		= $result['email'];
-		    $username 	= $result['given_name'] . ' ' . $result['family_name'];
-
-		    // check if users exists
-		    $user_network = UserNetwork::where('social_id', '=', $id)
-                ->where('type', '=', config('social_types.google'))
-                ->first();
-
-		    if ($user_network) {
-		    	Auth::loginUsingId($user_network->user_id);
-
-		    	return redirect()
-                    ->route('campaigns.my')
-                    ->withLogned_social(config('social_types.google'));
-		    } else {
-		    	$user = User::where('email', '=', $email)->first();
-
-		    	if (!$user) {
-			    	$password = time() + rand(1, 100);
-
-			    	// creating user
-			    	$user = new User;
-
-			    	$user->email = $email;
-			    	$user->username = $username;
-			    	$user->type = Config::get('user_types.user');
-			    	$user->password = Hash::make((string)$password);
-
-			    	$user->save();
-
-			    	// sending new password
-			    	$data['password'] 	= $password;
-			    	$data['email'] 		= $email;
-
-			    	Mail::send('emails.login.new_password', $data, function($message) use ($data)
-					{
-					    $message->from('info@apklausos.lt', 'Apklausos');
-					    $message->subject('Prisijungimo duomenys');
-
-					    $message->to($data['email']);
-					});
-		    	}
-
-		    	// adding user network
-		    	$network = new UserNetwork;
-
-		    	$network->user_id = $user->id;
-		    	$network->type = Config::get('social_types.google');
-		    	$network->social_id = $id;
-
-		    	$network->save();
-
-		    	Auth::loginUsingId( $user->id );
-
-		    	return Redirect::route('campaigns.my')->withLogned_social(Config::get('social_types.google'));
-		    }
-	    }
-	    else
-	    {
-	        $url = $googleService->getAuthorizationUri();
-
-	        return Redirect::to( (string)$url );
-	    }
 	}
 
 	public function login(Request $request)

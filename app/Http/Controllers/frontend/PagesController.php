@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 
 class PagesController extends Controller
 {
-    // View folder
-    protected $view = 'pages';
-
 	public function index($page = 'home')
 	{
 		switch ($page) {
@@ -24,9 +21,9 @@ class PagesController extends Controller
 		}
 
 		try {
-			return view('frontend.' . $this->view . '.' . $page);
+			return view('frontend.pages.' . $page);
 		} catch (Exception $e) {
-			return view('frontend.' . $this->view . '.404');
+			return view('frontend.pages.404');
 		}
 	}
 

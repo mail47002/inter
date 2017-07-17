@@ -11,9 +11,6 @@ use Image;
 
 class AccountController extends Controller
 {
-    // View folder
-    protected $view	= 'account';
-
     // Validation messages
     protected $messages = [
         'required'		=> 'Būtina užpildyti',
@@ -26,12 +23,12 @@ class AccountController extends Controller
 
 	function __construct()
 	{
-//		$this->beforeFilter('auth');
+		$this->middleware('auth');
 	}
 
 	public function index()
 	{
-		return view('frontend.' . $this->view . '.index');
+		return view('frontend.account.index');
 	}
 
 	public function update(Request $request)

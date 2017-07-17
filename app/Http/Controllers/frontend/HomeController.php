@@ -7,17 +7,6 @@ use App\Campaign;
 
 class HomeController extends Controller
 {
-    // View folder
-    protected $view = 'home';
-
-    function __construct()
-    {
-        // Access
-//        $except = ['session_destroy'];
-
-//        $this->beforeFilter('guest', ['except' => $except]);
-    }
-
     public function index()
     {
         $entries = Campaign::where('advertise_results', '>', 0)
@@ -33,7 +22,7 @@ class HomeController extends Controller
             ->take(5)
             ->get();
 
-        return view('frontend.' . $this->view . '.index', [
+        return view('frontend.home.index', [
             'entries' => $entries,
             'public_entries' => $public_entries
         ]);

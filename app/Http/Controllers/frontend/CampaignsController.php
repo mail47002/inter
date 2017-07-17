@@ -23,6 +23,11 @@ class CampaignsController extends Controller
     // View folder
     protected $view = 'campaigns';
 
+    // Allowed question types
+    protected $types = [
+        'radio', 'select', 'check', 'string', 'text', 'matrix'
+    ];
+
     // Validation messages
     protected $messages = [
         'required'  => 'Būtina užpildyti',
@@ -31,14 +36,11 @@ class CampaignsController extends Controller
         'mimes'		=> 'Netinkamas formatas. Galimi formatai: <em>jpeg, gif, bmp, png</em>.',
     ];
 
-	function __construct()
+	public function __construct()
 	{
-//		$except = ['index', 'answer', 'store_answer', 'answers', 'answered', 'search'];
-
-//		$this->beforeFilter('auth', ['except' => $except]);
-
-		// Allowed question types
-//		$this->types = ['radio', 'select', 'check', 'string', 'text', 'matrix'];
+        $this->middleware('auth', [
+            'index', 'answer', 'store_answer', 'answers', 'answered', 'search'
+        ]);
 	}
 
 	public function index()
@@ -48,7 +50,7 @@ class CampaignsController extends Controller
             ->orderBy('advertise_credits', 'desc')
             ->paginate(20);
 
-		return view('frontend.' . $this->view . '.index', [
+		return view('frontend.campaigns.index', [
 		    'entries' => $entries
         ]);
 	}
@@ -67,7 +69,7 @@ class CampaignsController extends Controller
 			->groupBy('campaigns.id')
 			->paginate(20);
 
-		return view('frontend.' . $this->view . '.index', [
+		return view('frontend.campaigns.index', [
 		    'entries'   => $entries
         ]);
 	}
@@ -79,7 +81,7 @@ class CampaignsController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(10);
 
-		return view('frontend.' . $this->view . '.my', [
+		return view('frontend.campaigns.my', [
 		    'entries' => $entries
         ]);
 	}
@@ -103,11 +105,11 @@ class CampaignsController extends Controller
 			}
 
 			if ($available) {
-				return view('frontend.' . $this->view . '.answer', [
+				return view('frontend.campaigns.answer', [
 				    'entry' => $entry
                 ]);
 			} else {
-                return redirect()->route($this->view . '.answered');
+                return redirect()->route('campaigns.answered');
             }
 		} else {
             return redirect()->route('campaigns.notfound');
@@ -267,17 +269,17 @@ class CampaignsController extends Controller
 
 	public function notFound()
 	{
-		return view('frontend.' . $this->view . '.notfound');
+		return view('frontend.campaigns.notfound');
 	}
 
 	public function answered()
 	{
-		return view('frontend.' . $this->view . '.answered');
+		return view('frontend.campaigns.answered');
 	}
 
 	public function create()
 	{
-		return view('frontend.' . $this->view . '.create');
+		return view('frontend.campaigns.create');
 	}
 
 	public function store(Request $request)
@@ -350,7 +352,7 @@ class CampaignsController extends Controller
 			}
 
 			return redirect()
-                ->route($this->view . '.my')
+                ->route('campaigns.my')
                 ->withCreated($entry->id);
 		}
 	}
@@ -368,7 +370,7 @@ class CampaignsController extends Controller
 
 			$entry->tags = implode(' ', $tags);
 
-			return view('frontend.' . $this->view . '.edit', [
+			return view('frontend.campaigns.edit', [
 			    'entry' => $entry
             ]);
 		} else {
@@ -381,7 +383,7 @@ class CampaignsController extends Controller
 		$entry = Campaign::find($id);
 
 		if ($entry && $entry->user_id == Auth::user()->id) {
-			return view('frontend.' . $this->view . '.questions', [
+			return view('frontend.campaigns.questions', [
                 'entry' => $entry
             ]);
 		} else {
@@ -419,7 +421,7 @@ class CampaignsController extends Controller
 				}
 			}
 
-			return view('frontend.' . $this->view . '.results', [
+			return view('frontend.campaigns.results', [
 			    'entry'          => $entry,
                 'bad_results'    => $bad_results,
                 'bad_questions'  => $bad_questions
@@ -543,7 +545,7 @@ class CampaignsController extends Controller
 			
 			$linear_probability = $kashi->chiDist($linear, 1);
 
-			return view('frontend.' . $this->view . '.cross_tabulation', [
+			return view('frontend.campaigns.cross_tabulation', [
                 'entry'                 => $entry,
                 'first'                 => $first,
                 'second'                => $second,
@@ -601,7 +603,7 @@ class CampaignsController extends Controller
 			$vars = $main_question->correlation_variables($main_question);
 			$main_question->correlation_coefficient = $this->Correlation($vars[0], $vars[1]);
 
-			return view('frontend.' . $this->view . '.regression', [
+			return view('frontend.campaigns.regression', [
 				'entry' => $entry,
 				'questions' => $questions,
 				'main_question' => $main_question
@@ -729,7 +731,7 @@ class CampaignsController extends Controller
 				}
 			}
 
-			return view('frontend.' . $this->view . '.correlation', [
+			return view('frontend.campaigns.correlation', [
 			    'entry'         => $entry,
                 'questions'     => $questions,
                 'correlation'   => [
@@ -862,7 +864,7 @@ class CampaignsController extends Controller
 				$excel->setDescription('Anketos rezultatai.');
 
 				$excel->sheet('Anketos rezultatai', function ($sheet) use ($entry) {
-					$sheet->loadView('frontend.' . $this->view . '.results_xlsx')->withEntry($entry);
+					$sheet->loadView('frontend.campaigns.results_xlsx')->withEntry($entry);
 				});
 
 			})->download('xlsx');
@@ -900,7 +902,7 @@ class CampaignsController extends Controller
 		$entry = Campaign::find($id);
 
 		if ($entry && $entry->user_id == Auth::user()->id && in_array($type, $this->types) && $entry->active == 0) {
-			return view('frontend.' . $this->view . '.add_question', [
+			return view('frontend.campaigns.add_question', [
                 'entry'     => $entry,
                 'type'      => $type
             ]);
@@ -915,7 +917,7 @@ class CampaignsController extends Controller
 		$cq = CampaignQuestion::find($question_id);
 
 		if ($c && $c->user_id == Auth::user()->id && $cq && $cq->campaign_id == $c->id && $c->active == 0) {
-			return view('frontend.' . $this->view . '.edit_question', [
+			return view('frontend.campaigns.edit_question', [
                 'entry'     => $c,
                 'question'  => $cq,
                 'type'      => $cq->type
@@ -1285,7 +1287,7 @@ class CampaignsController extends Controller
 			$entry->delete();
 
 			return redirect()
-                ->route( $this->view . '.my')
+                ->route('campaigns.my')
                 ->withDeleted($entry->id);
 		} else {
             return Redirect::back();

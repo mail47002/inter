@@ -16,12 +16,11 @@ class PaymentsController extends Controller
     // View folder
 	protected $view = 'payments';
 
-	function __construct()
+	public function __construct()
 	{
-//		$except = ['callback', 'success', 'cancel'];
-//
-//		$this->beforeFilter('auth', ['except' => $except]);
-
+	    $this->middleware('auth', [
+            'callback','success', 'cancel'
+        ]);
 	}
 
 	public function create($ammount)
@@ -106,12 +105,12 @@ class PaymentsController extends Controller
 
 	public function success()
 	{
-		return View::make('frontend.' . $this->view . '.success');
+		return view('frontend.payments.success');
 	}
 
 	public function cancel()
 	{
-		return View::make('frontend.' . $this->view . '.cancel');
+		return view('frontend.payments.cancel');
 	}
 
 }

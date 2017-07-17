@@ -6,17 +6,14 @@ use App\Http\Controllers\Controller;
 
 class CreditsController extends Controller
 {
-    // View folder
-    protected $view = 'credits';
-
-	function __construct()
+	public function __construct()
 	{
-//		$this->beforeFilter('auth');
+		$this->middleware('auth');
 	}
 
 	public function index()
 	{
-		return view('frontend.' . $this->view . '.index', [
+		return view('frontend.credits.index', [
 		    'prices' => config('prices')
         ]);
 	}
