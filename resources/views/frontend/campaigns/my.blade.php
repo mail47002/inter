@@ -19,19 +19,19 @@
 		</div>
 	</div>
 
-	@if (Session::get('created'))
+	@if (session('created'))
 		<div class="alert alert-success">
 			Anketa sėkmingai pridėta.
 		</div>
 	@endif
 
-	@if (Session::get('copied'))
+	@if (session('copied'))
 		<div class="alert alert-success">
 			Anketos kopija sėkmingai sukurta.
 		</div>
 	@endif
 
-	@if (Session::get('deleted'))
+	@if (session('deleted'))
 		<div class="alert alert-success">
 			Anketa sėkmingai ištrinta.
 		</div>

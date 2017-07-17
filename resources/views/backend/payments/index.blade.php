@@ -15,7 +15,7 @@
 		</h1>
 	</div>
 
-	@if (Session::get('created'))
+	@if (session('created'))
 		<div class="alert alert-success">
 			Mokėjimas sėkmingai pridėtas.
 		</div>
@@ -31,7 +31,7 @@
 			</thead>
 
 			@foreach ($entries as $entry)
-				<tr {{ (Session::get('created') == $entry->id ? 'class="success"' : NULL) }}>
+				<tr {{ (session('created') == $entry->id ? 'class="success"' : NULL) }}>
 					<td style="vertical-align: middle;">
 						{{ $entry->updated_at }}
 					</td>

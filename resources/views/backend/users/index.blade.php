@@ -15,19 +15,19 @@
 		</h1>
 	</div>
 
-	@if (Session::get('created'))
+	@if (session('created'))
 		<div class="alert alert-success">
 			Vartotojas sėkmingai pridėtas.
 		</div>
 	@endif
 
-	@if (Session::get('updated'))
+	@if (session('updated'))
 		<div class="alert alert-success">
 			Vartotojas sėkmingai atnaujintas.
 		</div>
 	@endif
 
-	@if (Session::get('deleted'))
+	@if (session('deleted'))
 		<div class="alert alert-success">
 			Vartotojas sėkmingai pašalintas.
 		</div>
@@ -43,7 +43,7 @@
 			</thead>
 
 			@foreach ($entries as $entry)
-				<tr {{ (Session::get('created') == $entry->id || Session::get('updated') == $entry->id ? 'class="success"' : NULL) }}>
+				<tr {{ (session('created') == $entry->id || session('updated') == $entry->id ? 'class="success"' : NULL) }}>
 					<td style="vertical-align: middle;">
 						{{ $entry->email }}<br>
 						<span class="label label-default">{{ $entry->isAdmin() ? 'Administratorius' : 'Vartotojas' }}</span>

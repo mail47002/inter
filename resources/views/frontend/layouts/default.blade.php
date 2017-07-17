@@ -10,7 +10,7 @@
 		@include('frontend.layouts.meta')
 
         <link href="{{ asset('packages/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('styles.css') }}" rel="stylesheet">
+        <link href="{{ asset('style.css') }}" rel="stylesheet">
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script type="text/javascript" src="{{ asset('js/holder.js') }}"></script>
@@ -39,7 +39,7 @@
 
                     @if (session('logned_social'))
                         <div class="alert alert-success">
-                            Sėkmingai prisijungėte naudojantis {{ Session::get('logned_social') == 1 ? 'Facebook' : 'Google' }}
+                            Sėkmingai prisijungėte naudojantis {{ session('logned_social') == 1 ? 'Facebook' : 'Google' }}
                         </div>
                     @endif
 

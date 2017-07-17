@@ -24,7 +24,7 @@
 
 		@include('frontend.campaigns.tabs')
 
-		@if (Session::get('updated'))
+		@if (session('updated'))
 			<div class="alert alert-success">
 				Anketa sėkmingai atnaujinta.
 			</div>

@@ -40,11 +40,6 @@ class RemindersController extends Controller
             : $this->sendResetLinkFailedResponse($request, $response);
 	}
 
-    public function broker()
-    {
-        return Password::broker();
-    }
-
     protected function sendResetLinkResponse($response)
     {
         return back()->with('status', trans($response));
@@ -53,7 +48,7 @@ class RemindersController extends Controller
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
         return back()->withErrors(
-            ['email' => trans($response)]
+            ['email'    => trans($response)]
         );
     }
 
@@ -81,9 +76,7 @@ class RemindersController extends Controller
 	 */
 	public function postReset(Request $request)
 	{
-		$credentials = $request->only('email', 'password', 'password_confirmation', 'token');
-
-		$response = Password::reset($credentials, function($user, $password) {
+		$response = Password::reset($this->credentials($request), function($user, $password) {
 			$user->password = Hash::make($password);
 
 			$user->save();
@@ -93,15 +86,27 @@ class RemindersController extends Controller
 			case Password::INVALID_PASSWORD:
 			case Password::INVALID_TOKEN:
 			case Password::INVALID_USER:
-				return Redirect::back()->with('error', Lang::get($response));
+				return redirect()
+                    ->back()
+                    ->with('error', trans($response));
 
 			case Password::PASSWORD_RESET:
-				return Redirect::route('password.success');
+				return redirect()->route('password.success');
 		}
 	}
 
     public function success()
     {
         return view('frontend.password.success');
+    }
+
+    public function broker()
+    {
+        return Password::broker();
+    }
+
+    protected function credentials(Request $request)
+    {
+        return $request->only('email', 'password', 'password_confirmation', 'token');
     }
 }
