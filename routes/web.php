@@ -13,7 +13,7 @@
 
 Route::namespace('frontend')->group(function() {
     // ADMINISTRAVIMAS
-    Route::resource('users', 'BackUsersController');
+
     Route::get('users/delete/{id}', ['as' => 'users.destroy', 'uses' => 'BackUsersController@destroy']);
 
     Route::resource('payments', 'BackPaymentsController');
@@ -96,7 +96,8 @@ Route::namespace('frontend')->group(function() {
 });
 
 Route::namespace('backend')->group(function() {
+    Route::resource('admin/users', 'UsersController');
 
-    Route::get('admin/pages', ['as' => 'index', 'uses' => 'BackPageController@index']);
+    Route::resource('admin/pages', 'PageController');
 
 });

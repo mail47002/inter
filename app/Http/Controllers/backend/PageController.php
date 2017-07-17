@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\backend;
 
-use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class BackPageController extends Controller
+class PageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +18,7 @@ class BackPageController extends Controller
      */
     public function index()
     {
-        return view('backend.pages');
+        return view('backend.pages.index');
     }
 
     /**
