@@ -3,44 +3,43 @@
 namespace App\Http\Controllers\backend;
 
 use App\User;
+use Auth;
 use Illuminate\Http\Request;
 use Validator;
 use File;
 use Image;
 use App\Http\Controllers\Controller;
+use Hash;
+use Mail;
 
 
 class UsersController extends Controller
 {
 
     protected $messages = [
-        'required'		=> 'Būtina užpildyti',
-        'email'			=> 'Netinkamas el. pašto adresas',
-        'enough'		=> 'Neužtenka kreditų',
-        'min'			=> 'Reikškmė turi susidaryti bent iš :min simbolių',
-        'mimes'			=> 'Netinkamas formatas. Galimi formatai: <em>jpeg, gif, bmp, png</em>.',
-        'confirmed'		=> 'Slaptažodžiai nesutampa',
-        'unique'		=> 'Jau egizstuoja',
+        'required'		=> 'Required',
+        'email'			=> 'Invalid email mail adress',
+        'enough'		=> 'Not enough credits',
+        'min'			=> 'The value must contain at least: min characters',
+        'mimes'			=> 'Invalid format. Available formats: <em> jpeg, gif, bmp, png </ em>.',
+        'confirmed'		=> 'Passwords do not match',
+        'unique'		=> 'Already existent',
     ];
 
 	public function __construct()
 	{
-	    $this->middleware('admin');
+	    // $this->middleware('admin');
 	}
 
-	public function index()
+	public function index(User $userModel)
 	{
-		$entries = User::orderBy('type', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-		return view('backend.users.index')
-			->withEntries($entries);
+		$users = $userModel->getUsers();
+		return view('backend.users.index', ['users' => $users, 'title' => 'User']);
 	}
 
 	public function create()
 	{
-		return view('backend.users.create');
+		return view('backend.users.create', ['title' => 'New User']);
 	}
 
 	public function store(Request $request)
@@ -50,7 +49,7 @@ class UsersController extends Controller
 			'username' 				=> 'required|unique:users,username',
 			'password' 				=> 'required|confirmed|min:6',
 			'photo' 				=> 'mimes:jpeg,gif,bmp,png',
-		), $this->messages);
+		));
 
 		if ($validation->fails()) {
 			return redirect()
@@ -58,8 +57,8 @@ class UsersController extends Controller
                 ->withInput()
                 ->withErrors($validation->messages());
 		} else {
-			$entry = new User;
 
+			$entry = new User;
 			$entry->email 		= $request->email;
 			$entry->username 	= $request->username;
 
@@ -80,7 +79,7 @@ class UsersController extends Controller
 					// creating directories
 					File::makeDirectory($path . 'default', 0777, true, true);
 
-					// Save 
+					// Save
 					$file->move($path . 'default/', $name);
 
 					// Resize if needed
@@ -91,6 +90,7 @@ class UsersController extends Controller
 					$entry->photo = $path . 'default/' . $name;
 				}
 			}
+			$entry->status 	= $request->status;
 
 			$entry->save();
 
@@ -98,12 +98,12 @@ class UsersController extends Controller
 	    	$data['email'] 		= $entry->email;
 	    	$data['password'] 	= $request->password;
 
-	    	Mail::send('emails.auth.created_by_admin', $data, function($message) use ($data) {
-			    $message->from('info@apklausos.lt', 'Apklausos');
-			    $message->subject('Prisijungimo duomenys');
+	   //  	Mail::send('emails.auth.created_by_admin', $data, function($message) use ($data) {
+			 //    $message->from('info@apklausos.lt', 'Apklausos');
+			 //    $message->subject('Prisijungimo duomenys');
 
-			    $message->to($data['email']);
-			});
+			 //    $message->to($data['email']);
+				// });
 
 			return redirect()
                 ->route('users.index')
@@ -111,29 +111,40 @@ class UsersController extends Controller
 		}
 	}
 
-	public function edit($id)
-	{
-		$entry = User::find($id);
+	/**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
 
-		if ($entry) {
-			return view('backend.' . $this->view . '.edit')
-				->withEntry($entry);
+	public function edit(User $user)
+	{
+
+		if ($user) {
+			 return view('backend.users.edit', [
+            'user' => $user,
+            'title' => 'Edit User']);
 		}
-		
+
 		return redirect()->route('users.index');
 	}
 
 	public function update($id, Request $request)
 	{
 		$entry = User::find($id);
-
+dd($entry);
 		if ($entry) {
 			$validation = Validator::make($request->all(), array(
 				'email' 				=> 'required|email|unique:users,email,' . $entry->id,
 				'username' 				=> 'required|unique:users,username,' . $entry->id,
-				'password' 				=> 'confirmed|min:6',
+				'password' 				=> 'nullable|min:6',
 				'photo' 				=> 'mimes:jpeg,gif,bmp,png',
-			), $this->messages);
+			));
 
 			if ($validation->fails()) {
 				return redirect()
@@ -144,19 +155,8 @@ class UsersController extends Controller
 				$entry->email 		= $request->email;
 				$entry->username 	= $request->username;
 
-				if ($request->has('password')) {
+				if (!empty($request->password)) {
 					$entry->password 	= Hash::make((string) $request->password);
-					
-					// Send login data
-			    	$data['email'] 		= $entry->email;
-			    	$data['password'] 	= $request->password;
-
-			    	Mail::send('emails.auth.password_changed', $data, function($message) use ($data) {
-					    $message->from('info@apklausos.lt', 'Apklausos');
-					    $message->subject('Pakeistas slaptažodis');
-
-					    $message->to($data['email']);
-					});
 				}
 
 				// Uploading photo
@@ -173,7 +173,7 @@ class UsersController extends Controller
 						// creating directories
 						File::makeDirectory($path . 'default', 0777, true, true);
 
-						// Save 
+						// Save
 						$file->move($path . 'default/', $name);
 
 						// Resize if needed
@@ -185,18 +185,31 @@ class UsersController extends Controller
 					}
 				}
 
+				$entry->status 	= $request->has('status') ? 1 : 0;
+
 				$entry->save();
+
+				// Send login data
+	    	$data['email'] 		= $entry->email;
+	    	$data['password'] 	= $request->password;
+
+	    	// Mail::send('emails.auth.password_changed', $data, function($message) use ($data) {
+			   //  $message->from('info@apklausos.lt', 'Apklausos');
+			   //  $message->subject('Pakeistas slaptažodis');
+
+			   //  $message->to($data['email']);
+			   //  });
 
 				return redirect()
                     ->route('users.index')
-                    ->withUpdated($entry->id);
+                     ->withUpdated($entry->id);
 			}
 		}
-		
+
 		return redirect()->route('users.index');
 	}
 
-	public function destroy($id)
+	public function destroy($id, Request $request)
 	{
 		$entry = User::find($id);
 
@@ -208,7 +221,7 @@ class UsersController extends Controller
                 ->route('users.index')
                 ->withDeleted($entry->id);
 		}
-		
+
 		return redirect()->route('users.index');
 	}
 

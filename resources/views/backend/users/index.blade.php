@@ -1,89 +1,43 @@
-@extends('frontend.layouts.default')
+@extends('backend.layouts.default')
 
-@include('frontend.layouts.navigation')
-
-@section('title')Vartotojų administravimas - @stop
+@section('title', $title)
 
 @section('content')
-	<div class="page-header">
-		<h1>
-			Vartotojų administravimas
-			
-			<div class="pull-right">
-				<a href="{{ route('users.create') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Sukurti naują vartotoją</a>
-			</div>
-		</h1>
+
+<div class="col-md-10">
+	<div class="content-box-large">
+		<div class="panel-heading">
+            <div class="panel-title">Users</div>
+			<div class="panel-title"><a href="{{route('users.create')}}" class="btn btn-success"><i class="glyphicon glyphicon-certificate"></i> New user</a></div>
+		</div>
+		<div class="panel-body">
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>username</th>
+						<th>email</th>
+						<th>Register</th>
+						<th>Status</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				@foreach($users as $user)
+					<tr class="odd gradeX">
+						<td>{{$user->id}}</td>
+						<td>{{$user->username}}</td>
+						<td>{{$user->email}}</td>
+						<td class="center">{{$user->created_at}}</td>
+						<td class="center">
+							{!! ($user->status == 1) ? '<i class="glyphicon glyphicon-hand-up">' : '<i class="glyphicon glyphicon-hand-down">' !!}
+						</td>
+						<td class="center"> <a href="{{route('users.edit', ['id' => $user->id])}}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> Edit</a> <a href="{{ route('users.destroy', ['id' => $user->id]) }}" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Delete</a> </td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
 	</div>
-
-	@if (session('created'))
-		<div class="alert alert-success">
-			Vartotojas sėkmingai pridėtas.
-		</div>
-	@endif
-
-	@if (session('updated'))
-		<div class="alert alert-success">
-			Vartotojas sėkmingai atnaujintas.
-		</div>
-	@endif
-
-	@if (session('deleted'))
-		<div class="alert alert-success">
-			Vartotojas sėkmingai pašalintas.
-		</div>
-	@endif
-	
-	@if (count($entries) > 0)
-		<table class="table">
-			<thead>
-				<th>El. paštas</th>
-				<th>Vartotojo vardas</th>
-				<th>Registruotas</th>
-				<th>Veiksmai</th>
-			</thead>
-
-			@foreach ($entries as $entry)
-				<tr {{ (session('created') == $entry->id || session('updated') == $entry->id ? 'class="success"' : NULL) }}>
-					<td style="vertical-align: middle;">
-						{{ $entry->email }}<br>
-						<span class="label label-default">{{ $entry->isAdmin() ? 'Administratorius' : 'Vartotojas' }}</span>
-					</td>
-
-					<td style="vertical-align: middle;">
-						{{ $entry->username }}
-					</td>
-
-					<td style="vertical-align:middle;">
-						{{ $entry->created_at }}
-					</td>
-
-					<td style="vertical-align: middle;">
-						<div class="btn-group">
-							<a href="{{ route('users.edit', $entry->id) }}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-edit"></span> Redaguoti</a>
-							<a href="{{ route('users.destroy', $entry->id) }}" class="btn btn-sm btn-default remove"><span class="glyphicon glyphicon-trash"></span> Ištrinti</a>
-						</div>
-					</td>
-				</tr>
-			@endforeach
-		</table>
-
-		<script>
-			$(".remove").click(function ()
-			{
-				var c = confirm('Ar tikrai norite ištrinti?');
-
-				return c;
-			});
-		</script>
-
-		<div class="text-center">
-			{{ $entries->links() }}
-		</div>
-	@else
-		<div class="alert alert-warning">
-			<h4>Tuščia!</h4>
-
-			<a href="{{ route('campaigns.create') }}">Pridėkite</a> dabar.
-		</div>
-	@endif
+</div>
 @stop

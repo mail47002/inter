@@ -1,93 +1,76 @@
-@extends('frontend.layouts.default')
+@extends('backend.layouts.default')
 
-@include('frontend.layouts.navigation')
-
-@section('title')Vartotojo redagavimas - @stop
+@section('title', $title)
 
 @section('content')
-	{{ Form::open( ['route' => ['users.update', $entry->id], 'method' => 'put', 'class' => 'form-horizontal', 'files' => true] ) }}
-		<div class="page-header">
-			<h1>
-				Vartotojo redagavimas
-				<small>{{ $entry->username }}</small>
-				
-				<div class="pull-right">
-					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Išsaugoti duomenis</button>
-				</div>
-			</h1>
-		</div>
+	<div class="col-md-10">
+	<div class="content-box-large">
+		<div class="panel-heading">
+          <div class="panel-title">Edit - {{$user->username}}</div>
 
+          <div class="panel-options">
+            <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+            <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+          </div>
+      </div>
+		{{ Form::open( ['route' => ['users.update', $user->id], 'method' => 'put', 'class' => 'form-horizontal', 'files' => true] ) }}
 		<div class="row">
-			<div class="col-sm-7">
-				<p class="lead">Bendrieji duomenys</p>
-
+			<div class="col-sm-6">
+				<p class="lead">General data</p>
+{{-- @php(dd($user->email)) --}}
 				<div class="form-group {{ ( $errors->first('email') ? 'has-error' : NULL) }}">
-					{{ Form::label('email', 'El. paštas', [ 'class' => 'col-sm-3 control-label']) }}
-
-					<div class="col-sm-9">
-						{{ Form::email('email', $entry->email, [ 'class' => 'form-control', 'placeholder' => 'El. pašto adresas']) }}
-
-						{{ $errors->first('email', '<label class="control-label">:message</label>') }}
-					</div>
+					{{ Form::label('email', 'Email') }}
+					{{ Form::email('email', $user->email, [ 'class' => 'form-control', 'placeholder' => 'Email adress']) }}
+					{{ $errors->first('email', '<label class="control-label">:message</label>') }}
 				</div>
-
 				<div class="form-group {{ ( $errors->first('username') ? 'has-error' : NULL) }}">
-					{{ Form::label('username', 'Vartotojo vardas', [ 'class' => 'col-sm-3 control-label']) }}
+					{{ Form::label('username', 'Username') }}
 
-					<div class="col-sm-9">
-						{{ Form::text('username', $entry->username, [ 'class' => 'form-control', 'placeholder' => 'Unikalus vartotojo vardas']) }}
-
+						{{ Form::text('username', $user->username, [ 'class' => 'form-control', 'placeholder' => 'Unique username']) }}
 						{{ $errors->first('username', '<label class="control-label">:message</label>') }}
-					</div>
 				</div>
 
-				<hr>
-
-				<p class="lead">Naujas slaptažodis</p>
+				<p class="lead">New password</p>
 
 				<div class="form-group {{ ( $errors->first('password') ? 'has-error' : NULL) }}">
-					{{ Form::label('password', 'Slaptažodis', [ 'class' => 'col-sm-3 control-label']) }}
-
-					<div class="col-sm-9">
-						{{ Form::password('password', [ 'class' => 'form-control', 'placeholder' => 'Naujas slaptažodis']) }}
-
-						{{ $errors->first('password', '<label class="control-label">:message</label>') }}
-					</div>
+					{{ Form::label('password', 'Password') }}
+					{{ Form::password('password', [ 'class' => 'form-control', 'placeholder' => 'Naujas slaptažodis']) }}
+					{{ $errors->first('password', '<label class="control-label">:message</label>') }}
 				</div>
-
 				<div class="form-group {{ ( $errors->first('password_confirmation') ? 'has-error' : NULL) }}">
-					{{ Form::label('password_confirmation', 'Pakartokite', [ 'class' => 'col-sm-3 control-label']) }}
-
-					<div class="col-sm-9">
-						{{ Form::password('password_confirmation', [ 'class' => 'form-control', 'placeholder' => 'Pakartokite naują slaptažodį']) }}
-
-						{{ $errors->first('password_confirmation', '<label class="control-label">:message</label>') }}
-					</div>
+					{{ Form::label('password_confirmation', 'Repeat') }}
+					{{ Form::password('password_confirmation', [ 'class' => 'form-control', 'placeholder' => 'Repeat the new password']) }}
+					{{ $errors->first('password_confirmation', '<label class="control-label">:message</label>') }}
 				</div>
-
-				<div class="alert alert-info">Jei nenorite keisti slaptažodžio - laukelių nepildykite!</div>
+				<div class="form-group">
+					{!! Form::label('status', 'Status') !!}
+					{!! Form::checkbox('status', 1, true); !!}
+				</div>
+				<div class="alert alert-info">If you do not want to change your password - do not fill in the fields!</div>
+				<div class="form-group">
+		    	{!!Form::submit('Save', ['class' => 'btn btn-primary'])!!}
+		  	</div>
 			</div>
 
-			<div class="col-sm-5">
-				<p class="lead">Įkelkite profilio nuotrauką</p>
+			<div class="col-sm-3">
+				<p class="lead">Upload a profile photo</p>
 
 				<div class="form-group {{ ( $errors->first('photo') ? 'has-error' : NULL) }}">
-					@if ( ! empty($entry->photo))
+					@if ( ! empty($user->photo))
 						<div class="col-sm-3">
 							<p>
-								<img src="{{ asset($entry->photo) }}" alt="Anketos paveikslėlis" class="img-thumbnail" style="width: 124px;">
+								<img src="{{ asset($user->photo) }}" alt="Picture of the profile" class="img-thumbnail" style="width: 124px;">
 							</p>
 						</div>
 					@endif
-
 					<div class="col-sm-9">
 						<p>
-							<strong>Pasirinkite naują</strong>
+							<strong>Select a new one</strong>
 						</p>
 
 						<p>
-							{{ Form::file('photo', [ 'class' => 'form-control ', 'placeholder' => 'Anketos paveikslėlis']) }}
-							
+							{{ Form::file('photo', [ 'class' => 'form-control ', 'placeholder' => 'Picture of the profile']) }}
+
 							{{ $errors->first('photo', '<br><label class="control-label">:message</label>') }}
 						</p>
 					</div>
@@ -97,4 +80,6 @@
 
 		<p></p>
 	{{ Form::close() }}
+	</div>
+	</div>
 @stop

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="{{ asset('packages/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('packages/vendors/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" media="screen">
     <link href="{{ asset('css/backend/styles.css') }}" rel="stylesheet">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
