@@ -137,7 +137,6 @@ class UsersController extends Controller
 	public function update($id, Request $request)
 	{
 		$entry = User::find($id);
-dd($entry);
 		if ($entry) {
 			$validation = Validator::make($request->all(), array(
 				'email' 				=> 'required|email|unique:users,email,' . $entry->id,
