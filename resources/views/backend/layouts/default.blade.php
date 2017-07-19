@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ config('app.locale') }}">
 <head>
-    <title>@yield('title')</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title')</title>
     <link href="{{ asset('packages/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     @stack('styles')
     <link href="{{ asset('css/backend/styles.css') }}" rel="stylesheet">
@@ -15,18 +16,13 @@
                     <h1><a href="#">Admin Panel</a></h1>
                 </div>
             </div>
-            @if (auth()->check())
-                @include('backend.layouts.search')
-                @include('backend.layouts.account')
-            @endif
+            @include('backend.layouts.search')
+            @include('backend.layouts.account')
         </div>
     </div>
     <div class="page-content">
         <div class="row">
-            @if (auth()->check())
-                @include('backend.layouts.menu')
-            @endif
-
+            @include('backend.layouts.menu')
             @yield('content')
         </div>
     </div>
