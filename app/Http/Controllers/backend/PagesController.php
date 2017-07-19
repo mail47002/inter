@@ -126,19 +126,8 @@ class PagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Page $page)
     {
-      $page = Page::find($id);
-
-      if ($page) {
-        $page->campaigns()->delete();
-        $page->delete();
-
-        return redirect()
-                  ->route('pages.index')
-                  ->withDeleted($page->id);
-      }
-
-      return redirect()->route('pages.index');
+      $page->destroy();
     }
 }

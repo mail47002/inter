@@ -55,5 +55,21 @@
     <script src="{{ asset('packages/vendors/datatables/dataTables.bootstrap.js') }}"></script>
     <script src="{{ asset('js/backend/custom.js') }}"></script>
     <script src="{{ asset('js/backend/tables.js') }}"></script>
+    <script type="text/javascript">
+
+		  $('.btn-danger').on('click', function (e) {
+		  	console.log($(this).attr('href'));
+		    if (!confirm('Are you sure you want to delete?')) return false;
+		  e.preventDefault();
+		    $.post({
+		        type: 'POST',  // destroy Method
+		        url: $(this).attr('href')
+		    }).done(function (data) {
+		        console.log(data);
+		        location.reload(true);
+		    });
+		  });
+
+	</script>
   </body>
 </html>
