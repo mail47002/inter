@@ -5,20 +5,19 @@ namespace App\Http\Controllers\backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Page;
-use Validator;
 
 class PagesController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware(['admin', 'auth']);
+        $this->middleware(['admin']);
     }
 
     public function index()
     {
         return view('backend.pages.index', [
-            'pages' => Page::all()
+            'pages' => Page::paginate()
         ]);
     }
 
@@ -29,21 +28,16 @@ class PagesController extends Controller
 
     public function store(Request $request)
     {
-        $validation = Validator::make($request->all(), array(
+        $this->validate($request, [
             'title'     => 'required',
             'slug'      => 'required',
-        ));
+        ]);
 
-        if ($validation->fails()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->withErrors($validation->messages());
-        } else {
-            Page::create($request->all());
+        $page = Page::create($request->all());
 
-            return redirect()->route('pages.index');
-        }
+        return redirect()
+            ->route('pages.index')
+            ->withStatus(trans('pages.create'));
     }
 
     public function show($id)
@@ -69,23 +63,16 @@ class PagesController extends Controller
         $page = Page::find($id);
 
         if ($page) {
-            $validation = Validator::make($request->all(), [
+            $this->validate($request, [
                 'title'     => 'required',
                 'slug'      => 'required'
             ]);
 
-            if ($validation->fails()) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->withErrors($validation->messages());
-            } else {
-                $page->fill($request->all())->save();
+            $page->fill($request->all())->save();
 
-                return redirect()
-                    ->route('pages.index')
-                    ->withUpdated($page->id);
-            }
+            return redirect()
+                ->route('pages.index')
+                ->withStatus(trans('pages.update'));
         }
     }
 
@@ -98,7 +85,7 @@ class PagesController extends Controller
 
             return redirect()
                 ->route('pages.index')
-                ->withDeleted($page->id);
+                ->withStatus(trans('pages.delete'));
         }
 
         return redirect()->route('pages.index');

@@ -6,16 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    protected $fillable = ['title', 'slug', 'content', 'published'];
+    protected $fillable = [
+        'title', 'slug', 'content', 'status'
+    ];
 
-    public function getPages()
+    public function setSlugAttribute($value)
     {
-    	$pages = $this->latest('created_at')->published()->get();
-    	return $pages;
+        $this->attributes['slug'] = $this->makeSlug($value);
     }
 
-    public function scopePublished($query)
+    protected function makeSlug($value, $extra = '')
     {
-    	// $query->where('published', '=', 1);
+        $slug = !empty($extra) ? str_slug($value . '-' . $extra) : str_slug($value);
+
+        if ($this->id === null && $this->whereSlug($slug)->exists()) {
+            return $this->makeSlug($value, $extra + 1);
+        }
+
+        return $slug;
     }
 }

@@ -17,10 +17,10 @@ class Admin
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ((int) Auth::user()->isAdmin() === 1) {
+        if (Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
 
-        return redirect('/');
+        return redirect('/admin');
     }
 }

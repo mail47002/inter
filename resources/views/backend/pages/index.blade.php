@@ -4,33 +4,46 @@
 <div class="col-md-10">
 	<div class="content-box-large">
 		<div class="panel-heading">
-            <div class="panel-title">Pages</div>
-			<div class="panel-title"><a href="{{route('pages.create')}}" class="btn btn-success"><i class="glyphicon glyphicon-certificate"></i> New page</a></div>
+			<div class="pull-right">
+				<a href="{{ route('pages.create') }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> New Page</a>
+			</div>
+			<h1 class="panel-title">Pages</h1>
 		</div>
 		<div class="panel-body">
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
+			@if (session('status'))
+				<div class="alert alert-success">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					{{ session('status') }}
+				</div>
+			@endif
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">
 				<thead>
 					<tr>
 						<th>Id</th>
 						<th>Title</th>
 						<th>Slug</th>
-						<th>Date</th>
-						<th>Published</th>
+						<th class="text-center">Status</th>
+						<th>Create At</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
-				@foreach($pages as $page)
-					<tr class="odd gradeX">
-						<td>{{$page->id}}</td>
-						<td>{{$page->title}}</td>
-						<td>{{$page->slug}}</td>
-						<td class="center">{{$page->created_at}}</td>
-						<td class="center">
-							{!! ($page->published == 1) ? '<i class="glyphicon glyphicon-hand-up">' : '<i class="glyphicon glyphicon-hand-down">' !!}
-						</td>
-						<td class="center"> <a href="{{route('pages.edit', ['id' => $page->id])}}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> Edit</a> <a href="{{ route('pages.destroy', ['id' => $page->id]) }}" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Delete</a> </td>
-					</tr>
+					@foreach ($pages as $page)
+						<tr>
+							<td>{{ $page->id }}</td>
+							<td>{{ $page->title }}</td>
+							<td>{{ $page->slug }}</td>
+							<td class="text-center">
+								{!! $page->status == 1 ? '<span class="status status-success"></span>' : '<span class="status"></span>' !!}
+							</td>
+							<td>{{ $page->created_at }}</td>
+							<td>
+								<a href="{{ route('pages.edit', $page->id) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+								{{ Form::open(['route' => ['pages.destroy', $page->id], 'method' => 'delete', 'class' => 'form-inline']) }}
+									<button class="btn btn-danger" type="submit" onclick="return confirm('Do you want to delete this page?');"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+								{{ Form::close() }}
+							</td>
+						</tr>
 					@endforeach
 				</tbody>
 			</table>
