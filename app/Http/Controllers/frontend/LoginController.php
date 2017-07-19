@@ -101,5 +101,4 @@ class LoginController extends Controller
 
 		return redirect()->route('home')->withLogout(1);
 	}
-
 }

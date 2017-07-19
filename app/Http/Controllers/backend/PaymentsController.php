@@ -7,13 +7,10 @@ use App\Http\Controllers\Controller;
 
 class PaymentsController extends Controller
 {
-    protected $messages = [
-		'required'		=> 'Būtina užpildyti',
-    ];
 
 	function __construct()
 	{
-		$this->middleware('admin');
+        $this->middleware(['admin', 'auth']);
 	}
 
 	public function index()

@@ -1,9 +1,6 @@
 @extends('backend.layouts.default')
 
-@section('title', $title)
-
 @section('content')
-
 <div class="col-md-10">
 	<div class="content-box-large">
 		<div class="panel-heading">

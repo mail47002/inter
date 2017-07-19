@@ -10,10 +10,24 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::namespace('backend')->group(function() {
+    // Auth
+    Route::get('admin', 'LoginController@index');
+    Route::post('admin/login', ['as' => 'backend.login', 'uses' => 'LoginController@login']);
+    Route::get('admin/logout', ['as' => 'backend.logout', 'uses' => 'LoginController@logout']);
+
+    // Users
+    Route::resource('admin/users', 'UsersController');
+
+    // Pages
+    Route::resource('admin/pages', 'PagesController');
+
+    // Banners
+    Route::resource('admin/banners', 'BannersController');
+});
 
 Route::namespace('frontend')->group(function() {
     // ADMINISTRAVIMAS
-
     Route::get('users/delete/{id}', ['as' => 'users.destroy', 'uses' => 'BackUsersController@destroy']);
 
     Route::resource('payments', 'BackPaymentsController');
@@ -81,7 +95,7 @@ Route::namespace('frontend')->group(function() {
     Route::post('atkurti-slaptazodi', ['as' => 'password.reset.post', 'uses' => 'RemindersController@postReset']);
     Route::get('slaptazodis-pakeistas', ['as' => 'password.success', 'uses' => 'RemindersController@success']);
 
-    // Login & Registration
+    // Auth & Registration
     Route::get('prisijungimas', ['as' => 'login', 'uses' => 'LoginController@index']);
     Route::get('registruotis', ['as' => 'login.registration', 'uses' => 'LoginController@registration']);
     Route::post('registruotis', ['as' => 'login.register', 'uses' => 'LoginController@register']);
@@ -94,21 +108,3 @@ Route::namespace('frontend')->group(function() {
     Route::get('', ['as' => 'home', 'uses' => 'HomeController@index']);
     Route::get('{page}', 'PagesController@index');
 });
-
-Route::namespace('backend')->group(function() {
-    // Users
-    Route::resource('admin/users', 'UsersController');
-
-    // Pages
-    Route::resource('admin/pages', 'PagesController');
-
-});
-
-// Verb    Path                        Action  Route Name
-// GET     /lpz                        index   lpz.index
-// GET     /lpz/create                 create  lpz.create
-// POST    /lpz                        store   lpz.store
-// GET     /lpz/{lpz}                  show    lpz.show
-// GET     /lpz/{lpz}/edit             edit    lpz.edit
-// PUT     /lpz/{lpz}                  update  lpz.update
-// DELETE  /lpz/{lpz}                  destroy lpz.destroy

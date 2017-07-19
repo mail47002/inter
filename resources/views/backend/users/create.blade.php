@@ -13,7 +13,7 @@
         <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
       </div>
     </div>
-		{{ Form::open( ['route' => ['users.store'], 'method' => 'post', 'class' => 'form-horizontal', 'files' => true] ) }}
+		{{ Form::open( ['route' => 'users.store', 'method' => 'post', 'class' => 'form-horizontal', 'files' => true] ) }}
 		<div class="row">
 			<div class="col-sm-6">
 				<p class="lead">General data</p>

@@ -16,19 +16,9 @@ use Mail;
 class UsersController extends Controller
 {
 
-    protected $messages = [
-        'required'		=> 'Required',
-        'email'			=> 'Invalid email mail adress',
-        'enough'		=> 'Not enough credits',
-        'min'			=> 'The value must contain at least: min characters',
-        'mimes'			=> 'Invalid format. Available formats: <em> jpeg, gif, bmp, png </ em>.',
-        'confirmed'		=> 'Passwords do not match',
-        'unique'		=> 'Already existent',
-    ];
-
 	public function __construct()
 	{
-	    // $this->middleware('admin');
+	    $this->middleware(['admin', 'auth']);
 	}
 
 	public function index(User $userModel)
@@ -98,13 +88,6 @@ class UsersController extends Controller
 	    	$data['email'] 		= $entry->email;
 	    	$data['password'] 	= $request->password;
 
-	   //  	Mail::send('emails.auth.created_by_admin', $data, function($message) use ($data) {
-			 //    $message->from('info@apklausos.lt', 'Apklausos');
-			 //    $message->subject('Prisijungimo duomenys');
-
-			 //    $message->to($data['email']);
-				// });
-
 			return redirect()
                 ->route('users.index')
                 ->withCreated($entry->id);
@@ -119,16 +102,27 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        $entry = User::find($id);
+
+        if ($entry) {
+            return view('backend.users.show', [
+                'user' => $entry,
+                'title' => 'Edit User'
+            ]);
+        }
+
+        return redirect()->route('users.index');
     }
 
-	public function edit(User $user)
+	public function edit($id)
 	{
+        $entry = User::find($id);
 
-		if ($user) {
+		if ($entry) {
 			 return view('backend.users.edit', [
-            'user' => $user,
-            'title' => 'Edit User']);
+                'user' => $entry,
+                'title' => 'Edit User'
+             ]);
 		}
 
 		return redirect()->route('users.index');
@@ -137,12 +131,13 @@ class UsersController extends Controller
 	public function update($id, Request $request)
 	{
 		$entry = User::find($id);
+
 		if ($entry) {
 			$validation = Validator::make($request->all(), array(
-				'email' 				=> 'required|email|unique:users,email,' . $entry->id,
-				'username' 				=> 'required|unique:users,username,' . $entry->id,
-				'password' 				=> 'nullable|min:6',
-				'photo' 				=> 'mimes:jpeg,gif,bmp,png',
+				'email' 	=> 'required|email|unique:users,email,' . $entry->id,
+				'username'  => 'required|unique:users,username,' . $entry->id,
+				'password' 	=> 'nullable|min:6',
+				'photo' 	=> 'mimes:jpeg,gif,bmp,png',
 			));
 
 			if ($validation->fails()) {
@@ -189,20 +184,13 @@ class UsersController extends Controller
 				$entry->save();
 
 				// Send login data
-	    	$data['email'] 		= $entry->email;
-	    	$data['password'] 	= $request->password;
+	    	    $data['email'] 		= $entry->email;
+	    	    $data['password'] 	= $request->password;
 
-	    	// Mail::send('emails.auth.password_changed', $data, function($message) use ($data) {
-			   //  $message->from('info@apklausos.lt', 'Apklausos');
-			   //  $message->subject('Pakeistas slaptažodis');
-
-			   //  $message->to($data['email']);
-			   //  });
-
-				return redirect()
+                return redirect()
                     ->route('users.index')
-                     ->withUpdated($entry->id);
-			}
+                    ->withUpdated($entry->id);
+            }
 		}
 
 		return redirect()->route('users.index');
