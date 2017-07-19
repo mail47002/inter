@@ -1,5 +1,9 @@
 @extends('backend.layouts.default')
 
+@section('title')
+	Admin Panel - Pages
+@endsection
+
 @section('content')
 <div class="col-md-10">
 	<div class="content-box-large">
@@ -23,7 +27,7 @@
 						<th>Title</th>
 						<th>Slug</th>
 						<th class="text-center">Status</th>
-						<th>Create At</th>
+						<th>Created At</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -47,6 +51,7 @@
 					@endforeach
 				</tbody>
 			</table>
+			{{ $pages->links() }}
 		</div>
 	</div>
 </div>

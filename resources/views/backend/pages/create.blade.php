@@ -1,5 +1,9 @@
 @extends('backend.layouts.default')
 
+@section('title')
+	Admin Panel - Page - Create
+@endsection
+
 @section('content')
 	<div class="col-md-10">
 		<div class="content-box-large">
@@ -9,7 +13,7 @@
 			<div class="panel-body">
 				{!! Form::open(['route' => 'pages.store', 'method' => 'post']) !!}
 				<div class="row">
-					<div class="col-md-9">
+					<div class="col-md-8">
 						<div class="form-group {{ $errors->first('title', 'has-error') }}">
 							{!! Form::label('title', 'Title:') !!}
 							{!! Form::text('title', null, ['class' => 'form-control']) !!}
@@ -25,7 +29,7 @@
 							{!! Form::textarea('content', null, ['id' => 'editor']) !!}
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group">
 							{!! Form::label('status', 'Status:') !!}
 							{!! Form::select('status', ['0' => 'Disabled', '1' => 'Enabled'], 1, ['class' => 'form-control']) !!}

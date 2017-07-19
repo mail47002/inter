@@ -1,5 +1,9 @@
 @extends('backend.layouts.default')
 
+@section('title')
+	Admin Panel - {{ $page->title }} - Edit
+@endsection
+
 @section('content')
 	<div class="col-md-10">
 		<div class="content-box-large">
@@ -9,7 +13,7 @@
 			<div class="panel-body">
 				{!! Form::open(['route' => ['pages.update', $page->id], 'method' => 'put']) !!}
 				<div class="row">
-					<div class="col-md-9">
+					<div class="col-md-8">
 						<div class="form-group {{ $errors->first('title', 'has-error') }}">
 							{!! Form::label('title', 'Title:') !!}
 							{!! Form::text('title', $page->title, ['class' => 'form-control']) !!}
@@ -25,7 +29,7 @@
 							{!! Form::textarea('content', $page->content, ['id' => 'editor']) !!}
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group">
 							{!! Form::label('status', 'Status:') !!}
 							{!! Form::select('status', ['0' => 'Disabled', '1' => 'Enabled'], $page->status, ['class' => 'form-control']) !!}

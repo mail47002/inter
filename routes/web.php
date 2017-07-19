@@ -27,9 +27,7 @@ Route::namespace('backend')->group(function() {
 });
 
 Route::namespace('frontend')->group(function() {
-    // ADMINISTRAVIMAS
-    Route::get('users/delete/{id}', ['as' => 'users.destroy', 'uses' => 'BackUsersController@destroy']);
-
+    // Payments
     Route::resource('payments', 'BackPaymentsController');
     Route::get('payments/delete/{id}', ['as' => 'payments.destroy', 'uses' => 'BackPaymentsController@destroy']);
 
