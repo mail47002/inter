@@ -198,18 +198,18 @@ class UsersController extends Controller
 
 	public function destroy($id, Request $request)
 	{
-		$entry = User::find($id);
+		 $entry = User::find($id);
 
-		if ($entry) {
-			$entry->campaigns()->delete();
-			$entry->delete();
+		 if ($entry) {
+		 	$entry->campaigns()->delete();
+		 	$entry->delete();
 
-			return redirect()
-                ->route('users.index')
-                ->withDeleted($entry->id);
-		}
+		 	return redirect()
+                 ->route('users.index')
+                 ->withDeleted($entry->id);
+		 }
 
-		return redirect()->route('users.index');
+		 return redirect()->route('users.index');
 	}
 
 }

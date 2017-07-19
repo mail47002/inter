@@ -5,7 +5,6 @@ namespace App\Http\Controllers\backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Page;
-use Auth;
 use Validator;
 
 class PagesController extends Controller
@@ -65,16 +64,15 @@ class PagesController extends Controller
         return redirect()->route('pages.index');
     }
 
-
     public function update($id, Request $request)
     {
         $page = Page::find($id);
 
         if ($page) {
-            $validation = Validator::make($request->all(), array(
+            $validation = Validator::make($request->all(), [
                 'title'     => 'required',
                 'slug'      => 'required'
-            ));
+            ]);
 
             if ($validation->fails()) {
                 return redirect()
@@ -96,7 +94,6 @@ class PagesController extends Controller
         $page = Page::find($id);
 
         if ($page) {
-            $page->campaigns()->delete();
             $page->delete();
 
             return redirect()
