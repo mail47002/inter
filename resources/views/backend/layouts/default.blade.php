@@ -3,7 +3,7 @@
 <head>
     <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+		<meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('packages/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('packages/vendors/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" media="screen">
     <link href="{{ asset('css/backend/styles.css') }}" rel="stylesheet">
@@ -40,7 +40,7 @@
     </div>
 
     <link href="{{ asset('packages/vendors/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" media="screen">
-    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="{{ asset('packages/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('packages/vendors/datatables/js/jquery.dataTables.min.js') }}"></script>
