@@ -9,11 +9,6 @@ use Auth;
 
 class LoginController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin.auth');
-    }
-
     public function index()
     {
         return view('backend.login.index');
@@ -21,30 +16,18 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $validation = Validator::make($request->all(), [
+        $this->validate($request, [
             'email'     => 'required|email',
             'password'  => 'required|string',
         ]);
 
-        if ($validation->fails()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->withErrors($validation->messages());
-        }
-
         if (Auth::attempt($request->only('email', 'password')) && Auth::user()->isAdmin()) {
             $request->session()->regenerate();
 
-            return redirect()
-                ->route('pages.index')
-                ->withLogned(1);
-        } else {
-            return redirect()
-                ->back()
-                ->withLogin_error(1)
-                ->withInput();
+            return redirect()->route('pages.index');
         }
+
+        return redirect()->back();
     }
 
     public function logout(Request $request)
@@ -52,9 +35,8 @@ class LoginController extends Controller
         Auth::logout();
 
         $request->session()->flush();
-
         $request->session()->regenerate();
 
-        return redirect()->route('home')->withLogout(1);
+        return redirect('/admin');
     }
 }

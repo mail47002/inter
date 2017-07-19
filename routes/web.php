@@ -93,7 +93,7 @@ Route::namespace('frontend')->group(function() {
     Route::post('atkurti-slaptazodi', ['as' => 'password.reset.post', 'uses' => 'RemindersController@postReset']);
     Route::get('slaptazodis-pakeistas', ['as' => 'password.success', 'uses' => 'RemindersController@success']);
 
-    // Auth & Registration
+    // Login & Registration
     Route::get('prisijungimas', ['as' => 'login', 'uses' => 'LoginController@index']);
     Route::get('registruotis', ['as' => 'login.registration', 'uses' => 'LoginController@registration']);
     Route::post('registruotis', ['as' => 'login.register', 'uses' => 'LoginController@register']);
