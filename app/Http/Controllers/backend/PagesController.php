@@ -128,6 +128,6 @@ class PagesController extends Controller
      */
     public function destroy(Page $page)
     {
-      $page->destroy();
+        $page->delete();
     }
 }

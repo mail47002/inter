@@ -208,20 +208,9 @@ class UsersController extends Controller
 		return redirect()->route('users.index');
 	}
 
-	public function destroy($id, Request $request)
-	{
-		// $entry = User::find($id);
-
-		// if ($entry) {
-		// 	$entry->campaigns()->delete();
-		// 	$entry->delete();
-
-		// 	return redirect()
-  //               ->route('users.index')
-  //               ->withDeleted($entry->id);
-		// }
-
-		// return redirect()->route('users.index');
-	}
+	public function destroy(User $user)
+    {
+        $user->delete();
+    }
 
 }

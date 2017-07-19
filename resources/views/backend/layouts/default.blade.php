@@ -3,7 +3,7 @@
   <head>
     <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+		<meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('packages/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('packages/vendors/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" media="screen">
     <link href="{{ asset('css/backend/styles.css') }}" rel="stylesheet">
@@ -48,7 +48,7 @@
 	  </footer>
 
     <link href="{{ asset('packages/vendors/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" media="screen">
-    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="{{ asset('packages/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('packages/vendors/datatables/js/jquery.dataTables.min.js') }}"></script>
@@ -56,19 +56,29 @@
     <script src="{{ asset('js/backend/custom.js') }}"></script>
     <script src="{{ asset('js/backend/tables.js') }}"></script>
     <script type="text/javascript">
+    	$(function () {
 
-		  $('.btn-danger').on('click', function (e) {
-		  	console.log($(this).attr('href'));
-		    if (!confirm('Are you sure you want to delete?')) return false;
-		  e.preventDefault();
-		    $.post({
-		        type: 'POST',  // destroy Method
-		        url: $(this).attr('href')
-		    }).done(function (data) {
-		        console.log(data);
-		        location.reload(true);
-		    });
-		  });
+			  $.ajaxSetup({
+			    headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    }
+			  });
+			  //Delete record
+			  $('.btn-danger').on('click', function (e) {
+			  	var url = $(this).attr('href');
+			  	console.log(url);
+			    if (!confirm('Are you sure you want to delete?')) return false;
+			  e.preventDefault();
+			    $.post({
+			        type: 'DELETE',  // destroy Method
+			        url: url
+			    }).done(function (data) {
+			        console.log(data);
+			        location.reload(true);
+			    });
+			  });
+
+			});
 
 	</script>
   </body>
