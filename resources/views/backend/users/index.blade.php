@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+<<<<<<< Updated upstream
 	<div class="col-md-10">
 		<div class="content-box-large">
 			<div class="panel-heading">
@@ -53,6 +54,42 @@
 				</table>
 				{{ $users->links() }}
 			</div>
+=======
+
+<div class="col-md-10">
+	<div class="content-box-large">
+		<div class="panel-heading">
+            <div class="panel-title">Users</div>
+			<div class="panel-title"><a href="{{route('users.create')}}" class="btn btn-success"><i class="glyphicon glyphicon-certificate"></i> New user</a></div>
+		</div>
+		<div class="panel-body">
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>username</th>
+						<th>email</th>
+						<th>Register</th>
+						<th>Status</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				@foreach($users as $user)
+					<tr class="odd gradeX">
+						<td>{{$user->id}}</td>
+						<td>{{$user->username}}</td>
+						<td>{{$user->email}}</td>
+						<td class="center">{{$user->created_at}}</td>
+						<td class="center">
+							{!! ($user->status == 1) ? '<i class="glyphicon glyphicon-hand-up">' : '<i class="glyphicon glyphicon-hand-down">' !!}
+						</td>
+						<td class="center"> <a href="{{route('users.show', ['id' => $user->id])}}" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Show</a> <a href="{{route('users.edit', ['id' => $user->id])}}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> Edit</a> <a href="{{ route('users.destroy', ['id' => $user->id]) }}" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Delete</a> </td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+>>>>>>> Stashed changes
 		</div>
 	</div>
 @stop

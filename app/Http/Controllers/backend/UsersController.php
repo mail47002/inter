@@ -91,8 +91,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
+<<<<<<< Updated upstream
         $entry = User::find($id);
 
         if ($entry) {
@@ -102,6 +103,13 @@ class UsersController extends Controller
         }
 
         return redirect()->route('users.index');
+=======
+      if ($user) {
+				return view('backend.users.edit', [
+          'user' => $user,
+          'title' => 'Show user']);
+			}
+>>>>>>> Stashed changes
     }
 
 	public function edit($id)
