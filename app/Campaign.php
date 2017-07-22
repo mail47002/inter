@@ -27,4 +27,10 @@ class Campaign extends Model
     {
         return $this->belongsTo('App\User', 'user_id');
     }
+
+    // public function getCampaignsById($id)
+    // {
+    //     $campaigns = Campaign::find($id);
+    //     return $campaigns;
+    // }
 }

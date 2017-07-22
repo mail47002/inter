@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\User;
+use App\Campaign;
 use Auth;
 use Illuminate\Http\Request;
 use Validator;
@@ -18,7 +19,7 @@ class UsersController extends Controller
 
 	public function __construct()
 	{
-	    $this->middleware(['admin', 'auth']);
+	    // $this->middleware(['admin', 'auth']);
 	}
 
 	public function index()
@@ -91,25 +92,18 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-<<<<<<< Updated upstream
-        $entry = User::find($id);
-
-        if ($entry) {
-            return view('backend.users.show', [
-                'user' => $entry,
-            ]);
+        $user = User::find($id);
+        $campaigns = Campaign::where('user_id', '=', $id)->get();
+        // dd($campaigns);
+        if ($user) {
+          return view('backend.users.show', [
+            'user' => $user,
+            'campaigns' => $campaigns
+          ]);
         }
 
-        return redirect()->route('users.index');
-=======
-      if ($user) {
-				return view('backend.users.edit', [
-          'user' => $user,
-          'title' => 'Show user']);
-			}
->>>>>>> Stashed changes
     }
 
 	public function edit($id)
