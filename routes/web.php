@@ -19,6 +19,10 @@ Route::namespace('backend')->group(function() {
     // Users
     Route::resource('admin/users', 'UsersController');
 
+    // Profile
+    Route::get('admin/profile', ['as' => 'profile.edit', 'uses' => 'AccountController@edit']);
+    Route::put('admin/profile', ['as' => 'profile.update', 'uses' => 'AccountController@update']);
+
     // Pages
     Route::resource('admin/pages', 'PagesController');
 

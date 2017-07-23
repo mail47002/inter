@@ -79,10 +79,6 @@ footer .copy{
    margin:8px auto;
 }
 
-.header .navbar *{
-   box-shadow:none !important;
-}
-
 .header .navbar .label{
    font-size:12px;
    padding:4px 8px;
@@ -136,8 +132,10 @@ footer .copy{
 }
 
 .header .dropdown-menu{
-   border-radius:6px !important;
+   border-radius:3px !important;
    background:#fff !important;
+    border-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
 }
 
 .header .dropdown-menu li{
@@ -584,10 +582,6 @@ body {
 }
 
 /* Table */
-.table>thead>tr>th {
-    text-transform: uppercase;
-}
-
 .table>thead>tr>th,
 .table>tbody>tr>th,
 .table>tfoot>tr>th,

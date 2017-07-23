@@ -34,8 +34,8 @@
                         <ul class="nav navbar-nav">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
-                                <ul class="dropdown-menu animated fadeInUp">
-                                    <li><a href="#">Profile</a></li>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ route('profile.edit') }}">Profile</a></li>
                                     <li><a href="{{ route('backend.logout') }}">Logout</a></li>
                                 </ul>
                             </li>
