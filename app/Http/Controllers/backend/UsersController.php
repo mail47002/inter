@@ -25,7 +25,7 @@ class UsersController extends Controller
 	public function index()
 	{
 		return view('backend.users.index', [
-		    'users' => User::paginate()
+		    'users' => User::where('type', config('user_types.user'))->paginate()
         ]);
 	}
 
@@ -77,7 +77,7 @@ class UsersController extends Controller
             }
         }
 
-        $entry->status 	= $request->status;
+        $entry->status = $request->status;
 
         $entry->save();
 
@@ -87,7 +87,7 @@ class UsersController extends Controller
 	}
 
 	/**
-     * Display the specified resource.
+     * Show user.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -95,15 +95,12 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        $campaigns = Campaign::where('user_id', '=', $id)->get();
-        // dd($campaigns);
+
         if ($user) {
           return view('backend.users.show', [
-            'user' => $user,
-            'campaigns' => $campaigns
+            'user' => $user
           ]);
         }
-
     }
 
 	public function edit($id)

@@ -26,7 +26,7 @@
 						<th>Id</th>
 						<th>Title</th>
 						<th>Slug</th>
-						<th class="text-center">Status</th>
+						<th>Status</th>
 						<th>Created At</th>
 						<th>Action</th>
 					</tr>
@@ -37,14 +37,14 @@
 							<td>{{ $page->id }}</td>
 							<td>{{ $page->title }}</td>
 							<td>{{ $page->slug }}</td>
-							<td class="text-center">
-								{!! $page->status == 1 ? '<span class="status status-success"></span>' : '<span class="status"></span>' !!}
+							<td>
+								{!! $page->status == 1 ? '<span class="badge badge-success text-uppercase">Active</span>' : '<span class="badge text-uppercase">Disabled</span>' !!}
 							</td>
 							<td>{{ $page->created_at }}</td>
 							<td>
-								<a href="{{ route('pages.edit', $page->id) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+								<a href="{{ route('pages.edit', $page->id) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
 								{{ Form::open(['route' => ['pages.destroy', $page->id], 'method' => 'delete', 'class' => 'form-inline']) }}
-									<button class="btn btn-danger" type="submit" onclick="return confirm('Do you want to delete this page?');"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+									<button class="btn btn-danger" type="submit" onclick="return confirm('Do you want to delete this page?');" data-toggle="tooltip" data-placement="top" title="Delete"><i class="glyphicon glyphicon-trash"></i></button>
 								{{ Form::close() }}
 							</td>
 						</tr>

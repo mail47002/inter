@@ -25,27 +25,31 @@
 						<tr>
 							<th>Id</th>
 							<th>User</th>
-							<th>Email</th>
-							<th class="text-center">Status</th>
+							<th>E-mail</th>
+							<th>Status</th>
 							<th>Registered At</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach($users as $user)
-							<tr class="odd gradeX">
+							<tr>
 								<td>{{ $user->id }}</td>
-								<td>{{ $user->username }}</td>
+								<td><a href="{{route('users.show', ['id' => $user->id])}}">{{ $user->username }}</a></td>
 								<td>{{ $user->email }}</td>
-								<td class="text-center">
-									{!! $user->status == 1 ? '<span class="status status-success"></span>' : '<span class="status"></span>' !!}
+								<td>
+									{!! $user->status == 1 ? '<span class="badge badge-success text-uppercase">Active</span>' : '<span class="badge text-uppercase">Disabled</span>' !!}
 								</td>
 								<td>{{ $user->created_at }}</td>
 								<td>
-									<a href="{{route('users.show', ['id' => $user->id])}}" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Show</a>
-									<a href="{{route('users.edit', ['id' => $user->id])}}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+									@if ($user->status == 1)
+										<a href="#" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Disabled"><i class="glyphicon glyphicon-eye-close"></i></a>
+									@else
+										<a href="#" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Enabled"><i class="glyphicon glyphicon-eye-open"></i></a>
+									@endif
+									<a href="{{route('users.edit', ['id' => $user->id])}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
 									{{ Form::open(['route' => ['users.destroy', $user->id], 'method' => 'delete', 'class' => 'form-inline']) }}
-										<button class="btn btn-danger" type="submit" onclick="return confirm('Do you want to delete this user?');"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+										<button class="btn btn-danger" type="submit" onclick="return confirm('Do you want to delete this user?');" data-toggle="tooltip" data-placement="top" title="Delete"><i class="glyphicon glyphicon-trash"></i></button>
 									{{ Form::close() }}
 								</td>
 							</tr>

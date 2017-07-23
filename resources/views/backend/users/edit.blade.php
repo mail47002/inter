@@ -1,17 +1,21 @@
 @extends('backend.layouts.default')
 
 @section('title')
-	Admin Panel - {{ $user->username }} - Edit
+	Admin Panel - User - Edit
 @endsection
 
 @section('content')
 	<div class="col-md-10">
 		<div class="content-box-large">
 			<div class="panel-heading">
-				<div class="panel-title">{{ $user->username }} - Edit</div>
+				<div class="pull-right">
+					<a class="btn btn-default" href="{{ route('users.index') }}" data-toggle="tooltip" data-placement="top" title="Back"><i class="glyphicon glyphicon-share-alt flip-horizontal"></i></a>
+					<button class="btn btn-primary" type="submit" form="form-user" data-toggle="tooltip" data-placement="top" title="Save"><i class="glyphicon glyphicon-floppy-disk"></i></button>
+				</div>
+				<div class="panel-title">User - Edit</div>
 			</div>
 			<div class="panel-body">
-				{{ Form::open(['route' => ['users.update', $user->id], 'method' => 'put', 'files' => true]) }}
+				{{ Form::open(['route' => ['users.update', $user->id], 'method' => 'put', 'files' => true, 'id' => 'form-user']) }}
 				<div class="row">
 					<div class="col-sm-8">
 						<h4>General</h4>
@@ -39,10 +43,6 @@
 							{{ Form::label('password_confirmation', 'Confirm password:') }}
 							{{ Form::password('password_confirmation', [ 'class' => 'form-control', 'placeholder' => 'Confirm password']) }}
 							{!! $errors->first('password_confirmation', '<label class="control-label text-danger">:message</label>') !!}
-						</div>
-						<div class="form-group">
-							<button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-ok"></i> Update</button>
-							<a class="btn btn-danger" href="{{ route('users.index') }}"><i class="glyphicon glyphicon-remove"></i> Cancel</a>
 						</div>
 					</div>
 					<div class="col-sm-4">
