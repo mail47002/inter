@@ -16,14 +16,13 @@
       </div>
 		<div class="row">
 			<div class="col-sm-6">
-				<p class="lead">General data</p>
 				<div class="form-group ">
 							<label for="email">E-mail:</label>
 							<label>{{$user->email}}</label>
 				</div>
 				<div class="form-group ">
-							<label for="email">Username: </label>
-							<label>{{$user->username}}</label>
+							<label for="email">Status: </label>
+							{!! $user->status == 1 ? '<span class="status status-success"></span>' : '<span class="status"></span>' !!}
 				</div>
 			</div>
 		</div>

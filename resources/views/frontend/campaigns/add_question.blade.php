@@ -30,15 +30,15 @@
 						{{ $errors->first('title', '<label class="control-label">:message</label>') }}
 					</div>
 				</div>
-	
+
 				@if ($type == 'radio' || $type == 'select' || $type == 'check')
 					<hr>
 
 					<p class="lead">Atsakymo variantai</p>
 
 					<div class="variantai">
-						@if (Input::old('option'))
-							@foreach (Input::old('option') as $key => $option)
+						@if (Request::old('option'))
+							@foreach (Request::old('option') as $key => $option)
 								<div class="form-group option">
 									<div class="col-sm-9">
 										<input type="text" name="option[]" class="form-control" placeholder="Atsakymo variantas" value="{{ $option }}">
@@ -83,8 +83,8 @@
 					<div class="variantai">
 						<p>Atsakymai (y)</p>
 
-						@if (Input::old('option_y'))
-							@foreach (Input::old('option_y') as $key => $option)
+						@if (Request::old('option_y'))
+							@foreach (Request::old('option_y') as $key => $option)
 								<div class="form-group option">
 									<div class="col-sm-9">
 										<input type="text" name="option_y[]" class="form-control" placeholder="Reikšmė (y)" value="{{ $option }}">
@@ -115,8 +115,8 @@
 					<div class="variantai">
 						<p>Reitingavimas (x)</p>
 
-						@if (Input::old('option_x'))
-							@foreach (Input::old('option_x') as $key => $option)
+						@if (Request::old('option_x'))
+							@foreach (Request::old('option_x') as $key => $option)
 								<div class="form-group option">
 									<div class="col-sm-9">
 										<input type="text" name="option_x[]" class="form-control" placeholder="Reikšmė (y)" value="{{ $option }}">
@@ -211,13 +211,13 @@
 
 						<span class="label label-info">Bus rodomas po klausimu.</span>
 
-						{{ $errors->first('photo', '<br><label class="control-label">:message</label>') }}						
+						{{ $errors->first('photo', '<br><label class="control-label">:message</label>') }}
 					</div>
 				</div>
 
 
 				<div class="clearfix"></div>
-			
+
 				<hr>
 
 				<p class="lead">Vaizdo įrašas</p>
