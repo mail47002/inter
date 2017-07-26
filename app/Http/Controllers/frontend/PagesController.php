@@ -3,28 +3,21 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Page;
 
 class PagesController extends Controller
 {
-	public function index($page = 'home')
+	public function index($slug)
 	{
-		switch ($page) {
-			case 'naudojimosi-taisykles':
-				$page = 'rules';
-			break;
-			case 'duk':
-				$page = 'faq';
-			break;
-			case 'kontaktai':
-				$page = 'contacts';
-			break;
-		}
+        $page = Page::where('slug', $slug)->first();
 
-		try {
-			return view('frontend.pages.' . $page);
-		} catch (Exception $e) {
-			return view('frontend.pages.404');
-		}
+        if ($page) {
+            return view('frontend.pages.show', [
+                'page' => $page
+            ]);
+        } else {
+            return view('frontend.pages.404');
+        }
 	}
 
 }
