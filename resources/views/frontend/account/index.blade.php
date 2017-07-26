@@ -30,21 +30,21 @@
 			<div class="col-sm-7">
 				<p class="lead">Bendrieji duomenys</p>
 
-				<div class="form-group {{ ($errors->first('email') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('email', 'has-error') }}">
 					{{ Form::label('email', 'El. paštas', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
-						{{ Form::email('email', $auth_user->email, [ 'class' => 'form-control', 'disabled', 'placeholder' => 'El. pašto adresas']) }}
+						{{ Form::email('email', auth()->user()->email, [ 'class' => 'form-control', 'disabled', 'placeholder' => 'El. pašto adresas']) }}
 
 						{!! $errors->first('email', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ($errors->first('username') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('username', 'has-error') }}">
 					{{ Form::label('username', 'Vartotojo vardas', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
-						{{ Form::text('username', $auth_user->username, [ 'class' => 'form-control', 'placeholder' => 'Unikalus vartotojo vardas']) }}
+						{{ Form::text('username', auth()->user()->username, [ 'class' => 'form-control', 'placeholder' => 'Unikalus vartotojo vardas']) }}
 
 						{!! $errors->first('username', '<label class="control-label">:message</label>') !!}
 					</div>
@@ -54,7 +54,7 @@
 
 				<p class="lead">Naujas slaptažodis</p>
 
-				<div class="form-group {{ ($errors->first('password') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('password', 'has-error') }}">
 					{{ Form::label('password', 'Slaptažodis', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
@@ -64,7 +64,7 @@
 					</div>
 				</div>
 
-				<div class="form-group {{ ($errors->first('password_confirmation') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('password_confirmation', 'has-error') }}">
 					{{ Form::label('password_confirmation', 'Pakartokite', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
@@ -80,11 +80,11 @@
 			<div class="col-sm-5">
 				<p class="lead">Įkelkite profilio nuotrauką</p>
 
-				<div class="form-group {{ ( $errors->first('photo') ? 'has-error' : NULL) }}">
-					@if (!empty($auth_user->photo))
+				<div class="form-group {{ $errors->first('photo', 'has-error') }}">
+					@if (auth()->user()->photo)
 						<div class="col-sm-3">
 							<p>
-								<img src="{{ asset($auth_user->photo) }}" alt="Anketos paveikslėlis" class="img-thumbnail" style="width: 124px;">
+								<img src="{{ asset(auth()->user()->photo) }}" alt="Anketos paveikslėlis" class="img-thumbnail" style="width: 124px;">
 							</p>
 						</div>
 					@endif

@@ -48,13 +48,6 @@
 							</a>
 
 							<ul class="dropdown-menu" role="menu">
-								@if (auth()->user()->isAdmin())
-									<li class="dropdown-header">Administravimas</li>
-									<li><a href="{{ route('users.index') }}">Vartotojų administravimas</a></li>
-									<li><a href="{{ route('payments.index') }}">Mokėjimų istorija</a></li>
-									<li role="presentation" class="divider"></li>
-								@endif
-
 								<li><a href="{{ route('account.index') }}">Paskyros nustatymai</a></li>
 								<li><a href="{{ route('login.logout') }}">Atsijungti</a></li>
 							</ul>
