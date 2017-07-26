@@ -74,7 +74,7 @@
 										<tr>
 											<td>{{ $campaign->id }}</td>
 											<td>{{ $campaign->title }}</td>
-											<td class="text-center">{!! $user->status == 1 ? '<span class="status status-success"></span>' : '<span class="status"></span>' !!}</td>
+											<td class="text-center">{!! $user->campaign == 1 ? '<span class="status status-success"></span>' : '<span class="status"></span>' !!}</td>
 											<td>{{ $campaign->created_at }}</td>
 										</tr>
 									@endforeach
@@ -85,7 +85,28 @@
 						@endif
 					</div>
 					<div role="tabpanel" class="tab-pane" id="payments">
-						<p>There are no payments!</p>
+						@if (count($user->payments) > 0)
+							<table class="table">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Ammount</th>
+										<th>Created At</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach ($user->payments as $payment)
+										<tr>
+											<td>{{ $payment->id }}</td>
+											<td>{{ $payment->ammount }}</td>
+											<td>{{ $payment->created_at }}</td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
+						@else
+							<p>There are no payments!</p>
+						@endif
 					</div>
 				</div>
 

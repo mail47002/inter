@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Campaign');
     }
 
+    public function payments()
+    {
+        return $this->hasMany('App\Payment');
+    }
+
     public function isAdmin()
     {
         return $this->attributes['type'] == config('user_types.admin');

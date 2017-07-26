@@ -33,6 +33,12 @@
                     <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
                         <ul class="nav navbar-nav">
                             <li class="dropdown">
+                                <a href="{{ route('home')}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Site" target="_blank"><i class="glyphicon glyphicon-arrow-right"></i> Site</a>
+                            </li>
+
+                        </ul>
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('profile.edit') }}">Profile</a></li>

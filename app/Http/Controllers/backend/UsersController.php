@@ -95,10 +95,9 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-
         if ($user) {
           return view('backend.users.show', [
-            'user' => $user
+            'user' => $user,
           ]);
         }
     }
