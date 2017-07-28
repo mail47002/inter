@@ -5,7 +5,7 @@
 @section('title')Anketos „{{ $entry->title }}“ rezultatai - @stop
 
 @section('scripts')
-	<script type="text/javascript" src="{{ asset('Frontend') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/frontend/campaigns/questions.js') }}"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 @stop
 
@@ -23,8 +23,8 @@
 		<div class="alert alert-info">
 			<h4>Rezultatai filtruojami pagal šiuos atsakymus:</h4>
 			
-			@foreach (json_decode(Input::get('questions')) as $question => $option)
-				<strong>{{ CampaignQuestion::find($question)->title }}</strong> -> {{ CampaignQuestionOption::find($option)->title }}<br>
+			@foreach (json_decode(request()->get('questions')) as $question => $option)
+				<strong>{{ \App\CampaignQuestion::find($question)->title }}</strong> -> {{ \App\CampaignQuestionOption::find($option)->title }}<br>
 			@endforeach
 		</div>
 	@endif
@@ -191,12 +191,10 @@
 							var prefix 	= '{{ route('campaigns.results', $entry->id) }}';
 							var postfix = '?filter=1&questions=';
 
-							$(document).on('change', '.filter-1-radio', function()
-							{
+							$(document).on('change', '.filter-1-radio', function() {
 								var ending = {};
 
-								$(".filter-1-radio:checked").each(function ()
-								{
+								$(".filter-1-radio:checked").each(function() {
 									ending[ $(this).attr('name') ] = $(this).val();
 								});
 
@@ -205,15 +203,14 @@
 								$("#filter-url").attr('href', prefix + postfix + ending);
 							});
 
-							$(document).ready(function ()
-							{
+							$(document).ready(function() {
 								$("#filter-url").attr('href', prefix);
 							});
 						</script>
 						
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Uždaryti</button>
-							<a href="" id="filter-url" class="btn btn-primary">Filtruoti</a>
+							<a href="#" id="filter-url" class="btn btn-primary">Filtruoti</a>
 						</div>
 					</div>
 				</div>

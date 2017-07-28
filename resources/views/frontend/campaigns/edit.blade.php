@@ -34,27 +34,27 @@
 			<div class="col-sm-6">
 				<p class="lead">Bendrieji duomenys</p>
 
-				<div class="form-group {{ ( $errors->first('title') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('title', 'has-error') }}">
 					{{ Form::label('title', 'Pavadinimas', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
 						{{ Form::text('title', $entry->title, [ 'class' => 'form-control', 'placeholder' => 'Anketos pavadinimas']) }}
 
-						{{ $errors->first('title', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('title', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('description') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('description', 'has-error') }}">
 					{{ Form::label('description', 'Aprašymas', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
 						{{ Form::textarea('description', $entry->description, [ 'class' => 'form-control', 'placeholder' => 'Anketos aprašymas']) }}
 
-						{{ $errors->first('description', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('description', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('tags') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('tags', 'has-error') }}">
 					{{ Form::label('tags', 'Žymės', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
@@ -62,11 +62,11 @@
 
 						<span class="label label-info">Žymes atskirkite tarpais.</span>
 						
-						{{ $errors->first('tags', '<br><label class="control-label">:message</label>') }}
+						{!! $errors->first('tags', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('public') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('public', 'has-error') }}">
 					<div class="col-sm-9 col-sm-offset-3">
 						<div class="checkbox">
 							<label>
@@ -74,11 +74,11 @@
 							</label>
 						</div>
 
-						{{ $errors->first('public', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('public', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('active') ? 'has-error' : NULL) }}" id="activator">
+				<div class="form-group {{ $errors->first('active', 'has-error') }}" id="activator">
 					<div class="col-sm-9 col-sm-offset-3">
 						<div class="checkbox">
 							<label>
@@ -92,7 +92,7 @@
 							</label>
 						</div>
 
-						{{ $errors->first('active', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('active', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
@@ -105,11 +105,11 @@
 							</label>
 						</div>
 
-						{{ $errors->first('respondents', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('respondents', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('send_email') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('send_email', 'has-error') }}">
 					<div class="col-sm-9 col-sm-offset-3">
 						<div class="checkbox">
 							<label>
@@ -117,11 +117,11 @@
 							</label>
 						</div>
 
-						{{ $errors->first('send_email', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('send_email', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('same_computer') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('same_computer', 'has-error') }}">
 					<div class="col-sm-9 col-sm-offset-3">
 						<div class="checkbox">
 							<label>
@@ -129,7 +129,7 @@
 							</label>
 						</div>
 
-						{{ $errors->first('same_computer', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('same_computer', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 			</div>
@@ -153,7 +153,7 @@
 						
 						@if ($entry->public)
 							<p>
-								Jūs turite <strong>{{ $auth_user->credits()->sum('credits') - $auth_user->campaigns()->where('advertise_credits', '>', 0)->sum('advertise_credits') }}</strong> nepanaudotų kreditų už kuriuos galite reklamuoti anketą. 
+								Jūs turite <strong>{{ auth()->user()->credits()->sum('credits') - auth()->user()->campaigns()->where('advertise_credits', '>', 0)->sum('advertise_credits') }}</strong> nepanaudotų kreditų už kuriuos galite reklamuoti anketą. 
 								Šios anketos vieno reklamuojamo atsakymo kaina <strong>{{ $entry->questions()->count() * 2 }}</strong>. 
 								Įveskite reklamuojamų atsakymų kiekį kurį norėtumėte gauti šios anketos reklamos metu.
 							</p>
@@ -166,7 +166,7 @@
 								<button type="submit" class="btn btn-default">Reklamuoti</button>
 							</div>
 
-							{{ $errors->first('advertise_results', '<label class="label label-danger">:message</label>') }}
+							{!! $errors->first('advertise_results', '<label class="label label-danger">:message</label>') !!}
 
 							<div class="clearfix"></div>
 
@@ -190,9 +190,9 @@
 
 				<p class="lead">Įkelkite paveikslėlį</p>
 
-				<div class="form-group {{ ( $errors->first('photo') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('photo', 'has-error') }}">
 					<div class="col-sm-3">
-						@if ( ! empty($entry->photo))
+						@if (!empty($entry->photo))
 							<p>
 								<img src="{{ asset($entry->photo) }}" alt="Anketos paveikslėlis" class="img-thumbnail" style="width: 124px;">
 							</p>
@@ -209,7 +209,7 @@
 							
 							<span class="label label-info">Bus rodomas po anketos aprašymu.</span>
 
-							{{ $errors->first('photo', '<br><label class="control-label">:message</label>') }}
+							{!! $errors->first('photo', '<br><label class="control-label">:message</label>') !!}
 						</p>
 					</div>
 				</div>
@@ -218,13 +218,13 @@
 
 				<p class="lead">Vaizdo įrašas</p>
 
-				<div class="form-group {{ ( $errors->first('video') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('video', 'has-error') }}">
 					<div class="col-sm-12">
 						{{ Form::text('video', $entry->video, [ 'class' => 'form-control', 'placeholder' => 'http://']) }}
 
 						<span class="label label-info"><span class="hidden-sm hidden-xs">Nuoroda į <em>YouTube</em> vaizdo įrašą.</span> Bus rodomas po anketos aprašymu.</span>
 
-						{{ $errors->first('video', '<br><label class="control-label">:message</label>') }}
+						{!! $errors->first('video', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 			</div>

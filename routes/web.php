@@ -28,6 +28,9 @@ Route::namespace('backend')->group(function() {
 
     // Banners
     Route::resource('admin/banners', 'BannersController');
+
+    // Search
+    Route::get('admin/search', ['as' => 'backend.search', 'uses' => 'SearchController@index']);
 });
 
 Route::namespace('frontend')->group(function() {
@@ -107,6 +110,6 @@ Route::namespace('frontend')->group(function() {
     Route::get('atsijungti', ['as' => 'login.logout', 'uses' => 'LoginController@logout']);
 
     // Pages
-    Route::get('', ['as' => 'home', 'uses' => 'HomeController@index']);
+    Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
     Route::get('{page}', 'PagesController@index');
 });

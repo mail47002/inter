@@ -12,7 +12,7 @@ class PagesController extends Controller
         $page = Page::where('slug', $slug)->first();
 
         if ($page) {
-            return view('frontend.pages.show', [
+            return view('frontend.pages.index', [
                 'page' => $page
             ]);
         } else {

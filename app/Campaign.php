@@ -28,4 +28,10 @@ class Campaign extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function scopeRecentPublic($query)
+    {
+        return $query->where('active', 1)
+            ->where('public', 1)
+            ->orderBy('id', 'desc');
+    }
 }

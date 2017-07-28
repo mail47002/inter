@@ -30,21 +30,21 @@
 
 			@if (count($entries) > 0)
 				@foreach ($entries as $entry)
-					<h4>
+					<h4 class="title">
 						<a href="{{ route('campaigns.answer', $entry->id) }}">{{ $entry->title }}</a>
 
-						<div style="width: 100%; overflow: hidden; white-space: nowrap;">
+						<div>
 							<small title="{{ $entry->description }}">{{ $entry->description }}</small>
 						</div>
 					</h4>
 
-					@if ($auth_check && $entry->advertise_results)
-						<div class="btn btn-xs btn-success" title="Uždarbis">
+					@if (auth()->check() && $entry->advertise_results)
+						<span class="btn btn-xs btn-success" title="Uždarbis">
 							<span class="glyphicon glyphicon-usd"></span>
 							{{ $entry->questions()->count() * 2 }}
-						</div>
+						</span>
 					@endif
-					
+
 					<a href="{{ route('campaigns.answers', $entry->id) }}" class="btn btn-xs btn-default">
 						<span class="glyphicon glyphicon-tasks"></span>
 						{{ count($entry->results) }}
@@ -55,10 +55,10 @@
 						{{ $entry->user->username }}
 					</a>
 
-					<a href="#" class="btn btn-xs btn-default">
+					<span class="btn btn-xs btn-default">
 						<span class="glyphicon glyphicon-calendar"></span>
 						{{ $entry->created_at }}
-					</a>
+					</span>
 				@endforeach
 			@else
 				<div class="alert alert-warning">
@@ -72,21 +72,21 @@
 
 			@if (count($public_entries) > 0)
 				@foreach ($public_entries as $entry)
-					<h4>
+					<h4 class="title">
 						<a href="{{ route('campaigns.answer', $entry->id) }}">{{ $entry->title }}</a>
 
-						<div style="width: 100%; overflow: hidden; white-space: nowrap;">
+						<div>
 							<small title="{{ $entry->description }}">{{ $entry->description }}</small>
 						</div>
 					</h4>
 
-					@if ($auth_check && $entry->advertise_results)
-						<div class="btn btn-xs btn-success" title="Uždarbis">
+					@if (auth()->check() && $entry->advertise_results)
+						<span class="btn btn-xs btn-success" title="Uždarbis">
 							<span class="glyphicon glyphicon-usd"></span>
 							{{ $entry->questions()->count() * 2 }}
-						</div>
+						</span>
 					@endif
-					
+
 					<a href="{{ route('campaigns.answers', $entry->id) }}" class="btn btn-xs btn-default">
 						<span class="glyphicon glyphicon-tasks"></span>
 						{{ count($entry->results) }}
@@ -97,10 +97,10 @@
 						{{ $entry->user->username }}
 					</a>
 
-					<a href="#" class="btn btn-xs btn-default">
+					<span class="btn btn-xs btn-default">
 						<span class="glyphicon glyphicon-calendar"></span>
 						{{ $entry->created_at }}
-					</a>
+					</span>
 				@endforeach
 			@else
 				<div class="alert alert-warning">

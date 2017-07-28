@@ -20,7 +20,7 @@
 			<div class="col-sm-6">
 				<p class="lead">Bendrieji duomenys</p>
 
-				<div class="form-group {{ ( $errors->first('title') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('title'), 'has-error') }}">
 					{{ Form::label('title', 'Pavadinimas', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('description') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('description', 'has-error') }}">
 					{{ Form::label('description', 'Aprašymas', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
@@ -40,7 +40,7 @@
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('respondents') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('respondents', 'has-error') }}">
 					<div class="col-sm-9 col-sm-offset-3">
 						<div class="checkbox">
 							<label>
@@ -48,11 +48,11 @@
 							</label>
 						</div>
 
-						{{ $errors->first('respondents', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('respondents', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('send_email') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('send_email', 'has-error') }}">
 					<div class="col-sm-9 col-sm-offset-3">
 						<div class="checkbox">
 							<label>
@@ -60,11 +60,11 @@
 							</label>
 						</div>
 
-						{{ $errors->first('send_email', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('send_email', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('same_computer') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('same_computer', 'has-error') }}">
 					<div class="col-sm-9 col-sm-offset-3">
 						<div class="checkbox">
 							<label>
@@ -72,11 +72,11 @@
 							</label>
 						</div>
 
-						{{ $errors->first('same_computer', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('same_computer', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('tags') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('tags', 'has-error') }}">
 					{{ Form::label('tags', 'Žymės', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
@@ -84,7 +84,7 @@
 
 						<span class="label label-info">Žymes atskirkite tarpais.</span>
 						
-						{{ $errors->first('tags', '<br><label class="control-label">:message</label>') }}
+						{!! $errors->first('tags', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 			</div>
@@ -92,13 +92,13 @@
 			<div class="col-sm-6">
 				<p class="lead">Įkelkite paveikslėlį</p>
 
-				<div class="form-group {{ ( $errors->first('photo') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('photo', 'has-error') }}">
 					<div class="col-sm-12">
 						{{ Form::file('photo', [ 'class' => 'form-control', 'placeholder' => 'Paveikslėlis']) }}
 
 						<span class="label label-info">Bus rodomas po anketos aprašymu.</span>
 
-						{{ $errors->first('photo', '<br><label class="control-label">:message</label>') }}						
+						{!! $errors->first('photo', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
@@ -109,13 +109,13 @@
 
 				<p class="lead">Vaizdo įrašas</p>
 
-				<div class="form-group {{ ( $errors->first('video') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('video', 'has-error') }}">
 					<div class="col-sm-12">
 						{{ Form::text('video', '', [ 'class' => 'form-control', 'placeholder' => 'http://']) }}
 
 						<span class="label label-info">Nuoroda į <em>YouTube</em> vaizdo įrašą. Bus rodomas po anketos aprašymu.</span>
 
-						{{ $errors->first('video', '<br><label class="control-label">:message</label>') }}
+						{!! $errors->first('video', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 

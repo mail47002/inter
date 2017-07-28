@@ -16,15 +16,11 @@ class HomeController extends Controller
             ->take(5)
             ->get();
 
-        $public_entries = Campaign::where('active', '=', 1)
-            ->where('public', '=', 1)
-            ->orderBy('id', 'desc')
-            ->take(5)
-            ->get();
+        $public_entries = Campaign::recentPublic()->take(5)->get();
 
         return view('frontend.home.index', [
-            'entries' => $entries,
-            'public_entries' => $public_entries
+            'entries'           => $entries,
+            'public_entries'    => $public_entries
         ]);
     }
 }

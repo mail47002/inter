@@ -7,20 +7,19 @@
 
 		<title>@yield('title')Apklausos internetu</title>
 
-		@include('frontend.layouts.meta')
+        <link href="{{ asset('css/frontend/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/frontend/style.css') }}" rel="stylesheet">
 
-        <link href="{{ asset('packages/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('style.css') }}" rel="stylesheet">
+        @yield('styles')
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script type="text/javascript" src="{{ asset('js/holder.js') }}"></script>
 
-        @yield('styles')
         @yield('scripts')
     </head>
 
     <body>
-        @yield('navigation')
+        @include('frontend.layouts.navigation')
 
         <div class="container">
             <div class="row">
@@ -79,7 +78,7 @@
             </div>
         </div>
 
-		<script type="text/javascript" src="{{ asset('packages/bootstrap/js/bootstrap.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/frontend/bootstrap.min.js') }}"></script>
         <script type="text/javascript">
             $('[data-toggle="popover"]').popover();
         </script>

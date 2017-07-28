@@ -23,11 +23,11 @@
 					Klausimo pavadinimas
 				</p>
 
-				<div class="form-group {{ ( $errors->first('title') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('title', 'has-error') }}">
 					<div class="col-sm-12">
 						{{ Form::text('title', $question->title, [ 'class' => 'form-control', 'placeholder' => 'Klausimo pavadinimas']) }}
 
-						{{ $errors->first('title', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('title', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 	
@@ -103,15 +103,15 @@
 			<div class="col-sm-6">
 				<p class="lead">Daugiau nustatymų</p>
 
-				<div class="form-group {{ ( $errors->first('note') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('note', 'has-error') }}">
 					<div class="col-sm-12">
 						{{ Form::text('note', $question->note, [ 'class' => 'form-control', 'placeholder' => 'Klausimo pastaba']) }}
 
-						{{ $errors->first('note', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('note', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('required') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('required', 'has-error') }}">
 					{{ Form::label('required', 'Privalomas klausimas', [ 'class' => 'col-sm-5 control-label']) }}
 
 					<div class="col-sm-7">
@@ -121,11 +121,11 @@
 							</label>
 						</div>
 
-						{{ $errors->first('required', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('required', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('private') ? 'has-error' : NULL) }}">
+				<div class="form-group {{ $errors->first('private', 'has-error') }}">
 					{{ Form::label('private', 'Privatus klausimas', [ 'class' => 'col-sm-5 control-label']) }}
 
 					<div class="col-sm-7">
@@ -135,7 +135,7 @@
 							</label>
 						</div>
 
-						{{ $errors->first('private', '<label class="control-label">:message</label>') }}
+						{!! $errors->first('private', '<label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
@@ -150,7 +150,7 @@
 								</label>
 							</div>
 
-							{{ $errors->first('custom_answer', '<label class="control-label">:message</label>') }}
+							{!! $errors->first('custom_answer', '<label class="control-label">:message</label>') !!}
 						</div>
 					</div>
 				@endif
@@ -177,7 +177,7 @@
 								
 								<span class="label label-info">Bus rodomas po klausimu.</span>
 
-								{{ $errors->first('photo', '<br><label class="control-label">:message</label>') }}
+								{!! $errors->first('photo', '<br><label class="control-label">:message</label>') !!}
 							</p>
 						</div>
 					@else
@@ -186,7 +186,7 @@
 
 							<span class="label label-info">Bus rodomas po klausimu.</span>
 
-							{{ $errors->first('photo', '<br><label class="control-label">:message</label>') }}						
+							{!! $errors->first('photo', '<br><label class="control-label">:message</label>') !!}
 						</div>
 					@endif
 				</div>
@@ -203,7 +203,7 @@
 
 						<span class="label label-info">Nuoroda į <em>YouTube</em> vaizdo įrašą. Bus rodomas po klausimu.</span>
 
-						{{ $errors->first('video', '<br><label class="control-label">:message</label>') }}
+						{!! $errors->first('video', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 			</div>

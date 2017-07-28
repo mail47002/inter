@@ -24,7 +24,7 @@
 					@foreach ($entry->questions as $question)
 						<p class="lead">
 							{{ $question->title }}
-							{{ $errors->first($question->id, '<small><label class="control-label">:message</label></small>') }}
+							{!! $errors->first($question->id, '<small><label class="control-label">:message</label></small>') !!}
 
 							@if ($question->photo)
 								<small><a class="visible-xs visible-sm" href="{{ asset($question->photo) }}" target="_blank">Paveikslėlis</a></small>
@@ -41,14 +41,14 @@
 							<div id="chart-{{ $question->id }}" class="col-sm-12" style="height: 250px;"></div>
 
 							<script type="text/javascript">
-								google.load("visualization", "1", {packages:["corechart"]});
+                                google.load('visualization', '1.0', {'packages': ['corechart']});
 								google.setOnLoadCallback(drawChart);
 
 								function drawChart() {
 									var data = google.visualization.arrayToDataTable([
 										['Option', 'Count'],
 										@foreach ($question->options as $option)
-											['{{ $option->title }}', {{ $question->answers()->where('option_id', '=', $option->id)->count() }}],
+											['{{ $option->title }}', {{ $question->answers()->where('option_id', $option->id)->count() }}],
 										@endforeach
 										['Kitas variantas', {{ $question->answers()->where('type', '=', 'custom')->count() }}],
 									]);

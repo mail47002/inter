@@ -13,7 +13,7 @@
 				<small>Anketos pildymas</small>
 			</h1>
 
-			@if ($auth_check && $entry->advertise_results)
+			@if ($entry->advertise_results)
 				<div class="btn btn-sm btn-success" title="Uždarbis">
 					<span class="glyphicon glyphicon-usd"></span>
 					{{ $entry->questions()->count() * 2 }}
@@ -59,10 +59,9 @@
 					</p>
 				</div>
 			@endif
-
+		</div>
+		<div class="row">
 			@if ($entry->photo || $entry->description)
-				<div class="clearfix"></div>
-
 				<div class="col-sm-12">
 					<hr>
 				</div>
@@ -71,13 +70,13 @@
 	
 		<div class="row">
 			<div class="col-sm-12">
-				@if (count($entry->questions))
+				@if (count($entry->questions) > 0)
 					@foreach ($entry->questions as $key => $question)
-						<div class="form-group {{ ( $errors->first($question->id) ? 'has-error' : NULL) }}">
+						<div class="form-group {{ $errors->first($question->id, 'has-error') }}">
 							<p class="lead">
 								{{ $key + 1 }}. 
 								{{ $question->title }}
-								{{ $errors->first($question->id, '<small><label class="control-label">:message</label></small>') }}
+								{!! $errors->first($question->id, '<small><label class="control-label">:message</label></small>') !!}
 								
 								@if ($question->photo)
 									<small><a class="visible-xs visible-sm" href="{{ asset($question->photo) }}" target="_blank">Paveikslėlis</a></small>
@@ -92,36 +91,36 @@
 							
 							@if ($question->type == 'radio')
 								@foreach ($question->options as $option)
-									<input type="radio" name="{{ $question->id }}" value="{{ $option->id }}" {{ Input::old($question->id) == $option->id ? 'checked' : NULL }}> {{ $option->title }}<br>
+									<input type="radio" name="{{ $question->id }}" value="{{ $option->id }}" {{ request()->old($question->id) == $option->id ? 'checked' : NULL }}> {{ $option->title }}<br>
 								@endforeach
 
 								@if ($question->custom_answer)
 									<div class="form-inline">
 										<input type="radio" name="{{ $question->id }}" value="custom">
 
-										<input type="text" name="custom-{{ $question->id }}" value="{{ Input::old('custom-' . $question->id) }}" class="form-control" placeholder="Kitas variantas"><br>
+										<input type="text" name="custom-{{ $question->id }}" value="{{ request()->old('custom-' . $question->id) }}" class="form-control" placeholder="Kitas variantas"><br>
 									</div>
 								@endif
 							@elseif ($question->type == 'select')
 								<select name="{{ $question->id }}">
 									@foreach ($question->options as $option)
-										<option value="{{ $option->id }}" {{ Input::old($question->id) == $option->id ? 'selected' : NULL }}>{{ $option->title }}</option>
+										<option value="{{ $option->id }}" {{ request()->old($question->id) == $option->id ? 'selected' : NULL }}>{{ $option->title }}</option>
 									@endforeach
 								</select>
 							@elseif ($question->type == 'check')
 								@foreach ($question->options as $option)
-									<input type="checkbox" name="{{ $question->id }}[{{ $option->id }}]" value="1" {{ isset(Input::old($question->id)[$option->id]) ? 'checked' : NULL }}> {{ $option->title }}<br>
+									<input type="checkbox" name="{{ $question->id }}[{{ $option->id }}]" value="1" {{ isset(request()->old($question->id)[$option->id]) ? 'checked' : NULL }}> {{ $option->title }}<br>
 								@endforeach
 
 								@if ($question->custom_answer)
 									<div class="form-inline">
-										<input type="checkbox" name="{{ $question->id }}[custom]" value="custom" {{ isset(Input::old($question->id)['custom']) ? 'checked' : NULL }}> <input type="text" name="custom-{{ $question->id }}" value="{{ Input::old('custom-' . $question->id) }}" class="form-control" placeholder="Kitas variantas"><br>
+										<input type="checkbox" name="{{ $question->id }}[custom]" value="custom" {{ isset(request()->old($question->id)['custom']) ? 'checked' : NULL }}> <input type="text" name="custom-{{ $question->id }}" value="{{ request()->old('custom-' . $question->id) }}" class="form-control" placeholder="Kitas variantas"><br>
 									</div>
 								@endif
 							@elseif ($question->type == 'string')
-								<input type="text" name="{{ $question->id }}" value="{{ Input::old($question->id) }}" class="form-control" placeholder="">
+								<input type="text" name="{{ $question->id }}" value="{{ request()->old($question->id) }}" class="form-control" placeholder="">
 							@elseif ($question->type == 'text')
-								<textarea name="{{ $question->id }}" cols="30" rows="10" class="form-control">{{ Input::old($question->id) }}</textarea>
+								<textarea name="{{ $question->id }}" cols="30" rows="10" class="form-control">{{ request()->old($question->id) }}</textarea>
 							@elseif ($question->type == 'matrix')
 								<table class="table table-condensed table-bordered">
 									<tr>
@@ -138,7 +137,7 @@
 
 											@foreach ($question->options()->where('matrix', '=', 'x')->get() as $option_x)
 												<td class="text-center">
-													<input type="radio" name="{{ $question->id }}[{{ $option_y->id }}]" value="{{ $option_x->id }}" {{ isset(Input::old($question->id)[$option_y->id]) && Input::old($question->id)[$option_y->id] == $option_x->id ? 'checked' : NULL }}>
+													<input type="radio" name="{{ $question->id }}[{{ $option_y->id }}]" value="{{ $option_x->id }}" {{ isset(request()->old($question->id)[$option_y->id]) && request()->old($question->id)[$option_y->id] == $option_x->id ? 'checked' : NULL }}>
 												</td>
 											@endforeach
 										</tr>
@@ -152,7 +151,7 @@
 
 					<button type="submit" class="btn btn-primary btn-block btn-lg">Pateikti atsakymus</button>
 
-					<p></p>
+					<br>
 				@else
 					<div class="alert alert-warning">
 						Klausimų nėra.

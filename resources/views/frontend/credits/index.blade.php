@@ -19,6 +19,17 @@
 
 			<h3>Pirkti internetu</h3>
 
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+				<input type="hidden" name="business" value="winartas@yahoo.com">
+				<input type="hidden" name="cmd" value="_xclick">
+				<input type="hidden" name="item_name" value="Hot Sauce-12oz. Bottle">
+				<input type="hidden" name="amount" value=".99">
+				<input type="hidden" name="currency_code" value="USD">
+				<input type="hidden" name="email" value="{{ auth()->user()->email }}">
+				<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png" alt="Buy Now">
+				<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
+			</form>
+
 			<table class="table table-condensed table-striped">
 				<thead>
 					<th>Kaina</th>
