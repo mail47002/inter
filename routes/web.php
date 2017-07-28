@@ -21,6 +21,7 @@ Route::namespace('backend')->group(function() {
 
     // Users
     Route::resource('admin/users', 'UsersController');
+    Route::get('admin/users/status/{id}', ['as' => 'users.status', 'uses' => 'UsersController@status']);
     Route::get('admin/users/delete/{id}', ['as' => 'users.delete', 'uses' => 'UsersController@destroy']);
 
     // Profile

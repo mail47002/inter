@@ -41,9 +41,9 @@
 						<td>
 							<div class="btn-group">
 								@if ($user->status == 1)
-									<a href="#" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-close"></i> Disabled</a>
+									<a href="{{ route('users.status', $user->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-close"></i> Disabled</a>
 								@else
-									<a href="#" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-open"></i> Enabled</a>
+									<a href="{{ route('users.status', $user->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-open"></i> Enabled</a>
 								@endif
 								<a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-user"></i> Profile</a>
 								<a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>

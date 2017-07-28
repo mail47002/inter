@@ -171,6 +171,22 @@ class UsersController extends Controller
 		return redirect()->route('users.index');
 	}
 
+	public function status($id) {
+        $entry = User::find($id);
+
+        if ($entry) {
+            $entry->status = $entry->status == 0 ? 1 : 0;
+
+            $entry->save();
+
+            return redirect()
+                ->route('users.index')
+                ->withStatus(trans('users.status'));
+        }
+
+        return redirect()->route('users.index');
+    }
+
 	public function destroy($id)
 	{
 		 $entry = User::find($id);
