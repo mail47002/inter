@@ -8,13 +8,13 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="{{ url('admin') }}">Admin panel</a>
+            <a class="navbar-brand" href="{{ route('dashboard') }}">Admin panel</a>
         </div>
 
         @if (auth()->check())
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="{{ request()->is('admin/dashboard*') ? 'active' : '' }}"><a href="#">Dashboard</a></li>
+                    <li class="{{ request()->is('admin/dashboard*') ? 'active' : '' }}"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li class="{{ request()->is('admin/pages*') ? 'active' : '' }}"><a href="{{ route('pages.index') }}">Pages</a></li>
                     <li class="{{ request()->is('admin/users*') ? 'active' : '' }}"><a href="{{ route('users.index') }}">Users</a></li>
                     <li class="{{ request()->is('admin/banners*') ? 'active' : '' }}"><a href="{{ route('banners.index') }}">Banners</a></li>
@@ -30,11 +30,11 @@
                     </li>
                 </ul>
 
-                {{ Form::open( ['route' => 'backend.search', 'method' => 'post', 'class' => 'navbar-form navbar-right'] ) }}
+                {{ Form::open( ['route' => 'backend.search', 'method' => 'get', 'class' => 'navbar-form navbar-right'] ) }}
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button">Search</button>
+                        <button class="btn btn-primary" type="submit">Search</button>
                     </span>
                 </div>
                 {{ Form::close() }}

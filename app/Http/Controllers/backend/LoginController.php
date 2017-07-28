@@ -24,7 +24,7 @@ class LoginController extends Controller
         if (Auth::attempt($request->only('email', 'password')) && Auth::user()->isAdmin()) {
             $request->session()->regenerate();
 
-            return redirect()->route('pages.index');
+            return redirect()->route('dashboard');
         }
 
         return redirect()->back();

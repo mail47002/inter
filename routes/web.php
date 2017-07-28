@@ -16,6 +16,9 @@ Route::namespace('backend')->group(function() {
     Route::post('admin/login', ['as' => 'backend.login', 'uses' => 'LoginController@login']);
     Route::get('admin/logout', ['as' => 'backend.logout', 'uses' => 'LoginController@logout']);
 
+    // Dashboard
+    Route::get('admin/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@index']);
+
     // Users
     Route::resource('admin/users', 'UsersController');
 
