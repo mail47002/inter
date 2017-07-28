@@ -33,16 +33,16 @@
 					<tr>
 						<td>{{ $banner->id }}</td>
 						<td>{{ $banner->name }}</td>
-						<td>{{ $banner->position_id }}</td>
+						<td><span class="badge text-uppercase">{{ $banner->position }}</span></td>
 						<td>
 							{!! $banner->status == 1 ? '<span class="badge badge-success text-uppercase">Active</span>' : '<span class="badge text-uppercase">Disabled</span>' !!}
 						</td>
 						<td>{{ $banner->created_at }}</td>
 						<td>
-							<a href="{{ route('banners.edit', $banner->id) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-							{{ Form::open(['route' => ['banners.destroy', $banner->id], 'method' => 'delete', 'class' => 'form-inline']) }}
-								<button class="btn btn-danger" type="submit" onclick="return confirm('Do you want to delete this banner?');" data-toggle="tooltip" data-placement="top" title="Delete"><i class="glyphicon glyphicon-trash"></i></button>
-							{{ Form::close() }}
+							<div class="btn-group">
+								<a href="{{ route('banners.edit', $banner->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+								<a href="{{ route('banners.delete', $banner->id) }}" class="btn btn-sm btn-default" onclick="return confirm('Do you want to delete this banner?');"><i class="glyphicon glyphicon-trash"></i> Delete</a>
+							</div>
 						</td>
 					</tr>
 				@endforeach

@@ -21,6 +21,7 @@ Route::namespace('backend')->group(function() {
 
     // Users
     Route::resource('admin/users', 'UsersController');
+    Route::get('admin/users/delete/{id}', ['as' => 'users.delete', 'uses' => 'UsersController@destroy']);
 
     // Profile
     Route::get('admin/profile', ['as' => 'profile.edit', 'uses' => 'AccountController@edit']);
@@ -28,9 +29,11 @@ Route::namespace('backend')->group(function() {
 
     // Pages
     Route::resource('admin/pages', 'PagesController');
+    Route::get('admin/pages/delete/{id}', ['as' => 'pages.delete', 'uses' => 'PagesController@destroy']);
 
     // Banners
     Route::resource('admin/banners', 'BannersController');
+    Route::get('admin/banners/delete/{id}', ['as' => 'banners.delete', 'uses' => 'BannersController@destroy']);
 
     // Search
     Route::get('admin/search', ['as' => 'backend.search', 'uses' => 'SearchController@index']);

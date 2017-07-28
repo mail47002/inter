@@ -41,7 +41,7 @@
 					<td>
 						<div class="btn-group">
 							<a href="{{ route('pages.edit', $page->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
-							<a href="{{ route('pages.destroy', $page->id) }}" class="btn btn-sm btn-default" onclick="return confirm('Do you want to delete this page?');"><i class="glyphicon glyphicon-trash"></i> Delete</a>
+							<a href="{{ route('pages.delete', $page->id) }}" class="btn btn-sm btn-default" onclick="return confirm('Do you want to delete this page?');"><i class="glyphicon glyphicon-trash"></i> Delete</a>
 						</div>
 					</td>
 				</tr>

@@ -45,9 +45,9 @@
 								@else
 									<a href="#" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-open"></i> Enabled</a>
 								@endif
-								<a href="{{ route('users.show', ['id' => $user->id]) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-user"></i> Profile</a>
-								<a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
-								<a href="#" class="btn btn-sm btn-default" type="submit" onclick="return confirm('Do you want to delete this user?');"><i class="glyphicon glyphicon-trash"></i> Delete</a>
+								<a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-user"></i> Profile</a>
+								<a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+								<a href="{{ route('users.delete', $user->id) }}" class="btn btn-sm btn-default" onclick="return confirm('Do you want to delete this user?');"><i class="glyphicon glyphicon-trash"></i> Delete</a>
 							</div>
 						</td>
 					</tr>
