@@ -6,16 +6,21 @@
 
 @section('content')
 	<div class="page-header">
-		<h1>{{ $user->username }} <small>- Profile</small></h1>
+		<h1>{{ ucfirst($user->username) }} <small>- Profile</small></h1>
 	</div>
+	@if ($user->status == 0)
+		<div class="alert alert-warning">
+			<p>This user is blocked!</p>
+		</div>
+	@endif
 	<div class="row">
 		<div class="col-md-5">
+			<h3>General</h3>
 			@if ($user->photo)
 				<div class="photo">
 					<img class="img-responsive" src="{{ asset($user->photo) }}">
 				</div>
 			@endif
-			<h3>General</h3>
 			<table class="table table-profile">
 				<tbody>
 					<tr>
