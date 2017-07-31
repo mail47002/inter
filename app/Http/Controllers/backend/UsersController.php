@@ -25,7 +25,7 @@ class UsersController extends Controller
 	public function index()
 	{
 		return view('backend.users.index', [
-		    'users' => User::where('role', config('user_roles.user'))->paginate()
+		    'users' => User::where('role', config('users.role.user'))->paginate()
         ]);
 	}
 
@@ -134,7 +134,7 @@ class UsersController extends Controller
             $entry->status  	= $request->status;
 
             if (!empty($request->password)) {
-                $entry->password = Hash::make((string) $request->password);
+                $entry->password = Hash::make((string)$request->password);
             }
 
             // Uploading photo

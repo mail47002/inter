@@ -40,7 +40,7 @@ class LoginController extends Controller
         return [
             'email'     => $request->email,
             'password'  => $request->password,
-            'role'      => config('user_roles.admin')
+            'role'      => config('users.role.admin')
         ];
     }
 }

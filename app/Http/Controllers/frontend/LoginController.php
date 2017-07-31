@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\UserCredit;
 use Illuminate\Http\Request;
 use App\User;
 use Hash;
@@ -39,6 +40,14 @@ class LoginController extends Controller
 
         $entry->save();
 
+        $entry_credits = new UserCredit;
+
+        $entry_credits->user_id     = $entry->id;
+        $entry_credits->credits     = config('users.credits');
+        $entry_credits->description = '';
+
+        $entry_credits->save();
+
         return redirect()
             ->route('home')
             ->withRegistered(1);
@@ -60,7 +69,6 @@ class LoginController extends Controller
             'email'     => 'required|email',
             'password'  => 'required|string',
         ]);
-
 
 		if (Auth::guard('web')->attempt($this->credentials($request))) {
 			return redirect()
@@ -86,7 +94,7 @@ class LoginController extends Controller
         return [
             'email'     => $request->email,
             'password'  => $request->password,
-            'role'      => config('user_roles.user'),
+            'role'      => config('users.role.user'),
             'status'    => 1
         ];
     }
