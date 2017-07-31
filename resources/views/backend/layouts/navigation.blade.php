@@ -2,7 +2,7 @@
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-                <span class="sr-only">Navigacija</span>
+                <span class="sr-only">Navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -11,7 +11,7 @@
             <a class="navbar-brand" href="{{ route('dashboard') }}">Admin panel</a>
         </div>
 
-        @if (auth()->check())
+        @if (auth()->guard('admin')->check())
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="{{ request()->is('admin/dashboard*') ? 'active' : '' }}"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -22,7 +22,7 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ auth()->guard('admin')->user()->username }} <i class="caret"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ route('profile.edit') }}">Profile</a></li>
                             <li><a href="{{ route('backend.logout') }}">Logout</a></li>

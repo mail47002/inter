@@ -5,8 +5,6 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
-use App\UserNetwork;
-use Validator;
 use Hash;
 use Auth;
 
@@ -25,32 +23,25 @@ class LoginController extends Controller
 
 	public function register(Request $request)
 	{
-		$validation = Validator::make($request->all(), [
+		$this->validate($request, [
 			'r_email' 				    => 'required|email|unique:users,email',
 			'r_username' 			    => 'required|unique:users,username',
 			'r_password' 			    => 'required|confirmed|min:5',
 			'r_password_confirmation'   => 'required',
 		]);
 
-		if ($validation->fails()) {
-			return redirect()
-                ->back()
-                ->withInput()
-                ->withErrors($validation->messages());
-		} else {
-            $entry = new User;
+        $entry = new User;
 
-            $entry->type 	    = config('user_types.user');
-            $entry->email 	    = $request->r_email;
-            $entry->username    = $request->r_username;
-            $entry->password    = Hash::make((string)$request->r_password);
+        $entry->role 	    = config('user_roles.user');
+        $entry->email 	    = $request->r_email;
+        $entry->username    = $request->r_username;
+        $entry->password    = Hash::make((string)$request->r_password);
 
-            $entry->save();
+        $entry->save();
 
-			return redirect()
-                ->route('home')
-                ->withRegistered(1);
-		}
+        return redirect()
+            ->route('home')
+            ->withRegistered(1);
 	}
 
 	public function registerFacebook(Request $request)
@@ -65,40 +56,38 @@ class LoginController extends Controller
 
 	public function login(Request $request)
 	{
-        $validation = Validator::make($request->all(), [
+        $this->validate($request, [
             'email'     => 'required|email',
             'password'  => 'required|string',
         ]);
 
-        if ($validation->fails()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->withErrors($validation->messages());
-        }
 
-		if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
-
+		if (Auth::guard('web')->attempt($this->credentials($request))) {
 			return redirect()
                 ->route('campaigns.my')
                 ->withLogned(1);
-		} else {
-			return redirect()
-                ->back()
-                ->withLogin_error(1)
-                ->withInput();
 		}
+
+        return redirect()
+            ->back()
+            ->withLogin_error(1)
+            ->withInput();
 	}
 
-	public function logout(Request $request)
+	public function logout()
 	{
-        Auth::logout();
-
-        $request->session()->flush();
-
-        $request->session()->regenerate();
+        Auth::guard('web')->logout();
 
 		return redirect()->route('home')->withLogout(1);
 	}
+
+	protected function credentials(Request $request)
+    {
+        return [
+            'email'     => $request->email,
+            'password'  => $request->password,
+            'role'      => config('user_roles.user'),
+            'status'    => 1
+        ];
+    }
 }

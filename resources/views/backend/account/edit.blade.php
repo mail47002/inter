@@ -17,18 +17,18 @@
             {{ session('status') }}
         </div>
     @endif
-    {{ Form::open(['route' => ['profile.update', auth()->user()->id], 'method' => 'put', 'files' => true, 'id' => 'form-user']) }}
+    {{ Form::open(['route' => ['profile.update', $user->id], 'method' => 'put', 'files' => true, 'id' => 'form-user']) }}
         <div class="row">
             <div class="col-sm-8">
                 <h4>General</h4>
                 <div class="form-group {{ $errors->first('email', 'has-error') }}">
                     {{ Form::label('email', 'E-mail:') }}
-                    {{ Form::email('email', auth()->user()->email, [ 'class' => 'form-control', 'placeholder' => 'Email adress']) }}
+                    {{ Form::email('email', $user->email, [ 'class' => 'form-control', 'placeholder' => 'Email adress']) }}
                     {!! $errors->first('email', '<label class="control-label text-danger">:message</label>') !!}
                 </div>
                 <div class="form-group {{ $errors->first('username', 'has-error') }}">
                     {{ Form::label('username', 'Username:') }}
-                    {{ Form::text('username', auth()->user()->username, [ 'class' => 'form-control', 'placeholder' => 'Enter username']) }}
+                    {{ Form::text('username', $user->username, [ 'class' => 'form-control', 'placeholder' => 'Enter username']) }}
                     {!! $errors->first('username', '<label class="control-label text-danger">:message</label>') !!}
                 </div>
                 <br>
@@ -49,9 +49,9 @@
             </div>
             <div class="col-sm-4">
                 <h4>Select a new one</h4>
-                @if (auth()->user()->photo)
+                @if ($user->photo)
                     <div class="form-group">
-                        <img class="img-responsive" src="{{ asset(auth()->user()->photo) }}">
+                        <img class="img-responsive" src="{{ $user->photo }}">
                     </div>
                 @endif
                 <div class="form-group {{ $errors->first('photo', 'has-error') }}">

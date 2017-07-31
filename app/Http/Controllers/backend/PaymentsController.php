@@ -10,7 +10,7 @@ class PaymentsController extends Controller
 
 	function __construct()
 	{
-        $this->middleware(['admin', 'auth']);
+        $this->middleware('admin');
 	}
 
 	public function index()

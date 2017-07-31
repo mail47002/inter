@@ -51,6 +51,6 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->attributes['type'] == config('user_types.admin');
+        return $this->attributes['role_id'] === config('user_roles.admin');
     }
 }

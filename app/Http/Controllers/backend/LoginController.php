@@ -21,22 +21,26 @@ class LoginController extends Controller
             'password'  => 'required|string',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password')) && Auth::user()->isAdmin()) {
-            $request->session()->regenerate();
-
+        if (Auth::guard('admin')->attempt($this->credentials($request))) {
             return redirect()->route('dashboard');
         }
 
         return redirect()->back();
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
 
-        $request->session()->flush();
-        $request->session()->regenerate();
+        return redirect('admin');
+    }
 
-        return redirect('/admin');
+    protected function credentials(Request $request)
+    {
+        return [
+            'email'     => $request->email,
+            'password'  => $request->password,
+            'role'      => config('user_roles.admin')
+        ];
     }
 }

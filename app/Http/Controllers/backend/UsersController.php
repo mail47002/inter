@@ -25,7 +25,7 @@ class UsersController extends Controller
 	public function index()
 	{
 		return view('backend.users.index', [
-		    'users' => User::where('type', config('user_types.user'))->paginate()
+		    'users' => User::where('role', config('user_roles.user'))->paginate()
         ]);
 	}
 
@@ -45,6 +45,7 @@ class UsersController extends Controller
 
         $entry = new User;
 
+        $entry->role 	    = config('user_roles.user');
         $entry->email 		= $request->email;
         $entry->username 	= $request->username;
         $entry->password    = Hash::make((string)$request->password);
@@ -95,6 +96,7 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::find($id);
+
         if ($user) {
           return view('backend.users.show', [
             'user' => $user,

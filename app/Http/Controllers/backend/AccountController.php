@@ -4,22 +4,25 @@ namespace App\Http\Controllers\backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class AccountController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['admin']);
+        $this->middleware('admin');
     }
 
     public function edit()
     {
-        return view('backend.account.edit');
+        return view('backend.account.edit', [
+            'user' => Auth::guard('admin')->user()
+        ]);
     }
 
     public function update(Request $request)
     {
-        $entry = auth()->user();
+        $entry = Auth::guard('admin')->user();
 
         $this->validate($request, [
             'email' 	=> 'required|email|unique:users,email,' . $entry->id,
