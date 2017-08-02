@@ -109,76 +109,81 @@ class CampaignsController extends Controller
 
 	public function store_answer($id, Request $request)
 	{
-		$entry = Campaign::find($id);
+		$campaign = Campaign::find($id);
 
-		if ($entry && $entry->active) {
-		    // Check advertise credits
-		    if ($entry->advertise_credits > 0) {
-                $fields = [];
+		if ($campaign && $campaign->active) {
+            // Check advertise credits
+            $user_credits = UserCredit::where('user_id', $campaign->user_id)->get();
 
-                foreach ($entry->questions as $question) {
+            // Total user credits
+            $credits = 0;
+
+            foreach ($user_credits as $user_credit) {
+                $credits += (int)$user_credit->credits;
+            }
+
+            // Price
+            $price = $campaign->questions()->count() * 2;
+
+		    if ($credits > 0 && ($credits - $price) >= 0) {
+                $rules = [];
+
+                foreach ($campaign->questions as $question) {
                     if ($question->required == 1) {
-                        $fields[$question->id] = 'required';
+                        $rules[$question->id] = 'required';
                     }
                 }
 
-                $this->validate($request, $fields); // Not validate
+                // Need move to translate
+                $messages = [
+                    'required' => 'Būtina užpildyti'
+                ];
+
+                $this->validate($request, $rules, $messages);
 
                 // creating result
                 $result = new CampaignResult;
 
-                $check_result = CampaignResult::where('campaign_id', $id)->first();
-
-                $result->campaign_id = $id;
-
-                if (Auth::check()) {
-                    $result->user_id = Auth::user()->id;
-                }
-
-                $result->ip = $request->getClientIp();
+                $result->campaign_id    = $id;
+                $result->user_id        = Auth::check() ? Auth::user()->id : 0;
+                $result->ip             = $request->getClientIp();
 
                 $result->save();
 
-                // advertising shit
-                if (Auth::check() && $entry->advertise_results && Auth::user()->id != $entry->user_id && !isset($check_result)) {
-                    $price = $entry->questions()->count() * 2;
+                $campaign->used_credits += $price; // ???
 
-                    $entry->advertise_results--;
-                    $entry->used_results++;
+                $campaign->save();
 
-                    $entry->advertise_credits -= $price;
-                    $entry->used_credits += $price;
+                // Change advertise user credits
+                $credits = new UserCredit;
 
-                    // Įskaitome atsakiusiająm
+                $credits->user_id       = $campaign->user_id;
+                $credits->description   = 'Už reklamuojamą atsakymą';
+                $credits->credits       = -$price;
+
+                $credits->save();
+
+                // Change auth user credits
+                if (Auth::check() && Auth::user()->id != $campaign->user_id) {
                     $credits = new UserCredit;
 
-                    $credits->user_id = Auth::user()->id;
-                    $credits->description = 'Už atsakymą';
-                    $credits->credits = $price;
+                    $credits->user_id       = Auth::user()->id;
+                    $credits->description   = 'Už atsakymą';
+                    $credits->credits       = $price;
 
                     $credits->save();
-
-                    // Nuskaitome anketos savininkui
-                    $credits = new UserCredit;
-
-                    $credits->user_id = $entry->user_id;
-                    $credits->description = 'Už reklamuojamą atsakymą';
-                    $credits->credits = -$price;
-
-                    $credits->save();
-                    $entry->save();
                 }
 
                 // adding answers
-                foreach ($entry->questions as $question) {
+                foreach ($campaign->questions as $question) {
                     if ($request->has($question->id)) {
                         if (in_array($question->type, ['radio', 'select', 'string', 'text'])) {
                             $answer = new CampaignAnswer;
 
-                            $answer->campaign_id = $id;
-                            $answer->question_id = $question->id;
-                            $answer->result_id = $result->id;
-                            $answer->type = $question->type;
+                            $answer->campaign_id    = $id;
+                            $answer->question_id    = $question->id;
+                            $answer->result_id      = $result->id;
+                            $answer->type           = $question->type;
 
                             if (in_array($question->type, ['radio', 'select'])) {
                                 $answer->option_id = $request->get($question->id);
@@ -193,9 +198,9 @@ class CampaignsController extends Controller
                                     return redirect()->back()->withInput();
                                 }
 
-                                $answer->option_id = 0;
-                                $answer->value = $request->get('custom-' . $question->id);
-                                $answer->type = 'custom';
+                                $answer->option_id  = 0;
+                                $answer->value      = $request->get('custom-' . $question->id);
+                                $answer->type       = 'custom';
                             }
 
                             $answer->save();
@@ -204,21 +209,21 @@ class CampaignsController extends Controller
                                 foreach ($request->get($question->id) as $option_id => $value) {
                                     $answer = new CampaignAnswer;
 
-                                    $answer->campaign_id = $id;
-                                    $answer->question_id = $question->id;
-                                    $answer->result_id = $result->id;
+                                    $answer->campaign_id    = $id;
+                                    $answer->question_id    = $question->id;
+                                    $answer->result_id      = $result->id;
 
                                     if ($value == 'custom') {
                                         if (!$request->get('custom-' . $question->id)) {
                                             return redirect()->back()->withInput();
                                         }
 
-                                        $answer->option_id = 0;
-                                        $answer->value = $request->get('custom-' . $question->id);
-                                        $answer->type = 'custom';
+                                        $answer->option_id  = 0;
+                                        $answer->value      = $request->get('custom-' . $question->id);
+                                        $answer->type       = 'custom';
                                     } else {
-                                        $answer->option_id = $option_id;
-                                        $answer->type = $question->type;
+                                        $answer->option_id  = $option_id;
+                                        $answer->type       = $question->type;
                                     }
 
                                     $answer->save();
@@ -229,13 +234,12 @@ class CampaignsController extends Controller
                                 foreach ($request->get($question->id) as $option_id => $value) {
                                     $answer = new CampaignAnswer;
 
-                                    $answer->campaign_id = $id;
-                                    $answer->question_id = $question->id;
-                                    $answer->result_id = $result->id;
-                                    $answer->type = $question->type;
-
-                                    $answer->option_id = $option_id;
-                                    $answer->value = $value;
+                                    $answer->campaign_id    = $id;
+                                    $answer->question_id    = $question->id;
+                                    $answer->result_id      = $result->id;
+                                    $answer->type           = $question->type;
+                                    $answer->option_id      = $option_id;
+                                    $answer->value          = $value;
 
                                     $answer->save();
                                 }
@@ -244,13 +248,13 @@ class CampaignsController extends Controller
                     }
                 }
 
-                if ($entry->respondents) {
-                    return redirect()->route('campaigns.answers', $entry->id);
+                if ($campaign->respondents) {
+                    return redirect()->route('campaigns.answers', $campaign->id);
                 } else {
                     return redirect()->route('campaigns.answered');
                 }
             } else {
-		        return redirect()->back(); // if no advertise credits
+		        return redirect()->back(); // if no user credits
             }
 		}else {
             return redirect()->route('campaigns.notfound');
@@ -328,8 +332,8 @@ class CampaignsController extends Controller
             foreach ($tags as $tag) {
                 $entry_tag = new CampaignTag;
 
-                $entry_tag->campaign_id = $entry->id;
-                $entry_tag->title 		= $tag;
+                $entry_tag->campaign_id     = $entry->id;
+                $entry_tag->title 		    = $tag;
 
                 $entry_tag->save();
             }
@@ -866,14 +870,21 @@ class CampaignsController extends Controller
 
 		if ($entry) {
 			if ($entry->respondents) {
-				$recommended = Campaign::where('advertise_results', '>', 0)->where('active', '=', 1)->where('id', '<>', $entry->id)->orderBy('advertise_results', 'desc')->where('public', '=', 1)->take(5)->get();
+				$recommended = Campaign::where('advertise_results', '>', 0)
+                    ->where('active', '=', 1)
+                    ->where('id', '<>', $entry->id)
+                    ->where('public', '=', 1)
+                    ->orderBy('advertise_results', 'desc')
+                    ->take(5)
+                    ->get();
+
 
 				return view('frontend.results.index', [
                     'entry'         => $entry,
                     'recommended'   => $recommended
                 ]);
 			} else {
-                return view('Frontend.results.private');
+                return view('frontend.results.private');
             }
 		} else {
             return redirect()->route('home');

@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-8 col-md-offset-4">
-                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <button class="btn btn-primary" type="submit">Sign In</button>
                     </div>
                 </div>
                 <hr>

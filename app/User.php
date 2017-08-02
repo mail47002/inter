@@ -53,4 +53,11 @@ class User extends Authenticatable
     {
         return $this->attributes['role_id'] === config('user_roles.admin');
     }
+
+    public function total()
+    {
+        foreach ($this->credits() as $credit) {
+            dd($credit);
+        }
+    }
 }

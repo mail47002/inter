@@ -94,7 +94,6 @@ class LoginController extends Controller
         return [
             'email'     => $request->email,
             'password'  => $request->password,
-            'role'      => config('users.role.user'),
             'status'    => 1
         ];
     }

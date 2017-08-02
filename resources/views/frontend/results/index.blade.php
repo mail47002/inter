@@ -18,9 +18,9 @@
 	</div>
 
 	<div class="row">
-		@if (count($entry->results))
+		@if (count($entry->results) > 0)
 			<div class="col-sm-8">
-				@if (count($entry->questions))
+				@if (count($entry->questions) > 0)
 					@foreach ($entry->questions as $question)
 						<p class="lead">
 							{{ $question->title }}
