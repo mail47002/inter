@@ -2,7 +2,7 @@
 
 return [
     // User credits
-    'credits' => 10,
+    'credits' => 100,
 
     // User roles
     'role'  => [

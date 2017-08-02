@@ -33,7 +33,7 @@ class LoginController extends Controller
 
         $entry = new User;
 
-        $entry->role 	    = config('user_roles.user');
+        $entry->role 	    = config('users.role.user');
         $entry->email 	    = $request->r_email;
         $entry->username    = $request->r_username;
         $entry->password    = Hash::make((string)$request->r_password);
