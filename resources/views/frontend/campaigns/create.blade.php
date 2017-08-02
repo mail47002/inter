@@ -5,7 +5,7 @@
 @section('title')Sukurti naują anketą - @stop
 
 @section('content')
-	{{ Form::open( ['route' => 'campaigns.store', 'class' => 'form-horizontal', 'files' => true] ) }}
+	{{ Form::open(['route' => 'campaigns.store', 'class' => 'form-horizontal', 'files' => true]) }}
 		<div class="page-header">
 			<h1>
 				Sukurti naują anketą
@@ -20,7 +20,7 @@
 			<div class="col-sm-6">
 				<p class="lead">Bendrieji duomenys</p>
 
-				<div class="form-group {{ $errors->first('title'), 'has-error') }}">
+				<div class="form-group {{ $errors->first('title', 'has-error') }}">
 					{{ Form::label('title', 'Pavadinimas', [ 'class' => 'col-sm-3 control-label']) }}
 
 					<div class="col-sm-9">
