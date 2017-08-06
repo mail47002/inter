@@ -132,7 +132,7 @@
 					+
 				@endif
 
-				{{ '<strong>' . $question->b . '</strong><small>' . $question->title . '</small>' }}
+				{!! '<strong>' . $question->b . '</strong> <small>' . $question->title . '</small>' !!}
 			@endforeach
 		</p>
 	</div>

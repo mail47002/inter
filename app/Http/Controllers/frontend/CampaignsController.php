@@ -15,7 +15,7 @@ use Auth;
 use Validator;
 use File;
 use Image;
-use Kashi;
+use App\Services\Kashi\Kashi;
 use Excel;
 use App\Services\SpearmanCorrelation;
 
