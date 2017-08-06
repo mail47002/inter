@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'photo', 'status'
+        'username', 'email', 'password', 'photo', 'status'
     ];
 
     /**
@@ -52,12 +52,5 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->attributes['role_id'] === config('user_roles.admin');
-    }
-
-    public function total()
-    {
-        foreach ($this->credits() as $credit) {
-            dd($credit);
-        }
     }
 }

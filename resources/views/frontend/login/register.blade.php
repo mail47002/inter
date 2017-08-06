@@ -11,43 +11,43 @@
 			</div>
 
 			{{ Form::open([ 'route' => 'login.register', 'class' => 'form-horizontal' ]) }}
-				<div class="form-group {{ ( $errors->first('r_email') ? 'has-error' : NULL) }}">
-					{{ Form::label('r_email', 'El. paštas', ['class' => 'control-label col-sm-3']) }}
+				<div class="form-group {{ $errors->first('email', 'has-error') }}">
+					{{ Form::label('email', 'El. paštas', ['class' => 'control-label col-sm-3']) }}
 
 					<div class="col-sm-9">
-						{{ Form::email('r_email', '', ['class' => 'form-control', 'placeholder' => 'El. pašto adresas']) }}
+						{{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'El. pašto adresas']) }}
 						<span class="label label-info">Nebus rodomas. Bus naudojamas prisijungimui.</span>
 						
-						{!! $errors->first('r_email', '<br><label class="control-label">:message</label>') !!}
+						{!! $errors->first('email', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('r_username') ? 'has-error' : NULL) }}">
-					{{ Form::label('r_username', 'Vartotojas', ['class' => 'control-label col-sm-3']) }}
+				<div class="form-group {{ $errors->first('username', 'has-error') }}">
+					{{ Form::label('username', 'Vartotojas', ['class' => 'control-label col-sm-3']) }}
 
 					<div class="col-sm-9">
-						{{ Form::text('r_username', '', ['class' => 'form-control', 'placeholder' => 'Vartotojo vardas']) }}
+						{{ Form::text('username', '', ['class' => 'form-control', 'placeholder' => 'Vartotojo vardas']) }}
 						<span class="label label-info">Bus rodomas kartu su jūsų anketomis</span>
 
-						{!! $errors->first('r_username', '<br><label class="control-label">:message</label>') !!}
+						{!! $errors->first('username', '<br><label class="control-label">:message</label>') !!}
 					</div>
 				</div>
 
-				<div class="form-group {{ ( $errors->first('r_password') || $errors->first('r_password_confirmation') ? 'has-error' : NULL) }}">
-					{{ Form::label('r_password', 'Slaptažodis', ['class' => 'control-label col-sm-3']) }}
+				<div class="form-group {{ ( $errors->first('password') || $errors->first('password_confirmation') ? 'has-error' : NULL) }}">
+					{{ Form::label('password', 'Slaptažodis', ['class' => 'control-label col-sm-3']) }}
 	
 					<div class="col-sm-9">
 						<div class="row">
 							<div class="col-sm-6">
-								{{ Form::password('r_password', ['class' => 'form-control', 'placeholder' => 'Sugalvokite slaptažodį']) }}
+								{{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'Sugalvokite slaptažodį']) }}
 
-								{!! $errors->first('r_password', '<label class="control-label">:message</label>') !!}
+								{!! $errors->first('password', '<label class="control-label">:message</label>') !!}
 							</div>
 
 							<div class="col-sm-6">
-								{{ Form::password('r_password_confirmation', ['class' => 'form-control', 'placeholder' => 'Pakartokite slaptažodį']) }}
+								{{ Form::password('password_confirmation', ['class' => 'form-control', 'placeholder' => 'Pakartokite slaptažodį']) }}
 
-								{!! $errors->first('r_password_confirmation', '<label class="control-label">:message</label>') !!}
+								{!! $errors->first('password_confirmation', '<label class="control-label">:message</label>') !!}
 							</div>
 						</div>
 					</div>

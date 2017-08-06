@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserRegister;
 use App\UserCredit;
 use Illuminate\Http\Request;
 use App\User;
+use App\UserNetwork;
 use Hash;
 use Auth;
+use Socialite;
+use Exception;
 
 class LoginController extends Controller
 {
@@ -25,43 +29,82 @@ class LoginController extends Controller
 	public function register(Request $request)
 	{
 		$this->validate($request, [
-			'r_email' 				    => 'required|email|unique:users,email',
-			'r_username' 			    => 'required|unique:users,username',
-			'r_password' 			    => 'required|confirmed|min:5',
-			'r_password_confirmation'   => 'required',
+			'email' 				    => 'required|email|unique:users,email',
+			'username' 			        => 'required|unique:users,username',
+			'password' 			        => 'required|confirmed|min:5',
+			'password_confirmation'     => 'required',
 		]);
 
-        $entry = new User;
-
-        $entry->role 	    = config('users.role.user');
-        $entry->email 	    = $request->r_email;
-        $entry->username    = $request->r_username;
-        $entry->password    = Hash::make((string)$request->r_password);
-
-        $entry->save();
-
-        $entry_credits = new UserCredit;
-
-        $entry_credits->user_id     = $entry->id;
-        $entry_credits->credits     = config('users.credits');
-        $entry_credits->description = '';
-
-        $entry_credits->save();
+        $this->create($request->all());
 
         return redirect()
             ->route('home')
             ->withRegistered(1);
 	}
 
-	public function registerFacebook(Request $request)
+	public function redirectToFacebook()
 	{
-
+        return Socialite::driver('facebook')->redirect();
 	}
 
-	public function registerGoogle(Request $request)
-	{
+    public function  handleFacebookCallback()
+    {
+        try {
+            $user = Socialite::driver('facebook')->user();
 
+            $entry_network = UserNetwork::where('social_id', $user->id)->first();
+
+            if (!$entry_network) {
+                $password = $this->makePassword();
+
+                $entry = $this->create([
+                    'email' 	    => $user->email,
+                    'username'      => $user->name,
+                    'password'      => $password
+                ]);
+
+                Mail::to($user->name)->send(new UserRegister($entry, $password));
+            }
+
+            Auth::loginUsingId($entry->user_id);
+
+            return redirect()->route('campaigns.my');
+        } catch (Exception $e) {
+            return redirect()->route('login.register_facebook');
+        }
+    }
+
+	public function redirectToGoogle()
+	{
+        return Socialite::driver('google')->redirect();
 	}
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+
+            $entry_network = UserNetwork::where('social_id', $user->id)->first();
+
+            if (!$entry_network) {
+                $password = $this->makePassword();
+
+                $entry = $this->create([
+                    'email' 	    => $user->email,
+                    'username'      => $user->name,
+                    'password'      => $password
+                ]);
+
+                Mail::to($user->name)->send(new UserRegister($entry, $password));
+            }
+
+            Auth::loginUsingId($entry->user_id);
+
+            return redirect()->route('campaigns.my');
+        } catch (Exception $e) {
+            return redirect()->route('login.register_google');
+        }
+    }
 
 	public function login(Request $request)
 	{
@@ -97,4 +140,28 @@ class LoginController extends Controller
             'status'    => 1
         ];
     }
+
+    protected function create($data)
+    {
+        $entry = User::create([
+            'role' 	        => config('users.role.user'),
+            'email' 	    => $data['email'],
+            'username'      => $data['username'],
+            'password'      => Hash::make((string)$data['password'])
+        ]);
+
+        UserCredit::create([
+            'user_id'       => $entry->id,
+            'credits'       => config('users.credits'),
+            'description'   => 'Įskaitymas'
+        ]);
+
+        return $entry;
+    }
+
+    protected function makePassword()
+    {
+        return time() + rand(1, 100);
+    }
+
 }

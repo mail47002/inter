@@ -35,4 +35,16 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'facebook' => [
+        'client_id' => '291074594418092',
+        'client_secret' => 'e9fc1d6ca69407ede526905605f0e875',
+        'redirect' => 'http://inter.local/registruotis/facebook/callback', // change on production
+    ],
+
+    'google' => [
+        'client_id'     => '724297532619-fjjsr38iqcf55r5ohir0eqilfbpj4236.apps.googleusercontent.com',
+        'client_secret' => 'Z3VhGOiKY4PXuGigj6ATM0XO',
+        'redirect' => 'http://inter.local/registruotis/google/callback', // change on production
+    ],
+
 ];

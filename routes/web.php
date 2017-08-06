@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Backend
 Route::namespace('backend')->group(function() {
     // Auth
     Route::get('admin', 'LoginController@index');
@@ -40,6 +42,7 @@ Route::namespace('backend')->group(function() {
     Route::get('admin/search', ['as' => 'backend.search', 'uses' => 'SearchController@index']);
 });
 
+// Frontend
 Route::namespace('frontend')->group(function() {
     // Payments
     Route::resource('payments', 'BackPaymentsController');
@@ -111,10 +114,12 @@ Route::namespace('frontend')->group(function() {
     Route::get('prisijungimas', ['as' => 'login', 'uses' => 'LoginController@index']);
     Route::get('registruotis', ['as' => 'login.registration', 'uses' => 'LoginController@registration']);
     Route::post('registruotis', ['as' => 'login.register', 'uses' => 'LoginController@register']);
-    Route::get('registruotis-facebook', ['as' => 'login.register_facebook', 'uses' => 'LoginController@registerFacebook']);
-    Route::get('registruotis-google', ['as' => 'login.register_google', 'uses' => 'LoginController@registerGoogle']);
     Route::post('prisijungti', ['as' => 'login.session', 'uses' => 'LoginController@login']);
     Route::get('atsijungti', ['as' => 'login.logout', 'uses' => 'LoginController@logout']);
+    Route::get('registruotis/facebook', ['as' => 'login.register_facebook', 'uses' => 'LoginController@redirectToFacebook']);
+    Route::get('registruotis/facebook/callback', 'LoginController@handleFacebookCallback');
+    Route::get('registruotis/google', ['as' => 'login.register_google', 'uses' => 'LoginController@redirectToGoogle']);
+    Route::get('registruotis/google/callback', 'LoginController@handleGoogleCallback');
 
     // Pages
     Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);

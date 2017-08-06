@@ -12,7 +12,7 @@
 			</p>
 
 			<p>
-				El. paštas prisijungimui: {{ $email }}<br>
+				El. paštas prisijungimui: {{ $user->email }}<br>
 				Slaptažodis: {{ $password }}
 			</p>
 		</div>
