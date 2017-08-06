@@ -16,6 +16,7 @@ use Validator;
 use File;
 use Image;
 use Kashi;
+use Excel;
 use App\Services\SpearmanCorrelation;
 
 class CampaignsController extends Controller
