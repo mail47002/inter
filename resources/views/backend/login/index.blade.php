@@ -12,13 +12,13 @@
             </div>
             {{ Form::open(['route' => 'backend.login', 'method' => 'post', 'class' => 'form-horizontal']) }}
                 <div class="form-group {{ $errors->first('email', 'has-error') }}">
-                    <label class="col-sm-4">E-mail</label>
+                    <label class="control-label col-sm-4">E-mail</label>
                     <div class="col-sm-8">
                         <input class="form-control" type="text" name="email">
                     </div>
                 </div>
                 <div class="form-group {{ $errors->first('password', 'has-error') }}">
-                    <label class="col-sm-4">Password</label>
+                    <label class="control-label col-sm-4">Password</label>
                     <div class="col-sm-8">
                         <input class="form-control" type="password" name="password">
                     </div>
