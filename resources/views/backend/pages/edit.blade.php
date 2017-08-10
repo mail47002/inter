@@ -33,10 +33,10 @@
 					{!! Form::text('meta_title', $page->meta_title, ['class' => 'form-control']) !!}
 					{!! $errors->first('meta_title', '<label class="control-label text-danger">:message</label>') !!}
 				</div>
-				<div class="form-group {{ $errors->first('meta_discription', 'has-error') }}">
-					{!! Form::label('meta_discription', 'Meta discription:') !!}
-					{!! Form::text('meta_discription', $page->meta_discription, ['class' => 'form-control', 'rows' => 5]) !!}
-					{!! $errors->first('meta_discription', '<label class="control-label text-danger">:message</label>') !!}
+				<div class="form-group {{ $errors->first('meta_description', 'has-error') }}">
+					{!! Form::label('meta_discription', 'Meta description:') !!}
+					{!! Form::textarea('meta_description', $page->meta_description, ['class' => 'form-control', 'rows' => 5]) !!}
+					{!! $errors->first('meta_description', '<label class="control-label text-danger">:message</label>') !!}
 				</div>
 				</div>
 				<div class="col-md-4">

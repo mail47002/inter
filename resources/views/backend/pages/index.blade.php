@@ -11,10 +11,10 @@
 		</div>
 		<h1>Pages</h1>
 	</div>
-	@if (session('status'))
+	@if (session('success'))
 		<div class="alert alert-success">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			{{ session('status') }}
+			{{ session('success') }}
 		</div>
 	@endif
 	<table cellpadding="0" cellspacing="0" border="0" class="table table-striped">

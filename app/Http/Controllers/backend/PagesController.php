@@ -29,15 +29,16 @@ class PagesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title'     => 'required',
-            'slug'      => 'required',
+            'title'         => 'required',
+            'slug'          => 'required',
+            'meta_title'    => 'required'
         ]);
 
-        $page = Page::create($request->all());
+        Page::create($request->all());
 
         return redirect()
             ->route('pages.index')
-            ->withStatus(trans('pages.create'));
+            ->withSuccess(trans('pages.create'));
     }
 
     public function show($id)
@@ -64,15 +65,16 @@ class PagesController extends Controller
 
         if ($page) {
             $this->validate($request, [
-                'title'     => 'required',
-                'slug'      => 'required'
+                'title'         => 'required',
+                'slug'          => 'required',
+                'meta_title'    => 'required'
             ]);
 
             $page->fill($request->all())->save();
 
             return redirect()
                 ->route('pages.index')
-                ->withStatus(trans('pages.update'));
+                ->withSuccess(trans('pages.update'));
         }
     }
 
@@ -85,7 +87,7 @@ class PagesController extends Controller
 
             return redirect()
                 ->route('pages.index')
-                ->withStatus(trans('pages.delete'));
+                ->withSuccess(trans('pages.delete'));
         }
 
         return redirect()->route('pages.index');

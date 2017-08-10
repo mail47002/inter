@@ -18,6 +18,8 @@ class CreatePagesTable extends Migration
             $table->string('title');
             $table->string('slug');
             $table->text('content')->nullable();
+            $table->string('meta_title');
+            $table->string('meta_description')->nullable();
             $table->integer('status')->deault(1);
             $table->timestamps();
         });
