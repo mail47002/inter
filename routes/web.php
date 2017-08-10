@@ -40,6 +40,10 @@ Route::namespace('backend')->group(function() {
 
     // Search
     Route::get('admin/search', ['as' => 'backend.search', 'uses' => 'SearchController@index']);
+
+    // Settings
+    Route::get('admin/settings', ['as' => 'settings.edit', 'uses' => 'SettingsController@edit']);
+    Route::put('admin/settings/update', ['as' => 'settings.update', 'uses' => 'SettingsController@update']);
 });
 
 // Frontend

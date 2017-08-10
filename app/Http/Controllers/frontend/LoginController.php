@@ -152,7 +152,7 @@ class LoginController extends Controller
 
         UserCredit::create([
             'user_id'       => $entry->id,
-            'credits'       => config('users.credits'),
+            'credits'       => config('settings.credits_per_registration'),
             'description'   => 'Įskaitymas'
         ]);
 

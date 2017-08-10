@@ -15,9 +15,10 @@
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="{{ request()->is('admin/dashboard*') ? 'active' : '' }}"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="{{ request()->is('admin/banners*') ? 'active' : '' }}"><a href="{{ route('banners.index') }}">Banners</a></li>
                     <li class="{{ request()->is('admin/pages*') ? 'active' : '' }}"><a href="{{ route('pages.index') }}">Pages</a></li>
                     <li class="{{ request()->is('admin/users*') ? 'active' : '' }}"><a href="{{ route('users.index') }}">Users</a></li>
-                    <li class="{{ request()->is('admin/banners*') ? 'active' : '' }}"><a href="{{ route('banners.index') }}">Banners</a></li>
+                    <li class="{{ request()->is('admin/settings*') ? 'active' : '' }}"><a href="{{ route('settings.edit') }}">Settings</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
