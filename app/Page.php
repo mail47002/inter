@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Page extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'content', 'status'
+        'title', 'slug', 'content', 'meta_title', 'meta_discription', 'status'
     ];
 
     public function setSlugAttribute($value)

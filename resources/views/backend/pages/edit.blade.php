@@ -28,6 +28,16 @@
 						{!! Form::label('content', 'Content:') !!}
 						{!! Form::textarea('content', $page->content, ['id' => 'editor']) !!}
 					</div>
+					<div class="form-group {{ $errors->first('meta_title', 'has-error') }}">
+					{!! Form::label('meta_title', 'Meta title:') !!}
+					{!! Form::text('meta_title', $page->meta_title, ['class' => 'form-control']) !!}
+					{!! $errors->first('meta_title', '<label class="control-label text-danger">:message</label>') !!}
+				</div>
+				<div class="form-group {{ $errors->first('meta_discription', 'has-error') }}">
+					{!! Form::label('meta_discription', 'Meta discription:') !!}
+					{!! Form::text('meta_discription', $page->meta_discription, ['class' => 'form-control', 'rows' => 5]) !!}
+					{!! $errors->first('meta_discription', '<label class="control-label text-danger">:message</label>') !!}
+				</div>
 				</div>
 				<div class="col-md-4">
 					<div class="form-group">
