@@ -22,28 +22,21 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Rate</label>
-                    <div class="col-md-9">
-                        <input class="form-control" type="text" name="settings[credits_rate]" value="{{ config('settings.credits_rate') }}">
-                    </div>
-                </div>
-                <div class="form-group">
                     <label class="col-md-3 control-label">Per registration</label>
                     <div class="col-md-9">
-                        <input class="form-control" type="text" name="settings[credits_per_registration]" value="{{ config('settings.credits_per_registration') }}">
+                        <input class="form-control" type="text" name="settings[registration_credits]" value="{{ config('settings.registration_credits') }}">
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4"></div>
-        </div>
-        <hr>
-        <h4>Featured</h4>
-        <div class="row">
-            <div class="col-md-8">
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Rate</label>
+                    <label class="col-md-3 control-label">For campaigns</label>
                     <div class="col-md-9">
-                        <input class="form-control" type="text" name="settings[featured_rate]" value="{{ config('settings.featured_rate') }}">
+                        <input class="form-control" type="text" name="settings[campaigns_credits]" value="{{ config('settings.campaigns_credits') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">For featured</label>
+                    <div class="col-md-9">
+                        <input class="form-control" type="text" name="settings[featured_credits]" value="{{ config('settings.featured_credits') }}">
                     </div>
                 </div>
             </div>

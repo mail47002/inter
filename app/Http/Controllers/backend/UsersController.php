@@ -97,10 +97,13 @@ class UsersController extends Controller
     {
         $user = User::find($id);
 
+        $credits = $user->credits()->orderBy('id', 'desc')->take(10)->get();
+
         if ($user) {
-          return view('backend.users.show', [
-            'user' => $user,
-          ]);
+            return view('backend.users.show', [
+                'user' => $user,
+                'credits' => $credits
+            ]);
         }
     }
 

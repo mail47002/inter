@@ -13,14 +13,14 @@ class SettingsTableSeeder extends Seeder
     {
         DB::table('settings')->insert([
             [
-                'key' => 'credits_per_registration',
+                'key' => 'registration_credits',
                 'value'     => 100
             ], [
-                'key'       => 'credits_rate',
-                'value'     => 1
+                'key'       => 'campaigns_credits',
+                'value'     => 10
             ], [
-                'key'       => 'featured_rate',
-                'value'     => 1
+                'key'       => 'featured_credits',
+                'value'     => 5
             ]
         ]);
     }

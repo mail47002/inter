@@ -37,8 +37,7 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
-		<div class="col-md-7">
+			<br>
 			<h3>Campaigns</h3>
 			@if (count($user->campaigns) > 0)
 				<table class="table">
@@ -64,7 +63,29 @@
 			@else
 				<p>There are no campaigns!</p>
 			@endif
+		</div>
+		<div class="col-md-7">
+			<h3>Credits</h3>
+			@if (count($credits) > 0)
+				<table class="table table-condensed">
+					<thead>
+					<th>Data</th>
+					<th>Šaltinis</th>
+					<th>Kreditai</th>
+					</thead>
 
+					@foreach ($credits as $entry)
+						<tr class="{{ $entry->credits >= 0 ? 'success' : 'danger' }}">
+							<td>{{ $entry->created_at }}</td>
+							<td>{{ $entry->description }}</td>
+							<td>{{ $entry->credits }}</td>
+						</tr>
+					@endforeach
+				</table>
+			@else
+				<p>There are no credits history!</p>
+			@endif
+			<br>
 			<h3>Payments</h3>
 			<p>There are no payments!</p>
 		</div>

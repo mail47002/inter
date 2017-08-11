@@ -124,7 +124,7 @@ class CampaignsController extends Controller
             }
 
             // Price
-            $price = $campaign->questions()->count() * 2;
+            $price = config('settings.campaigns_credits');
 
 		    if ($credits > 0 && ($credits - $price) >= 0) {
                 $rules = [];
@@ -151,7 +151,7 @@ class CampaignsController extends Controller
 
                 $result->save();
 
-                $campaign->used_credits += $price; // ???
+                $campaign->used_credits += $price;
 
                 $campaign->save();
 
@@ -164,7 +164,6 @@ class CampaignsController extends Controller
 
                 $credits->save();
 
-                // Change auth user credits
                 if (Auth::check() && Auth::user()->id != $campaign->user_id) {
                     $credits = new UserCredit;
 
