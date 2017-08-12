@@ -34,8 +34,13 @@
 					{!! $errors->first('meta_title', '<label class="control-label text-danger">:message</label>') !!}
 				</div>
 				<div class="form-group {{ $errors->first('meta_description', 'has-error') }}">
+<<<<<<< Updated upstream
 					{!! Form::label('meta_discription', 'Meta description:') !!}
 					{!! Form::textarea('meta_description', $page->meta_description, ['class' => 'form-control', 'rows' => 5]) !!}
+=======
+					{!! Form::label('meta_description', 'Meta description:') !!}
+					{!! Form::text('meta_description', $page->meta_description, ['class' => 'form-control', 'rows' => 5]) !!}
+>>>>>>> Stashed changes
 					{!! $errors->first('meta_description', '<label class="control-label text-danger">:message</label>') !!}
 				</div>
 				</div>
