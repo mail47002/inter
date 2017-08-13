@@ -16,7 +16,18 @@ class SettingsController extends Controller
 
     public function edit()
     {
-        return view('backend.settings.edit');
+        $result = array();
+        $settings = Setting::all();
+        if($settings) {
+            foreach ($settings as $value) {
+               $result[$value->key] = $value->value;
+            }
+        }
+
+        return view('backend.settings.edit',
+            [
+            'settings' => $result,
+            ]);
     }
 
     public function update(Request $request)

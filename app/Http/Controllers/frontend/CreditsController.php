@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Setting;
 
 class CreditsController extends Controller
 {
@@ -13,8 +14,10 @@ class CreditsController extends Controller
 
 	public function index()
 	{
+		$one_credits = Setting::where('key', 'one_credits')->get();
+
 		return view('frontend.credits.index', [
-		    'prices' => config('prices')
+		    'one_credits' => $one_credits,
         ]);
 	}
 

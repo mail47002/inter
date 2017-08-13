@@ -36,8 +36,8 @@
 					<th>Kreditų kiekis</th>
 					<th></th>
 				</thead>
-
-				@foreach ($prices as $price)
+{{$one_credits}}
+				{{-- @foreach ($prices as $price)
 					<tr>
 						<td style="vertical-align: middle;">{{ $price['ammount'] }},00 EUR</td>
 						<td style="vertical-align: middle;">{{ number_format($price['credits'], 0, ',', ' ') }}</td>
@@ -54,7 +54,7 @@
 						</form>
 						</td>
 					</tr>
-				@endforeach
+				@endforeach --}}
 			</table>
 		</div>
 
