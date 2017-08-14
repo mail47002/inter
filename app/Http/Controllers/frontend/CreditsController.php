@@ -14,8 +14,7 @@ class CreditsController extends Controller
 
 	public function index()
 	{
-		$one_credits = Setting::where('key', 'one_credits')->get();
-
+		$one_credits = config('settings.one_credits');;
 		return view('frontend.credits.index', [
 		    'one_credits' => $one_credits,
         ]);
