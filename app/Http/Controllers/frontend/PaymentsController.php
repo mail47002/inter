@@ -19,14 +19,12 @@ class PaymentsController extends Controller
         ]);
 	}
 
-	public function create($amount)
-	{
-
-	}
-
 	public function callback(Request $request)
 	{
-
+		echo '<pre>';
+		print_r($_GET);
+		echo '<pre>';
+		die('ok');
 	}
 
 	public function success()

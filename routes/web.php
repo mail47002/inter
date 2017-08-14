@@ -49,7 +49,7 @@ Route::namespace('backend')->group(function() {
 // Frontend
 Route::namespace('frontend')->group(function() {
     // Payments
-    Route::resource('payments', 'BackPaymentsController');
+    Route::resource('payments', 'PaymentsController');
     Route::get('payments/delete/{id}', ['as' => 'payments.destroy', 'uses' => 'BackPaymentsController@destroy']);
 
     // Kreditai
