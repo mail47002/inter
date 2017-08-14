@@ -37,16 +37,16 @@
 					<th></th>
 				</thead>
 {{$one_credits}}
-				{{-- @foreach ($prices as $price)
-					<tr>
-						<td style="vertical-align: middle;">{{ $price['ammount'] }},00 EUR</td>
-						<td style="vertical-align: middle;">{{ number_format($price['credits'], 0, ',', ' ') }}</td>
+				@for($i = 1; $i <= 3; $i++):
+						<tr>
+						<td style="vertical-align: middle;">{{ $one_credits * $i }},00 EUR</td>
+						<td style="vertical-align: middle;">{{ $i * 5 }}</td>
 						<td>
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 							<input type="hidden" name="business" value="winartas@yahoo.com">
 							<input type="hidden" name="cmd" value="_xclick">
 							<input type="hidden" name="item_name" value="Hot Sauce-12oz. Bottle">
-							<input type="hidden" name="amount" value="{{$price['ammount']}}">
+							<input type="hidden" name="amount" value="{{ $one_credits * $i }}">
 							<input type="hidden" name="currency_code" value="EUR">
 							<input type="hidden" name="email" value="{{ auth()->user()->email }}">
 							<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png" alt="Buy Now">
@@ -54,7 +54,7 @@
 						</form>
 						</td>
 					</tr>
-				@endforeach --}}
+				@endfor
 			</table>
 		</div>
 
