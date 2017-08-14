@@ -36,7 +36,7 @@
 					<th>Kreditų kiekis</th>
 					<th></th>
 				</thead>
-{{$one_credits}}
+
 				@for($i = 1; $i <= 3; $i++):
 						<tr>
 						<td style="vertical-align: middle;">{{ $one_credits * $i }},00 EUR</td>
