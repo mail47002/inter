@@ -4,27 +4,19 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 use App\Payment;
-use App\Services\WebToPay;
+use Log;
 
 class PaymentsController extends Controller
 {
 	public function __construct()
 	{
-	    $this->middleware('auth', [
-	        'except' => [
-                'callback','success', 'cancel'
-            ]
-        ]);
+
 	}
 
 	public function callback(Request $request)
 	{
-		echo '<pre>';
-		print_r($_GET);
-		echo '<pre>';
-		die('ok');
+        Log::info(json_encode($request->all()));
 	}
 
 	public function success()

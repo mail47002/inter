@@ -38,24 +38,23 @@
 				</thead>
 
 				@for($i = 1; $i <= 3; $i++)
-						<tr>
-						<td style="vertical-align: middle;">{{ $one_credits * $i }},00 EUR</td>
+					<tr>
+						<td style="vertical-align: middle;">{{ config('settings.one_credits') * $i }},00 EUR</td>
 						<td style="vertical-align: middle;">{{ $i * 5 }}</td>
 						<td>
-						<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
-							<input type="hidden" name="business" value="winartas-facilitator@yahoo.com">
-							<input type="hidden" name="cmd" value="_xclick">
-							<input type="hidden" name="return" value="http://inter.loc/payment-callback?token=">
-							<input type="hidden" name="cancel_return" value="http://inter.loc/payment-callback">
-							<input type="hidden" name="callback_timeout" value="3">
-							<input type="hidden" name="rm" value="0">
-							<input type="hidden" name="item_name" value="payment credits">
-							<input type="hidden" name="amount" value="{{ $one_credits * $i }}">
-							<input type="hidden" name="currency_code" value="EUR">
-							<input type="hidden" name="email" value="{{ auth()->user()->email }}">
-							<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/silver-pill-paypal-44px.png" alt="Buy Now">
-							{{-- <img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"> --}}
-						</form>
+							<form action="https://ipnpb.sandbox.paypal.com/cgi-bin/webscr" method="post" style="display: inline;">
+								<input type="hidden" name="cmd" value="_xclick">
+								<input type="hidden" name="business" value="winartas-facilitator@yahoo.com">
+								<input type="hidden" name="item_name" value="payment credits">
+								<input type="hidden" name="amount" value="{{ config('settings.one_credits') * $i }}">
+								<input type="hidden" name="currency_code" value="EUR">
+								<input type="hidden" name="callback_url" value="{{ route('payments.callback') }}">
+								<input type="hidden" name="callback_timeout" value="3">
+								<input type="hidden" name="return" value="{{ route('payments.success') }}">
+								<input type="hidden" name="cancel_return" value="{{ route('payments.cancel') }}">
+								<input type="hidden" name="email" value="{{ auth()->user()->email }}">
+								<input type="image" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online">
+							</form>
 						</td>
 					</tr>
 				@endfor

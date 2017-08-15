@@ -12,7 +12,7 @@
 */
 
 // Backend
-Route::namespace('backend')->group(function() {
+Route::group(['namespace' => 'backend'], function() {
     // Auth
     Route::get('admin', 'LoginController@index');
     Route::post('admin/login', ['as' => 'backend.login', 'uses' => 'LoginController@login']);
@@ -47,7 +47,7 @@ Route::namespace('backend')->group(function() {
 });
 
 // Frontend
-Route::namespace('frontend')->group(function() {
+Route::group(['namespace' => 'frontend'], function() {
     // Payments
     Route::resource('payments', 'PaymentsController');
     Route::get('payments/delete/{id}', ['as' => 'payments.destroy', 'uses' => 'BackPaymentsController@destroy']);
@@ -56,7 +56,6 @@ Route::namespace('frontend')->group(function() {
     Route::get('mano-kreditai', ['as' => 'credits', 'uses' => 'CreditsController@index']);
 
     // Apmokėjimas
-    Route::get('naujas-mokejimas/{ammount}', ['as' => 'payments.create', 'uses' => 'PaymentsController@create']);
     Route::get('apmoketa', ['as' => 'payments.success', 'uses' => 'PaymentsController@success']);
     Route::get('mokejimas-atsauktas', ['as' => 'payments.cancel', 'uses' => 'PaymentsController@cancel']);
     Route::get('payment-callback', ['as' => 'payments.callback', 'uses' => 'PaymentsController@callback']);
