@@ -58,7 +58,7 @@ Route::group(['namespace' => 'frontend'], function() {
     // Apmokėjimas
     Route::get('apmoketa', ['as' => 'payments.success', 'uses' => 'PaymentsController@success']);
     Route::get('mokejimas-atsauktas', ['as' => 'payments.cancel', 'uses' => 'PaymentsController@cancel']);
-    Route::get('payment-callback', ['as' => 'payments.callback', 'uses' => 'PaymentsController@callback']);
+    Route::post('payment-callback', ['as' => 'payments.callback', 'uses' => 'PaymentsController@callback']);
 
     // Mano anketos
     Route::get('mano-anketos', ['as' => 'campaigns.my', 'uses' => 'CampaignsController@my']);

@@ -19,17 +19,6 @@
 
 			<h3>Pirkti internetu</h3>
 
-			{{-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-				<input type="hidden" name="business" value="winartas@yahoo.com">
-				<input type="hidden" name="cmd" value="_xclick">
-				<input type="hidden" name="item_name" value="Hot Sauce-12oz. Bottle">
-				<input type="hidden" name="amount" value="">
-				<input type="hidden" name="currency_code" value="EUR">
-				<input type="hidden" name="email" value="{{ auth()->user()->email }}">
-				<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png" alt="Buy Now">
-				<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
-			</form> --}}
-
 			<table class="table table-condensed table-striped">
 				<thead>
 					<th>Kaina</th>
@@ -42,18 +31,27 @@
 						<td style="vertical-align: middle;">{{ config('settings.one_credits') * $i }},00 EUR</td>
 						<td style="vertical-align: middle;">{{ $i * 5 }}</td>
 						<td>
-							<form action="https://ipnpb.sandbox.paypal.com/cgi-bin/webscr" method="post" style="display: inline;">
+							<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" style="margin: 0;">
+								<!-- Button type -->
 								<input type="hidden" name="cmd" value="_xclick">
+
+								<!-- Account ID -->
 								<input type="hidden" name="business" value="winartas-facilitator@yahoo.com">
-								<input type="hidden" name="item_name" value="payment credits">
+
+								<!-- Payment details -->
+								<input type="hidden" name="item_name" value="Payment credits">
 								<input type="hidden" name="amount" value="{{ config('settings.one_credits') * $i }}">
 								<input type="hidden" name="currency_code" value="EUR">
-								<input type="hidden" name="callback_url" value="{{ route('payments.callback') }}">
-								<input type="hidden" name="callback_timeout" value="3">
+
+								<!-- Url -->
 								<input type="hidden" name="return" value="{{ route('payments.success') }}">
 								<input type="hidden" name="cancel_return" value="{{ route('payments.cancel') }}">
+
+								<!-- User info -->
 								<input type="hidden" name="email" value="{{ auth()->user()->email }}">
-								<input type="image" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online">
+
+								<!-- Button -->
+								<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png" alt="Buy Now">
 							</form>
 						</td>
 					</tr>

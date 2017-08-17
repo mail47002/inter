@@ -5,6 +5,7 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Payment;
+use App\Services\PaypalPDT;
 use Log;
 
 class PaymentsController extends Controller
@@ -14,13 +15,18 @@ class PaymentsController extends Controller
 
 	}
 
-	public function callback(Request $request)
+	public function success(Request $request)
 	{
-        Log::info(json_encode($request->all()));
-	}
+        $pdt = new PaypalPDT();
 
-	public function success()
-	{
+        $pdt->useSandbox();
+
+        $verified = $pdt->verify($request);
+
+        if ($verified) {
+            dd($pdt->getPaymentData());
+        }
+
 		return view('frontend.payments.success');
 	}
 
