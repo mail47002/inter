@@ -29,7 +29,7 @@ class PaymentsController extends Controller
             $payment->user_id   = $userId->id;
             $payment->ammount   = $payment_data['mc_gross'];
             $payment->currency  = $payment_data['mc_currency'];
-            $payment->paid       = $payment_data['txn_id'];;
+            $payment->paid      = $payment_data['txn_id'];;
 
             $payment->save();
 

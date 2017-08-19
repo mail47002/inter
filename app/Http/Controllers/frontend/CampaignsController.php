@@ -68,7 +68,7 @@ class CampaignsController extends Controller
 
 	public function my()
 	{
-		$entries = Auth::user()
+		$entries = Auth::guard('web')->user()
             ->campaigns()
             ->orderBy('id', 'desc')
             ->paginate(10);
@@ -89,7 +89,7 @@ class CampaignsController extends Controller
 			if (!$entry->same_computer) {
 				$available = false;
 
-				if (Auth::check() && $entry->results()->where('user_id', Auth::user()->id)->count() == 0) {
+				if (Auth::guard('web')->check() && $entry->results()->where('user_id', Auth::guard('web')->user()->id)->count() == 0) {
                     $available = true;
                 } else if ($entry->results()->where('ip', $request->getClientIp())->count() == 0) {
                     $available = true;
@@ -146,7 +146,7 @@ class CampaignsController extends Controller
                 $result = new CampaignResult;
 
                 $result->campaign_id    = $id;
-                $result->user_id        = Auth::check() ? Auth::user()->id : 0;
+                $result->user_id        = Auth::guard('web')->check() ? Auth::guard('web')->user()->id : 0;
                 $result->ip             = $request->getClientIp();
 
                 $result->save();
@@ -164,10 +164,10 @@ class CampaignsController extends Controller
 
                 $credits->save();
 
-                if (Auth::check() && Auth::user()->id != $campaign->user_id) {
+                if (Auth::guard('web')->check() && Auth::guard('web')->user()->id != $campaign->user_id) {
                     $credits = new UserCredit;
 
-                    $credits->user_id       = Auth::user()->id;
+                    $credits->user_id       = Auth::guard('web')->user()->id;
                     $credits->description   = 'Už atsakymą';
                     $credits->credits       = $price;
 
@@ -286,7 +286,7 @@ class CampaignsController extends Controller
 
         $entry = new Campaign;
 
-        $entry->user_id 		= Auth::user()->id;
+        $entry->user_id 		= Auth::guard('web')->user()->id;
         $entry->title 			= $request->title;
         $entry->description 	= $request->description;
         $entry->video 			= $request->video;
@@ -348,7 +348,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id) {
 			$tags = [];
 
 			foreach ($entry->tags as $tag) {
@@ -369,7 +369,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id) {
 			return view('frontend.campaigns.questions', [
                 'entry' => $entry
             ]);
@@ -382,7 +382,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id) {
 			$filter 		= $request->filter;
 			$questions 		= json_decode($request->questions);
 			$bad_results 	= [ 0 ];
@@ -422,7 +422,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id && $request->has('question_first') && $request->has('question_second'))
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id && $request->has('question_first') && $request->has('question_second'))
 		{
 			$first = $entry->questions()->where('id', $request->question_first)->first();
 			$second = $entry->questions()->where('id', $request->question_second)->first();
@@ -557,7 +557,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id && $request->has('questions')) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id && $request->has('questions')) {
 			$main_question = 0;
 
 			foreach ($request->questions as $question) {
@@ -604,7 +604,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id && $request->has('questions')) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id && $request->has('questions')) {
 			$questions 	    = [];
 			$arr1		    = [];
 			$arr2		    = [];
@@ -843,7 +843,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id) {
 			Excel::create($this->_make_token($entry->title) . '.xlsx', function($excel) use ($entry) {
 				$excel->setTitle('Anketos „'.$entry->title.'“ rezultatai');
 			    $excel->setCreator('Apklausos internetu')->setCompany('ACVK');
@@ -895,7 +895,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id && in_array($type, $this->types) && $entry->active == 0) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id && in_array($type, $this->types) && $entry->active == 0) {
 			return view('frontend.campaigns.add_question', [
                 'entry'     => $entry,
                 'type'      => $type
@@ -910,7 +910,7 @@ class CampaignsController extends Controller
 		$c 	= Campaign::find($campaign_id);
 		$cq = CampaignQuestion::find($question_id);
 
-		if ($c && $c->user_id == Auth::user()->id && $cq && $cq->campaign_id == $c->id && $c->active == 0) {
+		if ($c && $c->user_id == Auth::guard('web')->user()->id && $cq && $cq->campaign_id == $c->id && $c->active == 0) {
 			return view('frontend.campaigns.edit_question', [
                 'entry'     => $c,
                 'question'  => $cq,
@@ -925,7 +925,7 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id && in_array($type, $this->types) && $entry->active == 0) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id && in_array($type, $this->types) && $entry->active == 0) {
 			$validation = Validator::make($request->all(), [
 				'title' 		=> 'required',
 			]);
@@ -1028,7 +1028,7 @@ class CampaignsController extends Controller
 		$entry 	= Campaign::find($id);
 		$cq 	= CampaignQuestion::find($question_id);
 
-		if ($entry && $entry->user_id == Auth::user()->id && $cq && $cq->campaign_id == $entry->id) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id && $cq && $cq->campaign_id == $entry->id) {
 			$validation = Validator::make($request->all(), [
 				'title' 		=> 'required',
 			]);
@@ -1129,10 +1129,10 @@ class CampaignsController extends Controller
 	{
 		$campaign = Campaign::find($id);
 
-		if ($campaign && $campaign->user_id == Auth::user()->id) {
+		if ($campaign && $campaign->user_id == Auth::guard('web')->user()->id) {
 			$entry = new Campaign;
 
-			$entry->user_id 		= Auth::user()->id;
+			$entry->user_id 		= Auth::guard('web')->user()->id;
 			$entry->title 			= 'Kopija: ' . $campaign->title;
 			$entry->description 	= $campaign->description;
 			$entry->video 			= $campaign->video;
@@ -1174,9 +1174,9 @@ class CampaignsController extends Controller
 	{
 		$entry = Campaign::find($id);
 
-		if ($entry && $entry->user_id == Auth::user()->id) {
+		if ($entry && $entry->user_id == Auth::guard('web')->user()->id) {
 			// Advertise
-			$available_credits 	= Auth::user()->credits()->sum('credits') - Auth::user()->campaigns()->where('advertise_credits', '>', 0)->where('id', '!=', $id)->sum('advertise_credits');
+			$available_credits 	= Auth::guard('web')->user()->credits()->sum('credits') - Auth::guard('web')->user()->campaigns()->where('advertise_credits', '>', 0)->where('id', '!=', $id)->sum('advertise_credits');
 			$price 				= $request->advertise_results * $entry->questions()->count() * 2;
 			
 			// Things
@@ -1199,7 +1199,7 @@ class CampaignsController extends Controller
                     ->withInput()
                     ->withErrors($validation->messages());
 			} else {
-				$entry->user_id 		= Auth::user()->id;
+				$entry->user_id 		= Auth::guard('web')->user()->id;
 				$entry->title 			= $request->title;
 				$entry->description 	= $request->description;
 				$entry->video 			= $request->video;
@@ -1307,7 +1307,7 @@ class CampaignsController extends Controller
 		$c 	= Campaign::find($id);
 		$cq = CampaignQuestion::find($question_id);
 
-		if ($c && $c->user_id == Auth::user()->id && $cq && $cq->campaign_id == $c->id && $c->active == 0) {
+		if ($c && $c->user_id == Auth::guard('web')->user()->id && $cq && $cq->campaign_id == $c->id && $c->active == 0) {
 			$path = 'uploads/campaigns_questions/photos/' . base64_encode($cq->id) . '/';
 
 			File::deleteDirectory($path);
