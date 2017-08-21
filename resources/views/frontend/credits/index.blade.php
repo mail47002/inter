@@ -26,9 +26,9 @@
 					<th></th>
 				</thead>
 
-				@for($i = 1; $i <= 3; $i++)
+				@for($i = 1; $i <= 5; $i++)
 					<tr>
-						<td style="vertical-align: middle;">{{ config('settings.one_credits') * $i }},00 EUR</td>
+						<td style="vertical-align: middle;">{{ $i * 5 / config('settings.one_credits') }} EUR</td>
 						<td style="vertical-align: middle;">{{ $i * 5 }}</td>
 						<td>
 							<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" style="margin: 0;">
@@ -40,7 +40,7 @@
 
 								<!-- Payment details -->
 								<input type="hidden" name="item_name" value="Payment credits">
-								<input type="hidden" name="amount" value="{{ config('settings.one_credits') * $i }}">
+								<input type="hidden" name="amount" value="{{ ($i * 5 / config('settings.one_credits')) }}">
 								<input type="hidden" name="currency_code" value="EUR">
 
 								<!-- Url -->
