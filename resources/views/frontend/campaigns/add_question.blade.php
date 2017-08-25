@@ -5,7 +5,7 @@
 @section('title')Pridėti klausimą „{{ $entry->title }}“ anketai - @stop
 
 @section('scripts')
-	<script type="text/javascript" src="{{ asset('Frontend') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/frontend/campaigns/questions.js') }}"></script>
 @stop
 
 @section('content')
@@ -13,7 +13,7 @@
 		<div class="page-header">
 			<h1>
 				Pridėti klausimą
-				<small>„{{ $entry->title }}“ anketai</small>
+				<small>"{{ $entry->title }}" anketai</small>
 			</h1>
 		</div>
 

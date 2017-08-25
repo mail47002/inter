@@ -141,7 +141,7 @@ class LoginController extends Controller
         ];
     }
 
-    protected function create($data)
+    private function create($data)
     {
         $entry = User::create([
             'role' 	        => config('users.role.user'),
@@ -152,14 +152,14 @@ class LoginController extends Controller
 
         UserCredit::create([
             'user_id'       => $entry->id,
-            'credits'       => config('settings.credits_per_registration'),
+            'credits'       => config('settings.registration_credits'),
             'description'   => 'Įskaitymas'
         ]);
 
         return $entry;
     }
 
-    protected function makePassword()
+    private function makePassword()
     {
         return time() + rand(1, 100);
     }

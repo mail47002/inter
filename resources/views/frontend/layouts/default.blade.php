@@ -12,7 +12,7 @@
 
         @yield('styles')
 
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery-2.2.4.min.js') }}"}></script>
 		<script type="text/javascript" src="{{ asset('js/holder.js') }}"></script>
 
         @yield('scripts')

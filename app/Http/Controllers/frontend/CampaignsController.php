@@ -279,8 +279,8 @@ class CampaignsController extends Controller
 	public function store(Request $request)
 	{
 		$this->validate($request, [
-			'title' 		=> 'required|min:15',
-			'description' 	=> 'required|min:30',
+			'title' 		=> 'required|min:10',
+			'description' 	=> 'required|min:15',
 			'photo' 		=> 'mimes:jpeg,gif,bmp,png',
 		]);
 
