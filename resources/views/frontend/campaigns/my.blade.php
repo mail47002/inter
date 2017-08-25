@@ -73,13 +73,13 @@
 					<td style="vertical-align: middle;">
 						<div class="btn-group">
 							<a href="{{ route('campaigns.edit', $entry->id) }}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-cog"></span> Anketos valdymas</a>
-							<a href="{{ route('campaigns.copy', $entry->id) }}" class="btn btn-sm btn-default" onclick="return confirm('Ar tikrai norite kopijuoti šią anketą?');"><span class="glyphicon glyphicon-floppy-disk"></span> Kopijuoti</a>
 							<a href="{{ route('campaigns.results', $entry->id) }}" class="btn btn-sm btn-default">
 								<span class="glyphicon glyphicon-tasks"></span>
 								Rezultatai ({{ count($entry->results) }})
 							</a>
 							<a href="{{ route('campaigns.destroy', $entry->id) }}" class="btn btn-sm btn-default remove"><span class="glyphicon glyphicon-trash"></span> Ištrinti</a>
 						</div>
+						<a href="{{ route('campaigns.my') }}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-arrow-up"></span> Mano anketos</a>
 					</td>
 				</tr>
 			@endforeach
