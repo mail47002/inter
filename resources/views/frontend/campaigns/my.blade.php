@@ -79,7 +79,6 @@
 							</a>
 							<a href="{{ route('campaigns.destroy', $entry->id) }}" class="btn btn-sm btn-default remove"><span class="glyphicon glyphicon-trash"></span> Ištrinti</a>
 						</div>
-						<a href="{{ route('campaigns.my') }}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-arrow-up"></span> Mano anketos</a>
 					</td>
 				</tr>
 			@endforeach
