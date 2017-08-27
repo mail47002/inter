@@ -73,8 +73,14 @@ class CampaignsController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(10);
 
+        $anketos = Campaign::where('active', '=', 1)
+            ->where('public', '=', 1)
+            ->orderBy('advertise_credits', 'desc')
+            ->paginate(20);
+
 		return view('frontend.campaigns.my', [
-		    'entries' => $entries
+		    'entries' => $entries,
+            'anketos' => $anketos
         ]);
 	}
 
@@ -394,7 +400,7 @@ class CampaignsController extends Controller
 
 					foreach ($questions as $question => $option) {
 						$bad_questions[] = $question;
-						
+
 						foreach ($result->answers as $answer) {
 							if ($answer->question_id == $question && $answer->option_id == $option) {
 								$cool++;
@@ -426,7 +432,7 @@ class CampaignsController extends Controller
 		{
 			$first = $entry->questions()->where('id', $request->question_first)->first();
 			$second = $entry->questions()->where('id', $request->question_second)->first();
-			
+
 			$counts = [];
 			$totals = [];
 			$arr1 	= [];
@@ -527,9 +533,9 @@ class CampaignsController extends Controller
 			$lprobability = $kashi->chiDist($sum, $results['df']);
 
 			$r = round($this->Correlation($arr1, $arr2), 3);
-			
+
 			$linear = (array_sum($totals['y']) - 1) * pow($r, 2);
-			
+
 			$linear_probability = $kashi->chiDist($linear, 1);
 
 			return view('frontend.campaigns.cross_tabulation', [
@@ -596,7 +602,7 @@ class CampaignsController extends Controller
 				'main_question' => $main_question
             ]);
 		}
-		
+
 		return redirect()->route('campaigns.my');
 	}
 
@@ -704,7 +710,7 @@ class CampaignsController extends Controller
 
 			foreach ($questions as $question) {
 				foreach ($questions as $q) {
-					$sp = new SpearmanCorrelation(); 
+					$sp = new SpearmanCorrelation();
 
 					$result = $sp->test($arr1[$question->id][$q->id], $arr2[$question->id][$q->id]);
 
@@ -734,19 +740,19 @@ class CampaignsController extends Controller
 	}
 
 	public function Correlation($arr1, $arr2)
-	{        
+	{
 	    $correlation = 0;
-	    
+
 	    $k = $this->SumProductMeanDeviation($arr1, $arr2);
 	    $ssmd1 = $this->SumSquareMeanDeviation($arr1);
 	    $ssmd2 = $this->SumSquareMeanDeviation($arr2);
-	    
+
 	    $product = $ssmd1 * $ssmd2;
-	    
+
 	    $res = sqrt($product);
-	    
+
 	    @$correlation = $k / $res;
-	    
+
 	    return $correlation;
 	}
 
@@ -761,7 +767,7 @@ class CampaignsController extends Controller
 	{
 		return $r*pow($n-$k-1,0.5)/pow(1-pow($r,2),0.5);
 	}
-	
+
 	private function p_t($t,$df)
 	{
 		$p = $df/2;
@@ -773,13 +779,13 @@ class CampaignsController extends Controller
 	public function SumProductMeanDeviation($arr1, $arr2)
 	{
 	    $sum = 0;
-	    
+
 	    $num = count($arr1);
-	    
+
 	    for($i=0; $i<$num; $i++) {
 	        $sum = $sum + $this->ProductMeanDeviation($arr1, $arr2, $i);
 	    }
-	    
+
 	    return $sum;
 	}
 
@@ -791,13 +797,13 @@ class CampaignsController extends Controller
 	public function SumSquareMeanDeviation($arr)
 	{
 	    $sum = 0;
-	    
+
 	    $num = count($arr);
-	    
+
 	    for($i=0; $i<$num; $i++) {
 	        $sum = $sum + $this->SquareMeanDeviation($arr, $i);
 	    }
-	    
+
 	    return $sum;
 	}
 
@@ -809,28 +815,28 @@ class CampaignsController extends Controller
 	public function SumMeanDeviation($arr)
 	{
 	    $sum = 0;
-	    
+
 	    $num = count($arr);
-	    
+
 	    for($i=0; $i<$num; $i++) {
 	        $sum = $sum + $this->MeanDeviation($arr, $i);
 	    }
-	    
+
 	    return $sum;
 	}
 
 	public function MeanDeviation($arr, $item)
 	{
 	    $average = $this->Average($arr);
-	    
+
 	    return @$arr[$item] - $average;
-	}    
+	}
 
 	public function Average($arr)
 	{
 	    $sum = $this->Sum($arr);
 	    $num = count($arr);
-	    
+
 	    return $sum/$num;
 	}
 
@@ -1000,7 +1006,7 @@ class CampaignsController extends Controller
 						// creating directories
 						File::makeDirectory($path . 'default', 0777, true, true);
 
-						// Save 
+						// Save
 						$file->move($path . 'default/', $name);
 
 						// Resize if needed
@@ -1102,7 +1108,7 @@ class CampaignsController extends Controller
 						// creating directories
 						File::makeDirectory($path . 'default', 0777, true, true);
 
-						// Save 
+						// Save
 						$file->move($path . 'default/', $name);
 
 						// Resize if needed
@@ -1178,7 +1184,7 @@ class CampaignsController extends Controller
 			// Advertise
 			$available_credits 	= Auth::guard('web')->user()->credits()->sum('credits') - Auth::guard('web')->user()->campaigns()->where('advertise_credits', '>', 0)->where('id', '!=', $id)->sum('advertise_credits');
 			$price 				= $request->advertise_results * $entry->questions()->count() * 2;
-			
+
 			// Things
 			$rules = [
 				'title' 			=> 'required|min:15',
@@ -1186,7 +1192,7 @@ class CampaignsController extends Controller
 				'photo' 			=> 'mimes:jpeg,gif,bmp,png',
 				'advertise_results' => 'enough',
 			];
-			
+
 			Validator::extend('enough', function($attribute, $value, $parameters) use ($price, $available_credits, $request) {
 				return ($price > $available_credits || $request->advertise_results < 0) ? false : true;
 			});
@@ -1229,7 +1235,7 @@ class CampaignsController extends Controller
 						// creating directories
 						File::makeDirectory($path . 'default', 0777, true, true);
 
-						// Save 
+						// Save
 						$file->move($path . 'default/', $name);
 
 						// Resize if needed

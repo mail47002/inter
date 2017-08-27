@@ -23,7 +23,7 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-9">
                     @if (session('registered'))
                         <div class="alert alert-success">
                             Jūs sėkmingai užsiregistravote. Dabar galite prisijungti.
@@ -56,10 +56,10 @@
                         <h1>Reklama</h1>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                     @section('sidebar')
                         <div class="well col-sm-12" style="height: 660px; min-width: 120px!important;">
-                            Reklama
+                            @yield('sidebar')
                         </div>
                     @show
                 </div>

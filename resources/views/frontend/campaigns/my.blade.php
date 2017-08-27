@@ -4,11 +4,63 @@
 
 @section('title')Mano anketos - @stop
 
+@section('sidebar')
+@if (count($anketos) > 0)
+		@foreach ($anketos as $anketa)
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h4>
+						<a href="{{ route('campaigns.answer', $anketa->id) }}">
+							<img src="{{ $anketa->user->photo ? $anketa->user->photo : 'holder.js/32x32/text:&nbsp;' }}" alt="{{ $anketa->user->username }}" style="height: 32px" class="img-circle">
+
+							{{ $anketa->title }}
+						</a>
+
+						<div>
+							<small title="{{ $anketa->description }}">{{ $anketa->description }}</small>
+						</div>
+					</h4>
+
+					@if (auth()->check() && $anketa->advertise_results)
+						<span class="btn btn-sm btn-success" title="Uždarbis">
+							<span class="glyphicon glyphicon-usd"></span>
+							{{ $anketa->questions()->count() * 2 }}
+						</span>
+					@endif
+
+					<a href="{{ route('campaigns.answers', $anketa->id) }}" class="btn btn-sm btn-default">
+						<span class="glyphicon glyphicon-tasks"></span>
+						{{ count($anketa->results) }}
+					</a>
+
+					<a href="#" class="btn btn-sm btn-default">
+						<span class="glyphicon glyphicon-user"></span>
+						{{ $anketa->user->username }}
+					</a>
+
+					<a href="#" class="btn btn-sm btn-default">
+						<span class="glyphicon glyphicon-calendar"></span>
+						{{ $anketa->created_at }}
+					</a>
+				</div>
+			</div>
+		@endforeach
+
+		<div class="text-center">
+			{{ $anketos->links() }}
+		</div>
+	@else
+		<div class="alert alert-warning">
+			Anketų nėra.
+		</div>
+	@endif
+@stop
+
 @section('content')
 	<div class="page-header">
 		<h1>
 			Mano anketos
-			
+
 			<div class="pull-right hidden-xs hidden-sm">
 				<a href="{{ route('campaigns.create') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Sukurti naują anketą</a>
 			</div>
@@ -36,7 +88,7 @@
 			Anketa sėkmingai ištrinta.
 		</div>
 	@endif
-	
+
 	@if (count($entries) > 0)
 		<table class="table hidden-sm hidden-xs">
 			<thead>
@@ -83,7 +135,7 @@
 				</tr>
 			@endforeach
 		</table>
-	
+
 		<div class="visible-sm visible-xs">
 			@foreach ($entries as $entry)
 				<div class="panel panel-default">
@@ -105,7 +157,7 @@
 								<span class="glyphicon glyphicon-pause"></span>
 							</a>
 						@endif
-						
+
 						<a href="{{ route('campaigns.results', $entry->id) }}" href="{{ route('campaigns.answers', $entry->id) }}" class="btn btn-sm btn-default">
 							<span class="glyphicon glyphicon-tasks"></span>
 							{{ count($entry->results) }}

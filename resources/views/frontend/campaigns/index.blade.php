@@ -10,7 +10,7 @@
 			Anketų sąrašas
 		</h1>
 	</div>
-	
+
 	@if (count($entries) > 0)
 		@foreach ($entries as $entry)
 			<div class="panel panel-default">
@@ -18,7 +18,7 @@
 					<h4>
 						<a href="{{ route('campaigns.answer', $entry->id) }}">
 							<img src="{{ $entry->user->photo ? $entry->user->photo : 'holder.js/32x32/text:&nbsp;' }}" alt="{{ $entry->user->username }}" style="height: 32px" class="img-circle">
-							
+
 							{{ $entry->title }}
 						</a>
 
@@ -26,14 +26,14 @@
 							<small title="{{ $entry->description }}">{{ $entry->description }}</small>
 						</div>
 					</h4>
-	
+
 					@if (auth()->check() && $entry->advertise_results)
 						<span class="btn btn-sm btn-success" title="Uždarbis">
 							<span class="glyphicon glyphicon-usd"></span>
 							{{ $entry->questions()->count() * 2 }}
 						</span>
 					@endif
-					
+
 					<a href="{{ route('campaigns.answers', $entry->id) }}" class="btn btn-sm btn-default">
 						<span class="glyphicon glyphicon-tasks"></span>
 						{{ count($entry->results) }}
