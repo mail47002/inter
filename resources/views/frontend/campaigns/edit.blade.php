@@ -153,15 +153,15 @@
 						
 						@if ($entry->public)
 							<p>
-								Jūs turite <strong>{{ auth()->user()->credits()->sum('credits') - auth()->user()->campaigns()->where('advertise_credits', '>', 0)->sum('advertise_credits') }}</strong> nepanaudotų kreditų už kuriuos galite reklamuoti anketą. 
-								Šios anketos vieno reklamuojamo atsakymo kaina <strong>{{ $entry->questions()->count() * 2 }}</strong>. 
+								Jūs turite <strong>{{ $entry->credits }}</strong> nepanaudotų kreditų už kuriuos galite reklamuoti anketą.
+								Šios anketos vieno reklamuojamo atsakymo kaina <strong>{{ config('settings.featured_credits') }}</strong>.
 								Įveskite reklamuojamų atsakymų kiekį kurį norėtumėte gauti šios anketos reklamos metu.
 							</p>
 							
 							<p></p>
 							
 							<div class="form-inline">
-								{{ Form::text('advertise_results', $entry->advertise_results, [ 'class' => 'form-control', 'placeholder' => 'Atsakymų kiekis']) }}
+								{{ Form::text('advertise_results', 0, [ 'class' => 'form-control', 'placeholder' => 'Atsakymų kiekis']) }}
 
 								<button type="submit" class="btn btn-default">Reklamuoti</button>
 							</div>

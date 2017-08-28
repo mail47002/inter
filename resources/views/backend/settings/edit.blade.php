@@ -18,31 +18,19 @@
         </div>
     @endif
     {!! Form::open(['route' => 'settings.update', 'method' => 'put', 'id' => 'form-settings', 'class' => 'form-horizontal']) !!}
-        <h4>Credits</h4>
         <div class="row">
             <div class="col-md-8">
+                <h4>Credits</h4>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Credits for registration</label>
+                    <label class="col-md-3 control-label">Credits per registration</label>
                     <div class="col-md-9">
                         <input class="form-control" type="text" name="settings[registration_credits]" value="{{ $settings['registration_credits'] }}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Сost of one credits</label>
+                    <label class="col-md-3 control-label">Credits course</label>
                     <div class="col-md-9">
                         <input class="form-control" type="text" name="settings[one_credits]" value="{{ $settings['one_credits']}}">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Сost of credits one day</label>
-                    <div class="col-md-9">
-                        <input class="form-control" type="text" name="settings[credits_one_day]" value="{{ $settings['credits_one_day']}}">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Сost of credits one day</label>
-                    <div class="col-md-9">
-                        <input class="form-control" type="text" name="settings[credits_one_campaigns]" value="{{ $settings['credits_one_campaigns']}}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -58,7 +46,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4"></div>
         </div>
     {!! Form::close() !!}
 @endsection

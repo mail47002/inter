@@ -119,20 +119,7 @@ class CampaignsController extends Controller
 		$campaign = Campaign::find($id);
 
 		if ($campaign && $campaign->active) {
-            // Check advertise credits
-            $user_credits = UserCredit::where('user_id', $campaign->user_id)->get();
-
-            // Total user credits
-            $credits = 0;
-
-            foreach ($user_credits as $user_credit) {
-                $credits += (int)$user_credit->credits;
-            }
-
-            // Price
-            $price = config('settings.campaigns_credits');
-
-		    if ($credits > 0 && ($credits - $price) >= 0) {
+            if (!Auth::guard('web')->check() || Auth::guard('web')->user()->id !== $campaign->user_id) {
                 $rules = [];
 
                 foreach ($campaign->questions as $question) {
@@ -148,109 +135,59 @@ class CampaignsController extends Controller
 
                 $this->validate($request, $rules, $messages);
 
-                // creating result
-                $result = new CampaignResult;
+                // Featured
+                if ($campaign->advertise_results == 1) {
+                    // Store advertise
+                    $price = config('settings.featured_credits');
+                    $advertise_credits = $campaign->advertise_credits - $price;
 
-                $result->campaign_id    = $id;
-                $result->user_id        = Auth::guard('web')->check() ? Auth::guard('web')->user()->id : 0;
-                $result->ip             = $request->getClientIp();
+                    $campaign->used_credits = $price;
+                    $campaign->advertise_credits = $advertise_credits;
+                    $campaign->advertise_results = ($advertise_credits > 0) ? 1 : 0;
 
-                $result->save();
+                    $campaign->save();
 
-                $campaign->used_credits += $price;
+                    // Store results
+                    $this->store_results($id, $campaign, $request, $price);
 
-                $campaign->save();
-
-                // Change advertise user credits
-                $credits = new UserCredit;
-
-                $credits->user_id       = $campaign->user_id;
-                $credits->description   = 'Už reklamuojamą atsakymą';
-                $credits->credits       = -$price;
-
-                $credits->save();
-
-                if (Auth::guard('web')->check() && Auth::guard('web')->user()->id != $campaign->user_id) {
+                    // Store user credits
                     $credits = new UserCredit;
 
-                    $credits->user_id       = Auth::guard('web')->user()->id;
-                    $credits->description   = 'Už atsakymą';
-                    $credits->credits       = $price;
+                    $credits->user_id = $campaign->user_id;
+                    $credits->description = 'Už reklamuojamą atsakymą';
+                    $credits->credits = -$price;
 
                     $credits->save();
-                }
+                } else {
+                    // User credits
+                    $user_credits = UserCredit::where('user_id', $campaign->user_id)->get();
 
-                // adding answers
-                foreach ($campaign->questions as $question) {
-                    if ($request->has($question->id)) {
-                        if (in_array($question->type, ['radio', 'select', 'string', 'text'])) {
-                            $answer = new CampaignAnswer;
+                    // Total user credits
+                    $credits = 0;
 
-                            $answer->campaign_id    = $id;
-                            $answer->question_id    = $question->id;
-                            $answer->result_id      = $result->id;
-                            $answer->type           = $question->type;
+                    foreach ($user_credits as $user_credit) {
+                        $credits += (int)$user_credit->credits;
+                    }
 
-                            if (in_array($question->type, ['radio', 'select'])) {
-                                $answer->option_id = $request->get($question->id);
-                            }
+                    // Price
+                    $price = config('settings.campaigns_credits');
 
-                            if (in_array($question->type, ['string', 'text'])) {
-                                $answer->value = $request->get($question->id);
-                            }
+                    if ($credits > 0 && ($credits - $price) >= 0) {
+                        // Store advertise
+                        $campaign->used_credits += $price;
 
-                            if ($request->get($question->id) == 'custom' && $question->tpe == 'radio') {
-                                if (!$request->get('custom-' . $question->id)) {
-                                    return redirect()->back()->withInput();
-                                }
+                        $campaign->save();
+                        // Store results
+                        $this->store_results($id, $campaign, $request, $price);
 
-                                $answer->option_id  = 0;
-                                $answer->value      = $request->get('custom-' . $question->id);
-                                $answer->type       = 'custom';
-                            }
+                        // Store user credits
+                        $credits = new UserCredit;
 
-                            $answer->save();
-                        } else {
-                            if ($question->type == 'check') {
-                                foreach ($request->get($question->id) as $option_id => $value) {
-                                    $answer = new CampaignAnswer;
+                        $credits->user_id = $campaign->user_id;
+                        $credits->description = 'Už atsakymą';
+                        $credits->credits = -$price;
 
-                                    $answer->campaign_id    = $id;
-                                    $answer->question_id    = $question->id;
-                                    $answer->result_id      = $result->id;
-
-                                    if ($value == 'custom') {
-                                        if (!$request->get('custom-' . $question->id)) {
-                                            return redirect()->back()->withInput();
-                                        }
-
-                                        $answer->option_id  = 0;
-                                        $answer->value      = $request->get('custom-' . $question->id);
-                                        $answer->type       = 'custom';
-                                    } else {
-                                        $answer->option_id  = $option_id;
-                                        $answer->type       = $question->type;
-                                    }
-
-                                    $answer->save();
-                                }
-                            }
-
-                            if ($question->type == 'matrix') {
-                                foreach ($request->get($question->id) as $option_id => $value) {
-                                    $answer = new CampaignAnswer;
-
-                                    $answer->campaign_id    = $id;
-                                    $answer->question_id    = $question->id;
-                                    $answer->result_id      = $result->id;
-                                    $answer->type           = $question->type;
-                                    $answer->option_id      = $option_id;
-                                    $answer->value          = $value;
-
-                                    $answer->save();
-                                }
-                            }
-                        }
+                        $credits->save();
                     }
                 }
 
@@ -259,13 +196,110 @@ class CampaignsController extends Controller
                 } else {
                     return redirect()->route('campaigns.answered');
                 }
-            } else {
-		        return redirect()->back(); // if no user credits
             }
-		}else {
-            return redirect()->route('campaigns.notfound');
+
+            return redirect()->back();
         }
+
+        return redirect()->route('campaigns.notfound');
 	}
+
+    private function store_results($id, $campaign, $request, $price)
+    {
+        // Store result
+        $result = new CampaignResult;
+
+        $result->campaign_id    = $id;
+        $result->user_id        = Auth::guard('web')->check() ? Auth::guard('web')->user()->id : 0;
+        $result->ip             = $request->getClientIp();
+
+        $result->save();
+
+        // Store user credits
+        if (Auth::guard('web')->check() && Auth::guard('web')->user()->id !== $campaign->user_id) {
+            $credits = new UserCredit;
+
+            $credits->user_id = Auth::guard('web')->user()->id;
+            $credits->description = 'Už atsakymą';
+            $credits->credits = $price;
+
+            $credits->save();
+        }
+
+        // Store question
+        foreach ($campaign->questions as $question) {
+            if ($request->has($question->id)) {
+                if (in_array($question->type, ['radio', 'select', 'string', 'text'])) {
+                    $answer = new CampaignAnswer;
+
+                    $answer->campaign_id    = $id;
+                    $answer->question_id    = $question->id;
+                    $answer->result_id      = $result->id;
+                    $answer->type           = $question->type;
+
+                    if (in_array($question->type, ['radio', 'select'])) {
+                        $answer->option_id = $request->get($question->id);
+                    }
+
+                    if (in_array($question->type, ['string', 'text'])) {
+                        $answer->value = $request->get($question->id);
+                    }
+
+                    if ($request->get($question->id) == 'custom' && $question->tpe == 'radio') {
+                        if (!$request->get('custom-' . $question->id)) {
+                            return redirect()->back()->withInput();
+                        }
+
+                        $answer->option_id  = 0;
+                        $answer->value      = $request->get('custom-' . $question->id);
+                        $answer->type       = 'custom';
+                    }
+
+                    $answer->save();
+                } else {
+                    if ($question->type == 'check') {
+                        foreach ($request->get($question->id) as $option_id => $value) {
+                            $answer = new CampaignAnswer;
+
+                            $answer->campaign_id    = $id;
+                            $answer->question_id    = $question->id;
+                            $answer->result_id      = $result->id;
+
+                            if ($value == 'custom') {
+                                if (!$request->get('custom-' . $question->id)) {
+                                    return redirect()->back()->withInput();
+                                }
+
+                                $answer->option_id  = 0;
+                                $answer->value      = $request->get('custom-' . $question->id);
+                                $answer->type       = 'custom';
+                            } else {
+                                $answer->option_id  = $option_id;
+                                $answer->type       = $question->type;
+                            }
+
+                            $answer->save();
+                        }
+                    }
+
+                    if ($question->type == 'matrix') {
+                        foreach ($request->get($question->id) as $option_id => $value) {
+                            $answer = new CampaignAnswer;
+
+                            $answer->campaign_id    = $id;
+                            $answer->question_id    = $question->id;
+                            $answer->result_id      = $result->id;
+                            $answer->type           = $question->type;
+                            $answer->option_id      = $option_id;
+                            $answer->value          = $value;
+
+                            $answer->save();
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 	public function notFound()
 	{
@@ -362,6 +396,17 @@ class CampaignsController extends Controller
 			}
 
 			$entry->tags = implode(' ', $tags);
+
+            // Total user credits
+            $user_credits = Auth::guard('web')->user()->credits()->get();
+
+            $credits = 0;
+
+            foreach ($user_credits as $user_credit) {
+                $credits += (int)$user_credit->credits;
+            }
+
+			$entry->credits = $credits;
 
 			return view('frontend.campaigns.edit', [
 			    'entry' => $entry
@@ -1181,98 +1226,116 @@ class CampaignsController extends Controller
 		$entry = Campaign::find($id);
 
 		if ($entry && $entry->user_id == Auth::guard('web')->user()->id) {
-			// Advertise
-			$available_credits 	= Auth::guard('web')->user()->credits()->sum('credits') - Auth::guard('web')->user()->campaigns()->where('advertise_credits', '>', 0)->where('id', '!=', $id)->sum('advertise_credits');
-			$price 				= $request->advertise_results * $entry->questions()->count() * 2;
+            // Total user credits
+            $user_credits = Auth::guard('web')->user()->credits()->get();
 
-			// Things
-			$rules = [
-				'title' 			=> 'required|min:15',
-				'description' 		=> 'required|min:30',
-				'photo' 			=> 'mimes:jpeg,gif,bmp,png',
-				'advertise_results' => 'enough',
-			];
+            $available_credits = 0;
 
-			Validator::extend('enough', function($attribute, $value, $parameters) use ($price, $available_credits, $request) {
-				return ($price > $available_credits || $request->advertise_results < 0) ? false : true;
-			});
+            foreach ($user_credits as $user_credit) {
+                $available_credits += (int)$user_credit->credits;
+            }
 
-			$validation = Validator::make($request->all(), $rules);
+            $price = config('settings.featured_credits');
 
-			if ($validation->fails()) {
-				return redirect()
+            // Rules
+            $rules = [
+                'title' => 'required|min:15',
+                'description' => 'required|min:30',
+                'photo' => 'mimes:jpeg,gif,bmp,png',
+                'advertise_results' => 'enough',
+            ];
+
+            Validator::extend('enough', function ($attribute, $value, $parameters) use ($price, $available_credits, $request) {
+                return ($request->advertise_results == 0 || ($available_credits > $price && $request->advertise_results > 0 && $request->advertise_results >= $price)) ? true : false;
+            });
+
+            $validation = Validator::make($request->all(), $rules);
+
+            if ($validation->fails()) {
+                return redirect()
                     ->back()
                     ->withInput()
                     ->withErrors($validation->messages());
-			} else {
-				$entry->user_id 		= Auth::guard('web')->user()->id;
-				$entry->title 			= $request->title;
-				$entry->description 	= $request->description;
-				$entry->video 			= $request->video;
-				$entry->respondents 	= $request->respondents ? 1 : 0;
-				$entry->send_email 		= $request->send_email ? 1 : 0;
-				$entry->same_computer 	= $request->same_computer ? 1 : 0;
-				$entry->public 			= $request->public ? 1 : 0;
-				$entry->active			= $request->active ? 1 : 0;
+            } else {
+                $entry->user_id = Auth::guard('web')->user()->id;
+                $entry->title = $request->title;
+                $entry->description = $request->description;
+                $entry->video = $request->video;
+                $entry->respondents = $request->respondents ? 1 : 0;
+                $entry->send_email = $request->send_email ? 1 : 0;
+                $entry->same_computer = $request->same_computer ? 1 : 0;
+                $entry->public = $request->public ? 1 : 0;
+                $entry->active = $request->active ? 1 : 0;
 
-				// Advertise
-				$entry->advertise_results = $request->advertise_results ? 1 : 0;
-				$entry->advertise_credits = $price;
+                $entry->advertise_results = ($entry->advertise_credits > 0 || $request->advertise_results > 0) ? 1 : 0;
 
-				$entry->save();
+                if ($request->advertise_results > 0) {
+                    $entry->advertise_credits = $request->advertise_results;
+                }
 
-				// Uploading photo
-				if ($request->hasFile('photo')) 	{
-					$file = $request->file('photo');
+                $entry->save();
 
-					if ($file->isValid()) {
-						$path 	= 'uploads/campaigns/photos/' . base64_encode($entry->id) . '/';
-						$name	= $file->getClientOriginalName();
+                // Uploading photo
+                if ($request->hasFile('photo')) {
+                    $file = $request->file('photo');
 
-						// deleting old if exists
-						File::deleteDirectory($path);
+                    if ($file->isValid()) {
+                        $path = 'uploads/campaigns/photos/' . base64_encode($entry->id) . '/';
+                        $name = $file->getClientOriginalName();
 
-						// creating directories
-						File::makeDirectory($path . 'default', 0777, true, true);
+                        // deleting old if exists
+                        File::deleteDirectory($path);
 
-						// Save
-						$file->move($path . 'default/', $name);
+                        // creating directories
+                        File::makeDirectory($path . 'default', 0777, true, true);
 
-						// Resize if needed
-						if (Image::make($path . 'default/' . $name)->width() > 200)
-							Image::make($path . 'default/' . $name)->widen(200)->save();
+                        // Save
+                        $file->move($path . 'default/', $name);
 
-						// Assign images
-						$entry->photo = $path . 'default/' . $name;
-					}
-				}
+                        // Resize if needed
+                        if (Image::make($path . 'default/' . $name)->width() > 200)
+                            Image::make($path . 'default/' . $name)->widen(200)->save();
 
-				$entry->save();
+                        // Assign images
+                        $entry->photo = $path . 'default/' . $name;
+                    }
+                }
 
-				// Saving campaign tags
-				if ($request->has('tags')) 	{
-					$entry->tags()->delete();
+                $entry->save();
 
-					$tags = explode(' ', $request->tags);
+                // Saving campaign tags
+                if ($request->has('tags')) {
+                    $entry->tags()->delete();
 
-					foreach ($tags as $tag) {
-						$entry_tag = new CampaignTag;
+                    $tags = explode(' ', $request->tags);
 
-						$entry_tag->campaign_id = $entry->id;
-						$entry_tag->title 		= $tag;
+                    foreach ($tags as $tag) {
+                        $entry_tag = new CampaignTag;
 
-						$entry_tag->save();
-					}
-				}
+                        $entry_tag->campaign_id = $entry->id;
+                        $entry_tag->title = $tag;
 
-				return redirect()
-                    ->back()
-                    ->withUpdated($entry->id);
-			}
-		} else {
-            return redirect()->back();
+                        $entry_tag->save();
+                    }
+                }
+
+                // Saving credits
+                if ($request->advertise_results > 0) {
+                    UserCredit::create([
+                        'user_id' => Auth::guard('web')->user()->id,
+                        'credits' => -$request->advertise_results,
+                        'description' => 'Reklamuokite anketą'
+                    ]);
+                }
+            }
+
+            return redirect()
+                ->back()
+                ->withUpdated($entry->id);
         }
-	}
+
+        return redirect()->back();
+    }
 
 	public function destroy($id)
 	{

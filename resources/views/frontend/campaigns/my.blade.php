@@ -21,13 +21,6 @@
 						</div>
 					</h4>
 
-					@if (auth()->check() && $anketa->advertise_results)
-						<span class="btn btn-sm btn-success" title="Uždarbis">
-							<span class="glyphicon glyphicon-usd"></span>
-							{{ $anketa->questions()->count() * 2 }}
-						</span>
-					@endif
-
 					<a href="{{ route('campaigns.answers', $anketa->id) }}" class="btn btn-sm btn-default">
 						<span class="glyphicon glyphicon-tasks"></span>
 						{{ count($anketa->results) }}

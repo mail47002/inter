@@ -28,12 +28,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function getUsers()
-    {
-        $users = $this->latest('id')->get();
-        return $users;
-    }
-
     public function credits()
     {
         return $this->hasMany('App\UserCredit');

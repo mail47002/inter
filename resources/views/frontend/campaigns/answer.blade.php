@@ -13,13 +13,6 @@
 				<small>Anketos pildymas</small>
 			</h1>
 
-			@if ($entry->advertise_results)
-				<div class="btn btn-sm btn-success" title="Uždarbis">
-					<span class="glyphicon glyphicon-usd"></span>
-					{{ $entry->questions()->count() * 2 }}
-				</div>
-			@endif
-
 			<a href="{{ route('campaigns.answers', $entry->id) }}" class="btn btn-sm btn-default">
 				<span class="glyphicon glyphicon-stats"></span>
 				{{ $entry->results->count() }}

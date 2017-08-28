@@ -73,13 +73,6 @@
 						</div>
 					</h4>
 
-					@if (auth()->check() && $entry->advertise_results)
-						<span class="btn btn-xs btn-success" title="Uždarbis">
-							<span class="glyphicon glyphicon-usd"></span>
-							{{ $entry->questions()->count() * 2 }}
-						</span>
-					@endif
-
 					<a href="{{ route('campaigns.answers', $entry->id) }}" class="btn btn-xs btn-default">
 						<span class="glyphicon glyphicon-tasks"></span>
 						{{ count($entry->results) }}
