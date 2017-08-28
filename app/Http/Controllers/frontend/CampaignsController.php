@@ -137,11 +137,12 @@ class CampaignsController extends Controller
 
                 // Featured
                 if ($campaign->advertise_results == 1) {
-                    // Store advertise
-                    $price = config('settings.featured_credits');
-                    $advertise_credits = $campaign->advertise_credits - $price;
+                    $price              = config('settings.featured_credits');
+                    $advertise_credits  = $campaign->advertise_credits - $price;
+                    $user_credits       = $campaign->used_credits + $price;
 
-                    $campaign->used_credits = $price;
+                    // Store advertise
+                    $campaign->used_credits = $user_credits;
                     $campaign->advertise_credits = $advertise_credits;
                     $campaign->advertise_results = ($advertise_credits > 0) ? 1 : 0;
 
